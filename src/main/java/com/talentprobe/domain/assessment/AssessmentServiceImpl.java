@@ -19,7 +19,7 @@ public class AssessmentServiceImpl implements AssessmentService {
 
   @Override
   public Assessment create(Assessment assessment) {
-    assessment.setStatus(Status.NEW);
+    assessment.setStatus(Status.New);
       return assessmentRepository.save(assessment);
     }
 

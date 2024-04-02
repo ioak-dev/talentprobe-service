@@ -25,7 +25,7 @@ public class AssessmentQuestion {
   private String id;
   private String assessmentId;
   private String assessmentStageId;
-  private String type;
+  private Type type;
   private String question;
   private String answer;
   private String choices;
