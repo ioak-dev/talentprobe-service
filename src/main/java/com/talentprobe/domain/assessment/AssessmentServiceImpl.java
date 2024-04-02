@@ -19,6 +19,7 @@ public class AssessmentServiceImpl implements AssessmentService {
 
   @Override
   public Assessment create(Assessment assessment) {
+    assessment.setStatus(Status.NEW);
       return assessmentRepository.save(assessment);
     }
 
