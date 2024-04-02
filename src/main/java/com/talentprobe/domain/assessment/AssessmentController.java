@@ -19,9 +19,9 @@ public class AssessmentController {
   @Autowired
   private AssessmentService assessmentService;
 
-  @PostMapping
-  public ResponseEntity<Assessment> create(@RequestBody Assessment request) {
-    return ResponseEntity.ok(assessmentService.create(request));
+  @GetMapping("/{id}")
+  public ResponseEntity<Assessment> getById(@PathVariable String id) {
+    return ResponseEntity.ok(assessmentService.getById(id));
   }
 
   @GetMapping
@@ -32,12 +32,12 @@ public class AssessmentController {
   @PutMapping("/{id}")
   public ResponseEntity<Assessment> update(@PathVariable String id,
       @RequestBody Assessment request) {
-    return ResponseEntity.ok(assessmentService.update(id, request));
+    return ResponseEntity.ok(assessmentService.update(request, id));
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<Assessment> getById(@PathVariable String id) {
-    return ResponseEntity.ok(assessmentService.getById(id));
+  @PostMapping
+  public ResponseEntity<Assessment> create(@RequestBody Assessment request) {
+    return ResponseEntity.ok(assessmentService.create(request));
   }
 
   @DeleteMapping(value = "/{id}")

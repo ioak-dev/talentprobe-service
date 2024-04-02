@@ -1,5 +1,6 @@
-package com.talentprobe.domain.assessment;
+package com.talentprobe.domain.assessmentresponse;
 
+import com.talentprobe.domain.assessment.Assessment;
 import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,23 +11,23 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "Assessment")
-public class Assessment {
+@Document(collection = "AssessmentResponse")
+public class AssessmentResponse {
 
   @Id
   private String id;
-  private String name;
-  private String jobDescription;
-  private String duration;
+  private String email;
   private Status status;
-  private String lastRecommendationId;
+  private String score;
+
+  private String assessmentId;
 
   @CreatedBy
   private String createdBy;
@@ -39,5 +40,4 @@ public class Assessment {
 
   @LastModifiedDate
   private ZonedDateTime lastModifiedDate;
-
 }

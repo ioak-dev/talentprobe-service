@@ -1,4 +1,4 @@
-package com.talentprobe.domain.assessment;
+package com.talentprobe.domain.assessmentquestionstage;
 
 import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
@@ -12,21 +12,21 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "Assessment")
-public class Assessment {
+@Document(collection = "AssessmentQuestionStage")
+public class AssessmentQuestionStage {
 
   @Id
   private String id;
-  private String name;
-  private String jobDescription;
-  private String duration;
-  private Status status;
-  private String lastRecommendationId;
+  private String assessmentId;
+  private String type;
+  private String question;
+  private String answer;
+  private String choices;
+  private String recommendationId;
 
   @CreatedBy
   private String createdBy;
@@ -39,5 +39,4 @@ public class Assessment {
 
   @LastModifiedDate
   private ZonedDateTime lastModifiedDate;
-
 }

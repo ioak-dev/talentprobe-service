@@ -18,21 +18,23 @@ public class AssessmentServiceImpl implements AssessmentService {
   }
 
   @Override
-  public Assessment create(Assessment request) {
-    return assessmentRepository.save(request);
-  }
+  public Assessment create(Assessment assessment) {
+      return assessmentRepository.save(assessment);
+    }
 
   @Override
-  public Assessment update(String id, Assessment request){
-    if (id != null) {
-      Assessment assessment = assessmentRepository.findById(id).orElseThrow(
+  public Assessment update(Assessment request, String id) {
+    if (request.getId() != null) {
+      Assessment assessment = assessmentRepository.findById(request.getId()).orElseThrow(
           () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Assessment Not found"));
       assessment.setName(request.getName());
       assessment.setJobDescription(request.getJobDescription());
       assessment.setDuration(request.getDuration());
+      assessment.setStatus(request.getStatus());
+      assessment.setLastRecommendationId(request.getLastRecommendationId());
       return assessmentRepository.save(assessment);
     }
-    throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    throw new IllegalArgumentException("Assessment id cannot be null for update");
   }
 
   @Override

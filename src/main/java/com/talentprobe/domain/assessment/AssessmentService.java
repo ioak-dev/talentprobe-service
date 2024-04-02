@@ -8,7 +8,7 @@ public interface AssessmentService {
 
   Assessment create(Assessment assessment);
 
-  Assessment update(String id, Assessment assessment);
+  Assessment update(Assessment request, String id);
 
   Assessment getById(String id);
 
