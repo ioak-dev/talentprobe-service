@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,14 +19,20 @@ public class AssessmentController {
   @Autowired
   private AssessmentService assessmentService;
 
+  @PostMapping
+  public ResponseEntity<Assessment> create(@RequestBody Assessment request) {
+    return ResponseEntity.ok(assessmentService.create(request));
+  }
+
   @GetMapping
   public ResponseEntity<List<Assessment>> getAll() {
     return ResponseEntity.ok(assessmentService.getAllAssessments());
   }
 
-  @PutMapping
-  public ResponseEntity<Assessment> createAndUpdate(@RequestBody Assessment request) {
-    return ResponseEntity.ok(assessmentService.createAndUpdate(request));
+  @PutMapping("/{id}")
+  public ResponseEntity<Assessment> update(@PathVariable String id,
+      @RequestBody Assessment request) {
+    return ResponseEntity.ok(assessmentService.update(id, request));
   }
 
   @GetMapping("/{id}")

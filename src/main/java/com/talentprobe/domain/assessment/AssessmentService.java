@@ -6,7 +6,9 @@ public interface AssessmentService {
 
   List<Assessment> getAllAssessments();
 
-  Assessment createAndUpdate(Assessment assessment);
+  Assessment create(Assessment assessment);
+
+  Assessment update(String id, Assessment assessment);
 
   Assessment getById(String id);
 
