@@ -1,5 +1,6 @@
 package com.talentprobe.domain.assessment;
 
+import com.talentprobe.domain.ai.AIService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,9 @@ public class AssessmentServiceImpl implements AssessmentService {
 
   @Autowired
   private AssessmentRepository assessmentRepository;
+
+  @Autowired
+  AIService aiService;
 
   @Override
   public List<Assessment> getAllAssessments() {
@@ -40,6 +44,7 @@ public class AssessmentServiceImpl implements AssessmentService {
 
   @Override
   public Assessment getById(String id) {
+    aiService.getAIResponse("NA");
     return assessmentRepository.findById(id).orElseThrow(
         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Assessment Not found"));
   }

@@ -2,6 +2,7 @@ package com.talentprobe.domain.assessmentquestionstage;
 
 import com.talentprobe.domain.assessmentquestion.Type;
 import java.time.ZonedDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,8 +27,8 @@ public class AssessmentQuestionStage {
   private Type type;
   private String question;
   private String answer;
-  private String choices;
-  private String recommendationId;
+  private List<String> choices;
+  private long recommendationNumber;
 
   @CreatedBy
   private String createdBy;
