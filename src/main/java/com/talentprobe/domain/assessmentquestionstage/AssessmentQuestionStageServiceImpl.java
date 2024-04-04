@@ -11,27 +11,37 @@ import org.springframework.stereotype.Service;
 public class AssessmentQuestionStageServiceImpl implements AssessmentQuestionStageService {
 
   @Autowired
-  private AssessmentQuestionStageRepository repository;
+  private AssessmentQuestionStageRepository assessmentQuestionStageRepository;
 
   private static final long RECOMMENDATION_NUMBER = 1L;
 
   @Override
+  public long getLatRecommendationNumber(String assessmentId){
+    long recommendationNumber = 0;
+    List<AssessmentQuestionStage> assessmentQuestionStageList = assessmentQuestionStageRepository
+        .findAllByAssessmentId(assessmentId);
+    if (!assessmentQuestionStageList.isEmpty()) {
+      recommendationNumber =
+          assessmentQuestionStageList.get(0).getRecommendationNumber();
+    }
+    return recommendationNumber;
+  }
+  @Override
   public void deleteAndUpdateQuestionStage(List<AIResponse> aiResponseList, String assessmentId) {
-    List<AssessmentQuestionStage> assessmentQuestionStageList = repository
+    List<AssessmentQuestionStage> assessmentQuestionStageList = assessmentQuestionStageRepository
         .findAllByAssessmentId(assessmentId);
     if (!assessmentQuestionStageList.isEmpty()) {
       long recommendationNumber =
-          assessmentQuestionStageList.getFirst().getRecommendationNumber() + 1;
+          assessmentQuestionStageList.get(0).getRecommendationNumber() + 1;
       deleteQuestionStage(assessmentId);
       updateQuestionStage(aiResponseList, assessmentId, recommendationNumber);
     }else{
-      deleteQuestionStage(assessmentId);
       updateQuestionStage(aiResponseList, assessmentId, RECOMMENDATION_NUMBER);
     }
   }
 
   private void deleteQuestionStage(String assessmentId) {
-    repository.deleteAllByAssessmentId(assessmentId);
+    assessmentQuestionStageRepository.deleteAllByAssessmentId(assessmentId);
   }
 
   private void updateQuestionStage(List<AIResponse> aiResponseList, String assessmentId,
@@ -47,6 +57,6 @@ public class AssessmentQuestionStageServiceImpl implements AssessmentQuestionSta
       assessmentQuestionStage.setRecommendationNumber(recommendationNumber);
       assessmentQuestionStageList.add(assessmentQuestionStage);
     });
-    repository.saveAll(assessmentQuestionStageList);
+    assessmentQuestionStageRepository.saveAll(assessmentQuestionStageList);
   }
 }

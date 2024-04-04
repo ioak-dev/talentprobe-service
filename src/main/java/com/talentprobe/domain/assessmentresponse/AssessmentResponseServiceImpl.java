@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class AssessmentResponseServiceImplementation implements
+public class AssessmentResponseServiceImpl implements
     AssessmentResponseService {
 
   @Autowired

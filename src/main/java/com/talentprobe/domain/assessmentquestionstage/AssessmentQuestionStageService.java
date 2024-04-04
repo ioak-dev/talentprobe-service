@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface AssessmentQuestionStageService {
 
+  long getLatRecommendationNumber(String assessmentId);
+
   void deleteAndUpdateQuestionStage(List<AIResponse> aiResponseList, String assessmentId);
 
 }
