@@ -40,19 +40,24 @@ public class AssessmentQuestionServiceImpl implements
     else {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Assessment Question Not found");
     }
-
   }
 
   @Override
   public void updateQuestions(String assessmentId) {
+    int deletedQuestionsCount = getDeletedQuestionsCount(assessmentId);
     List<AssessmentQuestionStage> assessmentQuestionStageList = assessmentQuestionStageRepository
         .findAllByAssessmentId(assessmentId);
-
-    List<AssessmentQuestionStage> first10AssessmentQuestionStages = assessmentQuestionStageList
-        .stream().limit(10).toList();
-
+    List<AssessmentQuestionStage> firstXAssessmentQuestionStages;
+    if (deletedQuestionsCount == 0) {
+      firstXAssessmentQuestionStages = assessmentQuestionStageList
+          .stream().limit(10).toList();
+    }
+    else {
+      firstXAssessmentQuestionStages = assessmentQuestionStageList
+          .stream().limit(deletedQuestionsCount).toList();
+    }
     List<AssessmentQuestion> assessmentQuestionList = new ArrayList<>();
-    first10AssessmentQuestionStages.forEach(stage -> {
+    firstXAssessmentQuestionStages.forEach(stage -> {
       AssessmentQuestion assessmentQuestion = new AssessmentQuestion();
       assessmentQuestion.setAssessmentId(stage.getAssessmentId());
       assessmentQuestion.setAssessmentStageId(stage.getId());
@@ -60,9 +65,23 @@ public class AssessmentQuestionServiceImpl implements
       assessmentQuestion.setAnswer(stage.getQuestion());
       assessmentQuestion.setType(stage.getType());
       assessmentQuestion.setChoices(stage.getChoices());
+      assessmentQuestion.setPinned(false);
       assessmentQuestionList.add(assessmentQuestion);
     });
     assessmentQuestionRepository.saveAll(assessmentQuestionList);
   }
 
+  public int getDeletedQuestionsCount(String assessmentId){
+    int deletedQuestionsCount = 0;
+    List<AssessmentQuestion> assessmentQuestions = assessmentQuestionRepository.findAllByAssessmentId(
+        assessmentId);
+    for (AssessmentQuestion assessmentQuestion : assessmentQuestions
+    ) {
+      if (!assessmentQuestion.getPinned()) {
+        assessmentQuestionRepository.delete(assessmentQuestion);
+        deletedQuestionsCount++;
+      }
+    }
+    return deletedQuestionsCount;
+  }
 }

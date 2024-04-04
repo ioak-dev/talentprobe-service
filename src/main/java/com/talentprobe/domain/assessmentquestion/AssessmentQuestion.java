@@ -28,7 +28,7 @@ public class AssessmentQuestion {
   private String question;
   private String answer;
   private List<String> choices;
-  private String pinned;
+  private Boolean pinned;
 
 
   @CreatedBy
