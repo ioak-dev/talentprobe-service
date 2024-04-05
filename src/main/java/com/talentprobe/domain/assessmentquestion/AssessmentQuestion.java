@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "assessmentquestion")
+@Document(collection = "assessment.question")
 public class AssessmentQuestion {
 
   @Id
