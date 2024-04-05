@@ -43,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         Claims claims = Jwts.parser().setSigningKey(publicKey).build().parseSignedClaims(token)
             .getPayload();
-        String userId = claims.getSubject();
+        String userId = (String) claims.get("user_id");
         if (null != userId) {
           UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
               userId, null, null);
