@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -53,7 +54,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     } catch (ExpiredJwtException expiredJwtException) {
       httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
       httpServletResponse.getWriter().write("Token Expired");
-    } catch (MalformedJwtException exception) {
+    } catch (MalformedJwtException | UnsupportedJwtException exception) {
       httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
       httpServletResponse.getWriter().write("Token Invalid");
     } catch (Exception exception) {
