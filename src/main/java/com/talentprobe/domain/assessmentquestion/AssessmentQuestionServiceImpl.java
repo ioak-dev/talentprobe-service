@@ -32,14 +32,10 @@ public class AssessmentQuestionServiceImpl implements
   }
 
   @Override
-  public AssessmentQuestion getById(String assessmentId) {
-    AssessmentQuestion assessmentQuestion = assessmentQuestionRepository
-        .findByAssessmentId(assessmentId);
-    if (assessmentQuestion!= null)
-    return assessmentQuestion;
-    else {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Assessment Question Not found");
-    }
+  public List<AssessmentQuestion> getById(String assessmentId) {
+    List<AssessmentQuestion> assessmentQuestionList = assessmentQuestionRepository
+        .findAllByAssessmentId(assessmentId);
+    return assessmentQuestionList;
   }
 
   @Override
@@ -51,8 +47,7 @@ public class AssessmentQuestionServiceImpl implements
     if (deletedQuestionsCount == 0) {
       firstXAssessmentQuestionStages = assessmentQuestionStageList
           .stream().limit(10).toList();
-    }
-    else {
+    } else {
       firstXAssessmentQuestionStages = assessmentQuestionStageList
           .stream().limit(deletedQuestionsCount).toList();
     }
@@ -71,12 +66,11 @@ public class AssessmentQuestionServiceImpl implements
     assessmentQuestionRepository.saveAll(assessmentQuestionList);
   }
 
-  public int getDeletedQuestionsCount(String assessmentId){
+  public int getDeletedQuestionsCount(String assessmentId) {
     int deletedQuestionsCount = 0;
     List<AssessmentQuestion> assessmentQuestions = assessmentQuestionRepository.findAllByAssessmentId(
         assessmentId);
-    for (AssessmentQuestion assessmentQuestion : assessmentQuestions
-    ) {
+    for (AssessmentQuestion assessmentQuestion : assessmentQuestions) {
       if (!assessmentQuestion.getPinned()) {
         assessmentQuestionRepository.delete(assessmentQuestion);
         deletedQuestionsCount++;
