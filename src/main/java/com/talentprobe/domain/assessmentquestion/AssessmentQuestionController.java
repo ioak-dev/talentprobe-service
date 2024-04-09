@@ -19,7 +19,7 @@ public class AssessmentQuestionController {
   private AssessmentQuestionService assessmentQuestionService;
 
   @GetMapping("/{assessmentId}/question")
-  public ResponseEntity<AssessmentQuestion> getById(@PathVariable String assessmentId) {
+  public ResponseEntity<List<AssessmentQuestion>> getById(@PathVariable String assessmentId) {
     return ResponseEntity.ok(assessmentQuestionService.getById(assessmentId));
   }
 
