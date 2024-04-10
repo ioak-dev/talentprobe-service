@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "usecase")
+@Document(collection = "suite")
 public class Suite {
 
   @Id

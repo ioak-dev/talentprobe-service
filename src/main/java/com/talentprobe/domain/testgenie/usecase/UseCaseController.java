@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/api/suite/{id}/usecase")
+@RequestMapping("/api/suite")
 @RestController
 public class UseCaseController {
 
@@ -20,29 +20,29 @@ public class UseCaseController {
   @Autowired
   private UseCaseService useCaseService;
 
-  @GetMapping
+  @GetMapping("/{id}/usecase")
   public ResponseEntity<List<UseCase>> getAllUseCases(@PathVariable String id){
     return ResponseEntity.ok(useCaseService.getUseCasesForSuite(id));
   }
 
-  @PostMapping
+  @PostMapping("/{id}/usecase")
   public ResponseEntity<UseCase> createUseCase(@PathVariable String id,
       @RequestBody UseCase useCase){
     return ResponseEntity.ok(useCaseService.createUseCaseForSuite(id,useCase));
   }
 
-  @PutMapping("/{usecaseid}")
+  @PutMapping("/{id}/usecase/{usecaseid}")
   public ResponseEntity<UseCase> updateUseCase(@PathVariable String id,
       @PathVariable String usecaseid,@RequestBody UseCase useCase){
     return ResponseEntity.ok(useCaseService.updateUseCase(id,usecaseid,useCase));
   }
 
-  @DeleteMapping("/{usecaseid}")
+  @DeleteMapping("/{id}/usecase/{usecaseid}")
   public void deleteUseCase(@PathVariable String id,@PathVariable String usecaseid){
     useCaseService.deleteUseCase(id,usecaseid);
   }
 
-  @DeleteMapping("/{usecaseid}")
+  @GetMapping("/{id}/usecase/{usecaseid}")
   public UseCase getUseCaseById(@PathVariable String id,@PathVariable String usecaseid){
    return useCaseService.getUseCaseById(id,usecaseid);
   }
