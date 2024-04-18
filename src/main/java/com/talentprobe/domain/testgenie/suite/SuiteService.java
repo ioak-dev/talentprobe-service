@@ -13,4 +13,6 @@ public interface SuiteService {
   Suite updateSuite(String id, Suite suite);
 
   void exportSuite(String suiteId);
+
+  Suite getSuiteById(String suiteId);
 }

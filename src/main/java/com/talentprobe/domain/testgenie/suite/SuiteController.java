@@ -39,4 +39,9 @@ public class SuiteController {
      suiteService.deleteSuite(id);
   }
 
+
+  @GetMapping("/{id}")
+  public ResponseEntity<Suite> getSuiteById(@PathVariable String id){
+    return ResponseEntity.ok(suiteService.getSuiteById(id));
+  }
 }
