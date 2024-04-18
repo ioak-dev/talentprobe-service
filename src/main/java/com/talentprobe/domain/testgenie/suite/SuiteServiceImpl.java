@@ -39,4 +39,9 @@ public class SuiteServiceImpl implements SuiteService{
     }
     throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Id can not be null");
   }
+
+  @Override
+  public void exportSuite(String suiteId) {
+    // TBD what all details to export based on suiteId
+  }
 }

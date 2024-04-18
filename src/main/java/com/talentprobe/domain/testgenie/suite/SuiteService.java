@@ -11,4 +11,6 @@ public interface SuiteService {
   void deleteSuite(String id);
 
   Suite updateSuite(String id, Suite suite);
+
+  void exportSuite(String suiteId);
 }
