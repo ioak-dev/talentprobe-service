@@ -1,6 +1,8 @@
 package com.talentprobe.domain.testgenie.suite;
 
 import java.util.List;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
 
 public interface SuiteService {
 
@@ -12,7 +14,7 @@ public interface SuiteService {
 
   Suite updateSuite(String id, Suite suite);
 
-  void exportSuite(String suiteId);
+  ResponseEntity<ByteArrayResource> exportSuite(String suiteId);
 
   Suite getSuiteById(String suiteId);
 }
