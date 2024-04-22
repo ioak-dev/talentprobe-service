@@ -33,13 +33,13 @@ public class AIServiceImpl implements AIService{
   @Autowired
   private RestTemplate restTemplate;
 
-  @Value(("${gpt.apiKey}"))
+  @Value("${gpt.apiKey}")
   private String gptApiKey;
 
-  @Value(("${gpt.accessKey}"))
+  @Value("${gpt.accessKey}")
   private String gptAccessKey;
 
-  @Value(("${gpt.url}"))
+  @Value("${gpt.url}")
   private String url;
 
   @Override
@@ -84,7 +84,7 @@ public class AIServiceImpl implements AIService{
   private HttpEntity<String> createHttpEntity(String jobDescription) {
 
     String envApiKey = System.getenv("CHATGPT_API_KEY");
-    String apiKey = null != envApiKey && !envApiKey.isBlank() ? envApiKey : gptApiKey;
+    String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
