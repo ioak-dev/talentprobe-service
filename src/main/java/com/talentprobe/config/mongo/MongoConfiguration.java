@@ -1,6 +1,5 @@
 package com.talentprobe.config.mongo;
 
-import com.google.common.base.Strings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import java.time.Instant;
@@ -33,8 +32,9 @@ public class MongoConfiguration {
 
   @Bean
   public MongoClient mongoClient() {
-    String environmentUrl = Strings.isNullOrEmpty(System.getenv("MONGODB_URI")) ? mongoUri
-        : System.getenv("MONGODB_URI");
+    String envUrl = System.getenv("MONGODB_URI");
+    String environmentUrl = null==envUrl || envUrl.isBlank() ? mongoUri
+        : envUrl;
     return MongoClients.create(environmentUrl);
   }
 

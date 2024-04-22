@@ -1,22 +1,25 @@
 package com.talentprobe.domain.ai;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.talentprobe.domain.assessmentquestionstage.AssessmentQuestionStageService;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class AIServiceImpl implements AIService{
@@ -27,9 +30,21 @@ public class AIServiceImpl implements AIService{
   @Autowired
   private AssessmentQuestionStageService assessmentQuestionStageService;
 
+  @Autowired
+  private RestTemplate restTemplate;
+
+  @Value(("${gpt.apiKey}"))
+  private String gptApiKey;
+
+  @Value(("${gpt.accessKey}"))
+  private String gptAccessKey;
+
+  @Value(("${gpt.url}"))
+  private String url;
+
   @Override
   public List<AIResponse> getAIResponse(String jobDescription) {
-    List<AIResponse> aiResponseList = new ArrayList<>();
+   /* List<AIResponse> aiResponseList = new ArrayList<>();
     try {
       Resource resource = resourceLoader.getResource("classpath:Chat_Gpt_Response.json");
       BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
@@ -52,8 +67,48 @@ public class AIServiceImpl implements AIService{
     } catch (IOException e) {
       e.printStackTrace();
     }
+    return aiResponseList;*/
+    List<AIResponse> aiResponseList = new ArrayList<>();
+    try {
+      HttpEntity<String> entity = createHttpEntity(jobDescription);
+      ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
+
+      aiResponseList = mapToAIResponse(responseEntity.getBody());
+    } catch (RestClientException exception) {
+      exception.printStackTrace();
+    }
+
     return aiResponseList;
   }
+
+  private HttpEntity<String> createHttpEntity(String jobDescription) {
+
+    String envApiKey = System.getenv("CHATGPT_API_KEY");
+    String apiKey = null != envApiKey && !envApiKey.isBlank() ? envApiKey : gptApiKey;
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.set("Authorization", gptAccessKey + " " + apiKey);
+    String payload = null;
+    try {
+      Resource resource = resourceLoader.getResource("classpath:template.txt");
+      String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+      if (!content.isBlank()) {
+        payload = content.replace("{placeholder}", jobDescription);
+      }
+    } catch (IOException exception) {
+      exception.printStackTrace();
+    }
+    return new HttpEntity<>(payload, headers);
+  }
+
+  private List<AIResponse> mapToAIResponse(Object body) {
+
+    // To be completed once the prompts are ready and response is received in required format
+    return null;
+  }
+
+
 
   @Data
   @AllArgsConstructor
