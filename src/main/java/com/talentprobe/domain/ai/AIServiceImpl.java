@@ -1,5 +1,8 @@
 package com.talentprobe.domain.ai;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.talentprobe.domain.assessmentquestionstage.AssessmentQuestionStageService;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -8,6 +11,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -21,8 +25,9 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 @Service
-public class AIServiceImpl implements AIService{
+public class AIServiceImpl implements AIService {
 
   @Autowired
   private ResourceLoader resourceLoader;
@@ -43,45 +48,30 @@ public class AIServiceImpl implements AIService{
   private String url;
 
   @Override
-  public List<AIResponse> getAIResponse(String jobDescription) {
-   /* List<AIResponse> aiResponseList = new ArrayList<>();
-    try {
-      Resource resource = resourceLoader.getResource("classpath:Chat_Gpt_Response.json");
-      BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
-      JsonElement jsonElement = JsonParser.parseReader(reader);
-      JsonArray jsonArray = jsonElement.getAsJsonArray();
+  public List<AIResponse> getAIResponse(String jobDescription,
+      int noOfQues) {
 
-      for (JsonElement element : jsonArray) {
-        JsonObject jsonObject = element.getAsJsonObject();
-        AIResponse aiResponse = new AIResponse();
-        aiResponse.setQuestion(jsonObject.get("question").getAsString());
-        List<String> choices = new ArrayList<>();
-        JsonArray choicesArray = jsonObject.getAsJsonArray("choices");
-        for (JsonElement choiceElement : choicesArray) {
-          choices.add(choiceElement.getAsString());
-        }
-        aiResponse.setChoices(choices);
-        aiResponse.setAnswer(jsonObject.get("answer").getAsString());
-        aiResponseList.add(aiResponse);
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return aiResponseList;*/
     List<AIResponse> aiResponseList = new ArrayList<>();
     try {
-      HttpEntity<String> entity = createHttpEntity(jobDescription);
-      ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
-
+      HttpEntity<String> entity = createHttpEntity(jobDescription,noOfQues);
+      // ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
+      Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response.json");
+      ResponseEntity<Object> responseEntity = ResponseEntity
+          .ok()
+          .header("header", "value")
+          .body(StreamUtils.copyToString(resource.getInputStream(),
+              StandardCharsets.UTF_8));
       aiResponseList = mapToAIResponse(responseEntity.getBody());
     } catch (RestClientException exception) {
       exception.printStackTrace();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
 
     return aiResponseList;
   }
 
-  private HttpEntity<String> createHttpEntity(String jobDescription) {
+  private HttpEntity<String> createHttpEntity(String jobDescription,int noOfQues) {
 
     String envApiKey = System.getenv("CHATGPT_API_KEY");
     String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
@@ -91,10 +81,11 @@ public class AIServiceImpl implements AIService{
     headers.set("Authorization", gptAccessKey + " " + apiKey);
     String payload = null;
     try {
-      Resource resource = resourceLoader.getResource("classpath:template.txt");
+      Resource resource = resourceLoader.getResource("classpath:talentProbleTemplate.txt");
       String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
       if (!content.isBlank()) {
-        payload = content.replace("{placeholder}", jobDescription);
+        payload = content.replace("${numberOfQuestions}", String.valueOf(noOfQues))
+            .replace("${jobDescription}", jobDescription);
       }
     } catch (IOException exception) {
       exception.printStackTrace();
@@ -103,9 +94,36 @@ public class AIServiceImpl implements AIService{
   }
 
   private List<AIResponse> mapToAIResponse(Object body) {
+    ObjectMapper objectMapper = new ObjectMapper();
+    List<AIResponse> list = new ArrayList<>();
+    try {
+      JsonNode rootNode = objectMapper.readTree(body.toString());
+      JsonNode choicesNode = rootNode.get("choices");
+      if (choicesNode != null) {
+        if (choicesNode.isArray()) {
+          for (JsonNode choice : choicesNode) {
+            JsonNode messageNode = choice.get("message");
+            if (messageNode != null) {
+              String contentString = messageNode.get("content").asText();
+              JsonNode contentNode = objectMapper.readTree(contentString);
+              JsonNode questionNode = contentNode.get("questions");
 
-    // To be completed once the prompts are ready and response is received in required format
-    return null;
+              if(questionNode.isArray()){
+                for(JsonNode node :questionNode) {
+                  AIResponse aiResponse = objectMapper.treeToValue(node, AIResponse.class);
+                  list.add(aiResponse);
+                }
+              }
+              }
+          }
+        }
+      } else {
+        log.error("'choices' node is missing in the response");
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return list;
   }
 
 
