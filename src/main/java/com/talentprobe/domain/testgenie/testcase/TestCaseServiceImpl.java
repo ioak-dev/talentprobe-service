@@ -2,6 +2,8 @@ package com.talentprobe.domain.testgenie.testcase;
 
 import com.talentprobe.domain.testgenie.gptResponse.GptResponse;
 import com.talentprobe.domain.testgenie.gptResponse.GptService;
+import com.talentprobe.domain.testgenie.usecase.UseCase;
+import com.talentprobe.domain.testgenie.usecase.UseCaseService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class TestCaseServiceImpl implements TestCaseService {
 
-  private static final String ERROR_RESPONSE="Test case does not exists";
+  private static final String ERROR_RESPONSE = "Test case does not exists";
 
   @Autowired
   private TestCaseRepository testCaseRepository;
@@ -21,15 +23,20 @@ public class TestCaseServiceImpl implements TestCaseService {
   @Autowired
   private GptService gptService;
 
+  @Autowired
+  private UseCaseService useCaseService;
+
   @Override
   public TestCase getTestCaseForSuiteAndUseCase(String suiteId, String usecaseId) {
-
-    List<GptResponse> gptResponseList = gptService.getGptResponse("useCase");
+    UseCase useCase = useCaseService.getUseCaseById(suiteId, usecaseId);
+    List<GptResponse> gptResponseList = gptService.getGptResponse(useCase.getDescription());
     List<TestCase> testCases = new ArrayList<>();
-    if (!gptResponseList.isEmpty()){
+    if (!gptResponseList.isEmpty()) {
       gptResponseList.forEach(
-          gptResponse->{
+          gptResponse -> {
             TestCase testCase = new TestCase();
+            testCase.setSuiteId(suiteId);
+            testCase.setUseCaseId(usecaseId);
             testCase.setDescription(gptResponse.getDescription());
             testCase.setSummary(gptResponse.getSummary());
             testCase.setComments(gptResponse.getComments());
@@ -42,7 +49,8 @@ public class TestCaseServiceImpl implements TestCaseService {
       testCaseRepository.saveAll(testCases);
     }
     Optional<TestCase> testCase = testCaseRepository.findBySuiteIdAndUseCaseId(suiteId, usecaseId);
-    return testCase.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,ERROR_RESPONSE));
+    return testCase.orElseThrow(
+        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_RESPONSE));
   }
 
 }
