@@ -1,0 +1,9 @@
+{
+    "model": "gpt-3.5-turbo-0125",
+    "messages": [
+        {
+            "role": "system",
+            "content": "Hi there! I need assistance in generating regression test cases in JSON format for a specific use case. Here are the details: Description: Generate regression test cases for ${usecase}. Summary: Include all scenarios. Priority: High Components: Test case components. Comments: Test case comments. Labels: Test case labels. Please structure the JSON with fields for description, summary, priority, comments, components, and labels. For the test cases: Ensure coverage of both positive and negative scenarios related to ${usecase}. Could you please help with this?"
+        }
+    ]
+}

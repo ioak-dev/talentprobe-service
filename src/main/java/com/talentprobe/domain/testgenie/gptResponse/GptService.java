@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface GptService {
 
-  List<GptResponse> getGptResponse(String description);
+  List<GptResponse> getGptResponse(String usecase);
 }

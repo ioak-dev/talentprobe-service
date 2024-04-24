@@ -1,9 +1,12 @@
 package com.talentprobe.domain.testgenie.gptResponse;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -17,6 +20,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 @Service
 public class GptServiceImpl implements GptService{
 
@@ -36,21 +40,29 @@ public class GptServiceImpl implements GptService{
   private String url;
 
   @Override
-  public List<GptResponse> getGptResponse(String description) {
+  public List<GptResponse> getGptResponse(String usecase) {
+
     List<GptResponse> gptResponseList = new ArrayList<>();
     try {
-      HttpEntity<String> entity = createHttpEntity(description);
-      ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
-
+      HttpEntity<String> entity = createHttpEntity(usecase);
+      //ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
+      Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_TestGenie.json");
+      ResponseEntity<Object> responseEntity = ResponseEntity
+          .ok()
+          .header("header", "value")
+          .body(StreamUtils.copyToString(resource.getInputStream(),
+              StandardCharsets.UTF_8));
       gptResponseList = mapToGptResponse(responseEntity.getBody());
     } catch (RestClientException exception) {
       exception.printStackTrace();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
 
     return gptResponseList;
   }
 
-  private HttpEntity<String> createHttpEntity(String description) {
+  private HttpEntity<String> createHttpEntity(String usecase) {
 
     String envApiKey = System.getenv("CHATGPT_API_KEY");
     String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
@@ -60,10 +72,10 @@ public class GptServiceImpl implements GptService{
     headers.set("Authorization", gptAccessKey + " " + apiKey);
     String payload = null;
     try {
-      Resource resource = resourceLoader.getResource("classpath:template.txt");
+      Resource resource = resourceLoader.getResource("classpath:testGenieTemplate.txt");
       String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
       if (!content.isBlank()) {
-        payload = content.replace("{placeholder}", description);
+        payload = content.replace("${usecase}", String.valueOf(usecase));
       }
     } catch (IOException exception) {
       exception.printStackTrace();
@@ -72,8 +84,35 @@ public class GptServiceImpl implements GptService{
   }
 
   private List<GptResponse> mapToGptResponse(Object body) {
+    ObjectMapper objectMapper = new ObjectMapper();
+    List<GptResponse> list = new ArrayList<>();
+    try {
+      JsonNode rootNode = objectMapper.readTree(body.toString());
+      JsonNode choicesNode = rootNode.get("choices");
+      if (choicesNode != null) {
+        if (choicesNode.isArray()) {
+          for (JsonNode choice : choicesNode) {
+            JsonNode messageNode = choice.get("message");
+            if (messageNode != null) {
+              String contentString = messageNode.get("content").asText();
+              JsonNode contentNode = objectMapper.readTree(contentString);
+              JsonNode testCaseNode = contentNode.get("testCases");
 
-    // To be completed once the prompts are ready and response is received in required format
-    return null;
+              if(testCaseNode.isArray()){
+                for(JsonNode node :testCaseNode) {
+                  GptResponse gptResponse = objectMapper.treeToValue(node, GptResponse.class);
+                  list.add(gptResponse);
+                }
+              }
+            }
+          }
+        }
+      } else {
+        log.error("'choices' node is missing in the response");
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return list;
   }
 }

@@ -23,18 +23,24 @@ public class TestCaseServiceImpl implements TestCaseService {
 
   @Override
   public TestCase getTestCaseForSuiteAndUseCase(String suiteId, String usecaseId) {
-    List<GptResponse> gptResponseList = gptService.getGptResponse("");
+
+    List<GptResponse> gptResponseList = gptService.getGptResponse("useCase");
     List<TestCase> testCases = new ArrayList<>();
-    gptResponseList.forEach(
-        gptResponse->{
-          TestCase testCase = new TestCase();
-          testCase.setDescription(gptResponse.getDescription());
-          testCase.setComponents(gptResponse.getComponents());
-          testCase.setSummary(gptResponse.getSummary());
-          testCases.add(testCase);
-        }
-    );
-    testCaseRepository.saveAll(testCases);
+    if (!gptResponseList.isEmpty()){
+      gptResponseList.forEach(
+          gptResponse->{
+            TestCase testCase = new TestCase();
+            testCase.setDescription(gptResponse.getDescription());
+            testCase.setSummary(gptResponse.getSummary());
+            testCase.setComments(gptResponse.getComments());
+            testCase.setPriority(gptResponse.getPriority());
+            testCase.setComponents(gptResponse.getComponents());
+            testCase.setLabels(gptResponse.getLabels());
+            testCases.add(testCase);
+          }
+      );
+      testCaseRepository.saveAll(testCases);
+    }
     Optional<TestCase> testCase = testCaseRepository.findBySuiteIdAndUseCaseId(suiteId, usecaseId);
     return testCase.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,ERROR_RESPONSE));
   }

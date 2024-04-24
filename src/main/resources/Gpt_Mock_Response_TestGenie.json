@@ -1,0 +1,23 @@
+{
+    "id": "chatcmpl-9HVHWvyJQjB9FNOi5OLpUBN8AIt4h",
+    "object": "chat.completion",
+    "created": 1713958850,
+    "model": "gpt-3.5-turbo-0125",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": "{ \"testCases\": [\n    {\n      \"description\": \"Verify user is able to login successfully with valid credentials\",\n      \"summary\": \"Positive scenario for successful login\",\n      \"priority\": \"High\",\n      \"components\": \"Test case components\",\n      \"comments\": \"Test case comments\",\n      \"labels\": \"positive, login\"   },\n    {\n      \"description\": \"Verify user receives an error message when entering invalid credentials\",\n      \"summary\": \"Negative scenario for invalid login\",\n      \"priority\": \"High\",\n      \"components\": \"Test case components\",\n      \"comments\": \"Test case comments\",\n      \"labels\": \"negative, login\"   }\n  ]\n}  "
+            },
+            "logprobs": null,
+            "finish_reason": "stop"
+        }
+    ],
+    "usage": {
+        "prompt_tokens": 138,
+        "completion_tokens": 173,
+        "total_tokens": 311
+    },
+    "system_fingerprint": "fp_c2295e73ad"
+}
