@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -95,37 +96,45 @@ public class AIServiceImpl implements AIService {
   private List<AIResponse> mapToAIResponse(Object body) {
     ObjectMapper objectMapper = new ObjectMapper();
     List<AIResponse> list = new ArrayList<>();
-    try {
-      JsonNode rootNode = objectMapper.readTree(body.toString());
-      JsonNode choicesNode = rootNode.get("choices");
-      if (choicesNode != null) {
-        if (choicesNode.isArray()) {
-          for (JsonNode choice : choicesNode) {
-            JsonNode messageNode = choice.get("message");
-            if (messageNode != null) {
-              String contentString = messageNode.get("content").asText();
-              JsonNode contentNode = objectMapper.readTree(contentString);
-              JsonNode questionNode = contentNode.get("questions");
-              if(null==questionNode){
-                if(contentNode.isArray()){
-                  for(JsonNode node :contentNode) {
-                    AIResponse aiResponse = objectMapper.treeToValue(node, AIResponse.class);
-                    list.add(aiResponse);
+      try {
+        JsonNode rootNode = null;
+        if(body instanceof Map){
+         rootNode = objectMapper.valueToTree(body);
+        }
+        else if(body instanceof String) {
+          rootNode = objectMapper.readTree((String) body);
+        }
+        if(null!=rootNode) {
+          JsonNode choicesNode = rootNode.get("choices");
+          if (choicesNode != null) {
+            if (choicesNode.isArray()) {
+              for (JsonNode choice : choicesNode) {
+                JsonNode messageNode = choice.get("message");
+                if (messageNode != null) {
+                  String contentString = messageNode.get("content").asText();
+                  JsonNode contentNode = objectMapper.readTree(contentString);
+                  JsonNode questionNode = contentNode.get("questions");
+                  if (null == questionNode) {
+                    if (contentNode.isArray()) {
+                      for (JsonNode node : contentNode) {
+                        AIResponse aiResponse = objectMapper.treeToValue(node, AIResponse.class);
+                        list.add(aiResponse);
+                      }
+                    }
+                  } else if (questionNode.isArray()) {
+                    for (JsonNode node : questionNode) {
+                      AIResponse aiResponse = objectMapper.treeToValue(node, AIResponse.class);
+                      list.add(aiResponse);
+                    }
                   }
                 }
-              }else if(questionNode.isArray()){
-                for(JsonNode node :questionNode) {
-                  AIResponse aiResponse = objectMapper.treeToValue(node, AIResponse.class);
-                  list.add(aiResponse);
-                }
               }
-              }
+            }
           }
+        }else {
+          log.error("Root node is missing in the response");
         }
-      } else {
-        log.error("'choices' node is missing in the response");
-      }
-    } catch (IOException e) {
+      } catch (IOException e) {
       e.printStackTrace();
     }
     return list;
