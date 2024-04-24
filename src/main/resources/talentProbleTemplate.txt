@@ -3,7 +3,7 @@
     "messages": [
         {
             "role": "user",
-            "content": "Generate multiple choice questions, answer, and choices, in JSON format, focusing on intricate technical aspects and advanced skills mentioned in the job description. Please refrain from asking questions about the JD itself but rather about the skills and technical aspects. Job Description:${jobDescription} Number of questions: ${numberOfQuestions}"
+            "content": "Generate multiple choice questions in JSON format, focusing on intricate technical aspects and advanced skills mentioned in the job description. Json fields should be questions array which will have question, answer and choices. Please refrain from asking questions about the JD itself but rather about the skills and technical aspects. Job Description:${jobDescription} Number of questions: ${numberOfQuestions}"
         }
     ],
     "temperature": 1,
