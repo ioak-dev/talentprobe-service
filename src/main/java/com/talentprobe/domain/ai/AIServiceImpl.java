@@ -82,8 +82,9 @@ public class AIServiceImpl implements AIService {
       Resource resource = resourceLoader.getResource("classpath:talentProbleTemplate.txt");
       String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
       if (!content.isBlank()) {
+       String job = jobDescription.replaceAll("\n","\\\\n").replaceAll("\r","\\\\r");
         payload = content.replace("${numberOfQuestions}", String.valueOf(noOfQues))
-            .replace("${jobDescription}", jobDescription);
+            .replace("${jobDescription}", job);
       }
     } catch (IOException exception) {
       exception.printStackTrace();
@@ -105,8 +106,14 @@ public class AIServiceImpl implements AIService {
               String contentString = messageNode.get("content").asText();
               JsonNode contentNode = objectMapper.readTree(contentString);
               JsonNode questionNode = contentNode.get("questions");
-
-              if(questionNode.isArray()){
+              if(null==questionNode){
+                if(contentNode.isArray()){
+                  for(JsonNode node :contentNode) {
+                    AIResponse aiResponse = objectMapper.treeToValue(node, AIResponse.class);
+                    list.add(aiResponse);
+                  }
+                }
+              }else if(questionNode.isArray()){
                 for(JsonNode node :questionNode) {
                   AIResponse aiResponse = objectMapper.treeToValue(node, AIResponse.class);
                   list.add(aiResponse);
