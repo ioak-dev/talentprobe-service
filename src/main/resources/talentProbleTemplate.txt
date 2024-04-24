@@ -1,9 +1,14 @@
 {
-    "model": "gpt-3.5-turbo-0125",
+    "model": "gpt-4",
     "messages": [
         {
-            "role": "system",
-            "content": "Hi ChatGPT, I need your assistance in generating ${numberOfQuestions} multiple-choice questions in JSON format(question, answer, choices) for a technical assessment related to ${jobDescription}. The questions should delve into real-world scenarios, cover key skills outlined in the job description, and require critical thinking and reasoning. Avoid direct references to the job description itself. Each question should challenge the candidate's depth of understanding in the technology, requiring more than surface-level knowledge to answer effectively. Can you assist with this?"
+            "role": "user",
+            "content": "Generate multiple choice questions, answer, and choices, in JSON format, focusing on intricate technical aspects and advanced skills mentioned in the job description. Please refrain from asking questions about the JD itself but rather about the skills and technical aspects. Job Description:${jobDescription} Number of questions: ${numberOfQuestions}"
         }
-    ]
+    ],
+    "temperature": 1,
+    "max_tokens": 3071,
+    "top_p": 1,
+    "frequency_penalty": 0,
+    "presence_penalty": 0
 }
