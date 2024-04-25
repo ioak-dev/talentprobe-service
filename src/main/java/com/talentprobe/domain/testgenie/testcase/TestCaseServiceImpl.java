@@ -15,8 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class TestCaseServiceImpl implements TestCaseService {
 
-  private static final String ERROR_RESPONSE = "Test case does not exists";
-
   @Autowired
   private TestCaseRepository testCaseRepository;
 
@@ -27,7 +25,7 @@ public class TestCaseServiceImpl implements TestCaseService {
   private UseCaseService useCaseService;
 
   @Override
-  public TestCase getTestCaseForSuiteAndUseCase(String suiteId, String usecaseId) {
+  public List<TestCase> getTestCaseForSuiteAndUseCase(String suiteId, String usecaseId) {
     UseCase useCase = useCaseService.getUseCaseById(suiteId, usecaseId);
     List<GptResponse> gptResponseList = gptService.getGptResponse(useCase.getDescription());
     List<TestCase> testCases = new ArrayList<>();
@@ -48,9 +46,8 @@ public class TestCaseServiceImpl implements TestCaseService {
       );
       testCaseRepository.saveAll(testCases);
     }
-    Optional<TestCase> testCase = testCaseRepository.findBySuiteIdAndUseCaseId(suiteId, usecaseId);
-    return testCase.orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_RESPONSE));
+    List<TestCase> testCaseList = testCaseRepository.findAllBySuiteIdAndUseCaseId(suiteId, usecaseId);
+    return testCaseList;
   }
 
 }

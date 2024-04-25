@@ -1,7 +1,9 @@
 package com.talentprobe.domain.testgenie.testcase;
 
+import java.util.List;
+
 public interface TestCaseService {
 
-  TestCase getTestCaseForSuiteAndUseCase(String suiteId, String usecaseId);
+  List<TestCase> getTestCaseForSuiteAndUseCase(String suiteId, String usecaseId);
 
 }
