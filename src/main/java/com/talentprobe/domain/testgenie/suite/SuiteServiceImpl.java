@@ -1,12 +1,16 @@
 package com.talentprobe.domain.testgenie.suite;
 
+import static com.talentprobe.domain.testgenie.export.ExportMode.JSON;
 import static com.talentprobe.domain.testgenie.testcase.CsvHeaderNames.comments;
 import static com.talentprobe.domain.testgenie.testcase.CsvHeaderNames.components;
 import static com.talentprobe.domain.testgenie.testcase.CsvHeaderNames.description;
 import static com.talentprobe.domain.testgenie.testcase.CsvHeaderNames.labels;
+import static com.talentprobe.domain.testgenie.testcase.CsvHeaderNames.name;
 import static com.talentprobe.domain.testgenie.testcase.CsvHeaderNames.priority;
 import static com.talentprobe.domain.testgenie.testcase.CsvHeaderNames.summary;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.talentprobe.domain.testgenie.export.ExportMode;
 import com.talentprobe.domain.testgenie.testcase.TestCase;
 import com.talentprobe.domain.testgenie.testcase.TestCaseRepository;
 import java.io.BufferedWriter;
@@ -74,18 +78,27 @@ public class SuiteServiceImpl implements SuiteService {
   }
 
   @Override
-  public ResponseEntity<ByteArrayResource> exportSuite(String suiteId) {
+  public ResponseEntity<Object> exportSuite(String suiteId, ExportMode type) {
     try {
       Path tempDirPath = Files.createTempDirectory("TestcaseData");
       String timestamp = new SimpleDateFormat(DATE_FORMAT).format(new Date());
       String fileName = "testcase_" + timestamp + ".csv";
       Path filePath = tempDirPath.resolve(fileName);
+      List<TestCase> testCaseList = testCaseRepository.findAllBySuiteId(suiteId);
+      if (type.equals(JSON)) {
+        return ResponseEntity.ok().contentType(MediaType.valueOf(APPLICATION_JSON_VALUE))
+            .body(testCaseList);
+      }
       try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8);
           CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
-        TestCase testCase = testCaseRepository.findBySuiteId(suiteId).orElseThrow(
+        Suite suite = suiteRepository.findById(suiteId).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_RESPONSE));
         csvPrinter.printRecord(computeStaticHeaders());
-        csvPrinter.printRecord(computeCsvRecords(testCase));
+        List<List<String>> rowData =new ArrayList<>();
+        computeCsvRecords(testCaseList, suite.getName(),rowData);
+        for(List<String> row:rowData){
+          csvPrinter.printRecord(row);
+        }
         csvPrinter.flush();
       }
       byte[] fileContent = Files.readAllBytes(filePath);
@@ -100,7 +113,8 @@ public class SuiteServiceImpl implements SuiteService {
   }
 
   private List<String> computeStaticHeaders() {
-    return List.of(description.toString(),
+    return List.of(name.toString(),
+        description.toString(),
         summary.toString(),
         priority.toString(),
         comments.toString(),
@@ -108,20 +122,26 @@ public class SuiteServiceImpl implements SuiteService {
         labels.toString());
   }
 
-  private List<String> computeCsvRecords(TestCase testCase) {
-    List<String> records = new ArrayList<>();
-    records.add(testCase.getDescription());
-    records.add(testCase.getSummary());
-    records.add(testCase.getPriority());
-    records.add(testCase.getComments());
-    records.add(testCase.getComponents());
-    records.add(testCase.getLabels());
-    return records;
+  private List<List<String>> computeCsvRecords(List<TestCase> testCaseList, String suiteName
+      , List<List<String>> rowData) {
+    for (TestCase testCase : testCaseList) {
+      List<String> recordValue = new ArrayList<>();
+      recordValue.add(suiteName);
+      recordValue.add(testCase.getDescription());
+      recordValue.add(testCase.getSummary());
+      recordValue.add(testCase.getPriority());
+      recordValue.add(testCase.getComments());
+      recordValue.add(testCase.getComponents());
+      recordValue.add(testCase.getLabels());
+      rowData.add(recordValue);
+    }
+    return rowData;
   }
 
   @Override
   public Suite getSuiteById(String suiteId) {
     Optional<Suite> suite = suiteRepository.findById(suiteId);
-    return suite.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_RESPONSE));
+    return suite.orElseThrow(
+        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_RESPONSE));
   }
 }
