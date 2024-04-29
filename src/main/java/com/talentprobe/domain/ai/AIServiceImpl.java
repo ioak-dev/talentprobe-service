@@ -20,12 +20,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @Service
@@ -66,6 +68,8 @@ public class AIServiceImpl implements AIService {
       aiResponseList = mapToAIResponse(responseEntity.getBody());
     } catch (RestClientException exception) {
       exception.printStackTrace();
+      throw new ResponseStatusException(HttpStatus.GATEWAY_TIMEOUT,
+          exception.getMessage());
     }
     return aiResponseList;
   }
@@ -98,11 +102,11 @@ public class AIServiceImpl implements AIService {
     List<AIResponse> list = new ArrayList<>();
       try {
         JsonNode rootNode = null;
-        if(body instanceof Map){
-         rootNode = objectMapper.valueToTree(body);
-        }
-        else if(body instanceof String) {
+        if(body instanceof String) {
           rootNode = objectMapper.readTree((String) body);
+        }
+        else{
+          rootNode = objectMapper.valueToTree(body);
         }
         if(null!=rootNode) {
           JsonNode choicesNode = rootNode.get("choices");
@@ -133,10 +137,12 @@ public class AIServiceImpl implements AIService {
           }
         }else {
           log.error("Root node is missing in the response");
+          throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,"Root node is missing in the response");
         }
       } catch (IOException e) {
-      e.printStackTrace();
-    }
+        log.error("Exception occurred "+e.getMessage());
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
+      }
     return list;
   }
 

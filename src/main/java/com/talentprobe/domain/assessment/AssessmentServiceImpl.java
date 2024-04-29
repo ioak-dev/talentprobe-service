@@ -67,7 +67,6 @@ public class AssessmentServiceImpl implements AssessmentService {
 
   @Override
   public Assessment getById(String id) {
-    aiService.getAIResponse("NA",2);
     return assessmentRepository.findById(id).orElseThrow(
         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Assessment Not found"));
   }
