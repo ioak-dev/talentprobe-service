@@ -71,7 +71,7 @@ public class AssessmentQuestionServiceImpl implements
   }
 
   @Override
-  public List<AssessmentQuestion> newQuestion(String assessmentId) {
+  public AssessmentQuestion newQuestion(String assessmentId) {
     Assessment assessment = assessmentRepository.findById(assessmentId).orElseThrow();
     List<AssessmentQuestionStage> assessmentQuestionStageList = assessmentQuestionStageRepository
         .findAllByAssessmentId(assessmentId);
@@ -89,7 +89,8 @@ public class AssessmentQuestionServiceImpl implements
 
     assessment.setLastRecommendationId(assessment.getLastRecommendationId() + 1);
     assessmentRepository.save(assessment);
-    return assessmentQuestionRepository.findAllByAssessmentId(assessmentId);
+    assessmentQuestionRepository.findAllByAssessmentId(assessmentId);
+    return assessmentQuestion;
   }
 
   @Override

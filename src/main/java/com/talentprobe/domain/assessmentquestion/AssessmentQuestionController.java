@@ -25,7 +25,7 @@ public class AssessmentQuestionController {
   }
 
   @GetMapping("/{assessmentId}/new-question")
-  public ResponseEntity<List<AssessmentQuestion>> newQuestion(@PathVariable String assessmentId) {
+  public ResponseEntity<AssessmentQuestion> newQuestion(@PathVariable String assessmentId) {
     return ResponseEntity.ok(assessmentQuestionService.newQuestion(assessmentId));
   }
 

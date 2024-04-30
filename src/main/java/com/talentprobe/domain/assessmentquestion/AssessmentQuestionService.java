@@ -10,7 +10,7 @@ public interface AssessmentQuestionService {
 
   void updateQuestionsFromStage(String assessmentId);
 
-  List<AssessmentQuestion> newQuestion(String assessmentId);
+  AssessmentQuestion newQuestion(String assessmentId);
 
   AssessmentQuestion update(AssessmentQuestion request, String questionId, String assessmentId);
 
