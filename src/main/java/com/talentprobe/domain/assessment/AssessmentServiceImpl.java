@@ -52,7 +52,7 @@ public class AssessmentServiceImpl implements AssessmentService {
       else {
         List<AIResponse> aiResponseList = aiService.getAIResponse(assessment.getJobDescription(),10) ;
         assessmentQuestionStageService.deleteAndUpdateQuestionStage(aiResponseList, id);
-        assessmentQuestionService.updateQuestions(id);
+        assessmentQuestionService.updateQuestionsFromStage(id);
         assessment.setName(request.getName());
         assessment.setJobDescription(request.getJobDescription());
         assessment.setDuration(request.getDuration());

@@ -7,9 +7,8 @@ public interface AssessmentResponseService {
 
   AssessmentResponse createAndUpdate(AssessmentResponse request, String assessmentId);
 
-  AssessmentResponse getById(String assessmentId);
+  List<AssessmentResponse> getAllByAssessmentId(String assessmentId);
 
-  void delete(String id);
+  void delete(String id, String assessmentId);
 
-  List<AssessmentResponse> getAllAssessmentResponses();
 }

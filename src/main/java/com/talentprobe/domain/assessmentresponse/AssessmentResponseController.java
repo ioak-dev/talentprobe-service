@@ -19,13 +19,8 @@ public class AssessmentResponseController {
   private AssessmentResponseService assessmentResponseService;
 
   @GetMapping("/{assessmentId}/response")
-  public ResponseEntity<AssessmentResponse> getById(@PathVariable String assessmentId) {
-    return ResponseEntity.ok(assessmentResponseService.getById(assessmentId));
-  }
-
-  @GetMapping
-  public ResponseEntity<List<AssessmentResponse>> getAll() {
-    return ResponseEntity.ok(assessmentResponseService.getAllAssessmentResponses());
+  public ResponseEntity<List<AssessmentResponse>> getAllByAssessmentId(@PathVariable String assessmentId) {
+    return ResponseEntity.ok(assessmentResponseService.getAllByAssessmentId(assessmentId));
   }
 
   @PostMapping("/{assessmentId}/response")
@@ -36,6 +31,6 @@ public class AssessmentResponseController {
 
   @DeleteMapping("/{assessmentId}/response/{responseId}")
   public void delete(@PathVariable String assessmentId, @PathVariable String responseId) {
-    assessmentResponseService.delete(responseId);
+    assessmentResponseService.delete(responseId, assessmentId);
   }
 }

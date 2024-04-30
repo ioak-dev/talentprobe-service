@@ -4,9 +4,13 @@ import java.util.List;
 
 public interface AssessmentQuestionService {
 
-  List<AssessmentQuestion> upsertAndDelete(List<AssessmentQuestion> request);
+  List<AssessmentQuestion> upsertAndDelete(List<AssessmentQuestion> request, String assessmentId);
 
-  List<AssessmentQuestion> getById(String assessmentId);
+  List<AssessmentQuestion> getAllByAssessmentId(String assessmentId);
 
-  void updateQuestions(String assessmentId);
+  void updateQuestionsFromStage(String assessmentId);
+
+  List<AssessmentQuestion> newQuestion(String assessmentId);
+
+  AssessmentQuestion update(AssessmentQuestion request, String questionId, String assessmentId);
 }

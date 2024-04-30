@@ -2,9 +2,7 @@ package com.talentprobe.domain.assessmentresponse;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AssessmentResponseServiceImpl implements
@@ -27,18 +25,12 @@ public class AssessmentResponseServiceImpl implements
   }
 
   @Override
-  public AssessmentResponse getById(String assessmentId) {
-    return assessmentResponseRepository.findById(assessmentId).orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Assessment Response Not found"));
+  public List<AssessmentResponse> getAllByAssessmentId(String assessmentId) {
+    return assessmentResponseRepository.findAllByAssessmentId(assessmentId);
   }
 
   @Override
-  public void delete(String id) {
-    assessmentResponseRepository.deleteById(id);
-  }
-
-  @Override
-  public List<AssessmentResponse> getAllAssessmentResponses() {
-    return assessmentResponseRepository.findAll();
+  public void delete(String id, String assessmentId) {
+    assessmentResponseRepository.deleteByAssessmentIdAndId(assessmentId, id);
   }
 }

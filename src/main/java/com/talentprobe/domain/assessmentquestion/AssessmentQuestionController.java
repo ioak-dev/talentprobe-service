@@ -1,12 +1,12 @@
 package com.talentprobe.domain.assessmentquestion;
 
-import com.talentprobe.domain.assessment.Assessment;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,13 +19,25 @@ public class AssessmentQuestionController {
   private AssessmentQuestionService assessmentQuestionService;
 
   @GetMapping("/{assessmentId}/question")
-  public ResponseEntity<List<AssessmentQuestion>> getById(@PathVariable String assessmentId) {
-    return ResponseEntity.ok(assessmentQuestionService.getById(assessmentId));
+  public ResponseEntity<List<AssessmentQuestion>> getAllByAssessmentId(@PathVariable String assessmentId) {
+    return ResponseEntity.ok(assessmentQuestionService.getAllByAssessmentId(assessmentId));
+  }
+
+  @GetMapping("/{assessmentId}/new-question")
+  public ResponseEntity<List<AssessmentQuestion>> newQuestion(@PathVariable String assessmentId) {
+    return ResponseEntity.ok(assessmentQuestionService.newQuestion(assessmentId));
   }
 
   @PostMapping("/{assessmentId}/question")
   public ResponseEntity<List<AssessmentQuestion>> upsertAndDelete(
-      @RequestBody List<AssessmentQuestion> request) {
-    return ResponseEntity.ok(assessmentQuestionService.upsertAndDelete(request));
+      @RequestBody List<AssessmentQuestion> request, @PathVariable String assessmentId) {
+    return ResponseEntity.ok(assessmentQuestionService.upsertAndDelete(request, assessmentId));
+  }
+
+  @PutMapping("/{assessmentId}/question/{questionId}")
+  public ResponseEntity<AssessmentQuestion> update(
+      @RequestBody AssessmentQuestion request, @PathVariable String questionId,
+      @PathVariable String assessmentId) {
+    return ResponseEntity.ok(assessmentQuestionService.update(request, questionId, assessmentId));
   }
 }
