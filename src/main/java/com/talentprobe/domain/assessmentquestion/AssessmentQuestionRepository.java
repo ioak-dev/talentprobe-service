@@ -8,4 +8,6 @@ public interface AssessmentQuestionRepository extends MongoRepository<Assessment
   List<AssessmentQuestion> findAllByAssessmentId(String assessmentId);
 
   AssessmentQuestion findByAssessmentIdAndId(String assessmentId, String id);
+
+  void deleteByAssessmentIdAndId(String assessmentId, String questionId);
 }

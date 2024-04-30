@@ -13,4 +13,6 @@ public interface AssessmentQuestionService {
   List<AssessmentQuestion> newQuestion(String assessmentId);
 
   AssessmentQuestion update(AssessmentQuestion request, String questionId, String assessmentId);
+
+  void delete(String questionId, String assessmentId);
 }

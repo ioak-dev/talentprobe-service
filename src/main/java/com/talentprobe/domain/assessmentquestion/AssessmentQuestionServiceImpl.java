@@ -111,6 +111,11 @@ public class AssessmentQuestionServiceImpl implements
     return assessmentQuestion;
   }
 
+  @Override
+  public void delete(String questionId, String assessmentId) {
+    assessmentQuestionRepository.deleteByAssessmentIdAndId(assessmentId, questionId);
+  }
+
   public int getDeletedQuestionsCount(String assessmentId) {
     int deletedQuestionsCount = 0;
     List<AssessmentQuestion> assessmentQuestions = assessmentQuestionRepository.findAllByAssessmentId(
