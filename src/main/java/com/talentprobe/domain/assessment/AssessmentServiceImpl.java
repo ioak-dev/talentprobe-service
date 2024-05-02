@@ -50,7 +50,7 @@ public class AssessmentServiceImpl implements AssessmentService {
         return assessmentRepository.save(assessment);
       }
       else {
-        List<AIResponse> aiResponseList = aiService.getAIResponse(assessment.getJobDescription(),50) ;
+        List<AIResponse> aiResponseList = aiService.getAIResponse(request.getJobDescription(),20) ;
         assessmentQuestionStageService.deleteAndUpdateQuestionStage(aiResponseList, id);
         Assessment assessmentTemp = assessmentQuestionService.updateQuestionsFromStage(id);
         assessment.setName(request.getName());
