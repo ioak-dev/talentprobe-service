@@ -23,17 +23,9 @@ public class AssessmentQuestionServiceImpl implements
   private AssessmentRepository assessmentRepository;
 
   @Override
-  public List<AssessmentQuestion> upsertAndDelete(List<AssessmentQuestion> request,
-      String assessmentId) {
-    List<String> newQuestionIds = request.stream().map(AssessmentQuestion::getId).toList();
-    List<AssessmentQuestion> oldQuestions = assessmentQuestionRepository.
-        findAllByAssessmentId(assessmentId);
-    for (AssessmentQuestion oldQuestion : oldQuestions) {
-      if (!newQuestionIds.contains(oldQuestion.getId())) {
-        assessmentQuestionRepository.delete(oldQuestion);
-      }
-    }
-    return assessmentQuestionRepository.saveAll(request);
+  public AssessmentQuestion create(AssessmentQuestion request, String assessmentId) {
+    request.setAssessmentId(assessmentId);
+    return assessmentQuestionRepository.save(request);
   }
 
   @Override
@@ -68,7 +60,6 @@ public class AssessmentQuestionServiceImpl implements
     firstXAssessmentQuestionStages.forEach(stage -> {
       AssessmentQuestion assessmentQuestion = new AssessmentQuestion();
       assessmentQuestion.setAssessmentId(stage.getAssessmentId());
-      assessmentQuestion.setAssessmentStageId(stage.getId());
       assessmentQuestion.setQuestion(stage.getQuestion());
       assessmentQuestion.setAnswer(stage.getAnswer());
       assessmentQuestion.setType(stage.getType());
@@ -90,7 +81,6 @@ public class AssessmentQuestionServiceImpl implements
             assessment.getLastRecommendationNumber() + 1);
     AssessmentQuestion assessmentQuestion = new AssessmentQuestion();
     assessmentQuestion.setAssessmentId(assessmentQuestionStage.getAssessmentId());
-    assessmentQuestion.setAssessmentStageId(assessmentQuestionStage.getId());
     assessmentQuestion.setQuestion(assessmentQuestionStage.getQuestion());
     assessmentQuestion.setAnswer(assessmentQuestionStage.getAnswer());
     assessmentQuestion.setType(assessmentQuestionStage.getType());
@@ -113,7 +103,6 @@ public class AssessmentQuestionServiceImpl implements
       assessmentQuestion = new AssessmentQuestion();
     }
     assessmentQuestion.setAssessmentId(request.getAssessmentId());
-    assessmentQuestion.setAssessmentStageId(request.getAssessmentStageId());
     assessmentQuestion.setQuestion(request.getQuestion());
     assessmentQuestion.setAnswer(request.getAnswer());
     assessmentQuestion.setType(request.getType());

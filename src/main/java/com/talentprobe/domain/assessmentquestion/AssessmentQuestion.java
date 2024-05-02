@@ -23,7 +23,6 @@ public class AssessmentQuestion {
   @Id
   private String id;
   private String assessmentId;
-  private String assessmentStageId;
   private Type type;
   private String question;
   private String answer;

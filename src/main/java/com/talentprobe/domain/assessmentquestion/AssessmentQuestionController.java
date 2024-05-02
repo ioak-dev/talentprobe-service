@@ -30,9 +30,9 @@ public class AssessmentQuestionController {
   }
 
   @PostMapping("/{assessmentId}/question")
-  public ResponseEntity<List<AssessmentQuestion>> upsertAndDelete(
-      @RequestBody List<AssessmentQuestion> request, @PathVariable String assessmentId) {
-    return ResponseEntity.ok(assessmentQuestionService.upsertAndDelete(request, assessmentId));
+  public ResponseEntity<AssessmentQuestion> upsertAndDelete(
+      @RequestBody AssessmentQuestion request, @PathVariable String assessmentId) {
+    return ResponseEntity.ok(assessmentQuestionService.create(request, assessmentId));
   }
 
   @PutMapping("/{assessmentId}/question/{questionId}")

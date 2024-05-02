@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface AssessmentQuestionService {
 
-  List<AssessmentQuestion> upsertAndDelete(List<AssessmentQuestion> request, String assessmentId);
+  AssessmentQuestion create(AssessmentQuestion request, String assessmentId);
 
   List<AssessmentQuestion> getAllByAssessmentId(String assessmentId);
 
