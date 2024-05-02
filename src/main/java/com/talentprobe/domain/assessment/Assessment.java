@@ -26,7 +26,8 @@ public class Assessment {
   private String jobDescription;
   private String duration;
   private Status status;
-  private long lastRecommendationId;
+  private long lastRecommendationNumber;
+  private String skillSet;
 
   @CreatedBy
   private String createdBy;

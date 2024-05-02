@@ -13,8 +13,6 @@ public class AssessmentQuestionStageServiceImpl implements AssessmentQuestionSta
   @Autowired
   private AssessmentQuestionStageRepository assessmentQuestionStageRepository;
 
-  private static final long RECOMMENDATION_NUMBER = 1L;
-
   @Override
   public long getLatRecommendationNumber(String assessmentId){
     long recommendationNumber = 0;
@@ -32,12 +30,10 @@ public class AssessmentQuestionStageServiceImpl implements AssessmentQuestionSta
     List<AssessmentQuestionStage> assessmentQuestionStageList = assessmentQuestionStageRepository
         .findAllByAssessmentId(assessmentId);
     if (!assessmentQuestionStageList.isEmpty()) {
-      long recommendationNumber =
-          assessmentQuestionStageList.get(0).getRecommendationNumber() + 1;
       deleteQuestionStage(assessmentId);
-      updateQuestionStage(aiResponseList, assessmentId, recommendationNumber);
+      updateQuestionStage(aiResponseList, assessmentId);
     }else{
-      updateQuestionStage(aiResponseList, assessmentId, RECOMMENDATION_NUMBER);
+      updateQuestionStage(aiResponseList, assessmentId);
     }
   }
 
@@ -45,10 +41,10 @@ public class AssessmentQuestionStageServiceImpl implements AssessmentQuestionSta
     assessmentQuestionStageRepository.deleteAllByAssessmentId(assessmentId);
   }
 
-  private void updateQuestionStage(List<AIResponse> aiResponseList, String assessmentId,
-      long recommendationNumber) {
+  private void updateQuestionStage(List<AIResponse> aiResponseList, String assessmentId) {
+    long recommendationNumber = 1;
     List<AssessmentQuestionStage> assessmentQuestionStageList = new ArrayList<>();
-    aiResponseList.forEach(aiResponse -> {
+    for (AIResponse aiResponse : aiResponseList) {
       AssessmentQuestionStage assessmentQuestionStage = new AssessmentQuestionStage();
       assessmentQuestionStage.setAssessmentId(assessmentId);
       assessmentQuestionStage.setQuestion(aiResponse.getQuestion());
@@ -57,7 +53,8 @@ public class AssessmentQuestionStageServiceImpl implements AssessmentQuestionSta
       assessmentQuestionStage.setType(Type.MultipleChoice);
       assessmentQuestionStage.setRecommendationNumber(recommendationNumber);
       assessmentQuestionStageList.add(assessmentQuestionStage);
-    });
+      recommendationNumber++;
+    }
     assessmentQuestionStageRepository.saveAll(assessmentQuestionStageList);
   }
 }

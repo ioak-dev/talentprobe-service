@@ -43,17 +43,26 @@ public class AssessmentQuestionServiceImpl implements
   }
 
   @Override
-  public void updateQuestionsFromStage(String assessmentId) {
+  public Assessment updateQuestionsFromStage(String assessmentId) {
+    Assessment assessment = assessmentRepository.findById(assessmentId).orElseThrow();
     int deletedQuestionsCount = getDeletedQuestionsCount(assessmentId);
     List<AssessmentQuestionStage> assessmentQuestionStageList = assessmentQuestionStageRepository
         .findAllByAssessmentId(assessmentId);
     List<AssessmentQuestionStage> firstXAssessmentQuestionStages;
     if (deletedQuestionsCount == 0) {
-      firstXAssessmentQuestionStages = assessmentQuestionStageList
-          .stream().limit(10).toList();
+      firstXAssessmentQuestionStages = assessmentQuestionStageList.stream()
+          .filter(stage -> stage.getRecommendationNumber() >= 1 &&
+              stage.getRecommendationNumber() <= 10)
+          .limit(10)
+          .toList();
+      assessment.setLastRecommendationNumber(10);
     } else {
-      firstXAssessmentQuestionStages = assessmentQuestionStageList
-          .stream().limit(deletedQuestionsCount).toList();
+      firstXAssessmentQuestionStages = assessmentQuestionStageList.stream()
+          .filter(stage -> stage.getRecommendationNumber() >= 1 &&
+              stage.getRecommendationNumber() <= deletedQuestionsCount)
+          .limit(deletedQuestionsCount)
+          .toList();
+      assessment.setLastRecommendationNumber(deletedQuestionsCount);
     }
     List<AssessmentQuestion> assessmentQuestionList = new ArrayList<>();
     firstXAssessmentQuestionStages.forEach(stage -> {
@@ -67,16 +76,18 @@ public class AssessmentQuestionServiceImpl implements
       assessmentQuestion.setPinned(false);
       assessmentQuestionList.add(assessmentQuestion);
     });
+    assessmentRepository.save(assessment);
     assessmentQuestionRepository.saveAll(assessmentQuestionList);
+    assessmentQuestionStageRepository.deleteAll(firstXAssessmentQuestionStages);
+    return assessment;
   }
 
   @Override
   public AssessmentQuestion newQuestion(String assessmentId) {
     Assessment assessment = assessmentRepository.findById(assessmentId).orElseThrow();
-    List<AssessmentQuestionStage> assessmentQuestionStageList = assessmentQuestionStageRepository
-        .findAllByAssessmentId(assessmentId);
-    AssessmentQuestionStage assessmentQuestionStage = assessmentQuestionStageList.get(
-        (int) (assessment.getLastRecommendationId() + 1));
+    AssessmentQuestionStage assessmentQuestionStage = assessmentQuestionStageRepository
+        .findByAssessmentIdAndRecommendationNumber(assessmentId,
+            assessment.getLastRecommendationNumber() + 1);
     AssessmentQuestion assessmentQuestion = new AssessmentQuestion();
     assessmentQuestion.setAssessmentId(assessmentQuestionStage.getAssessmentId());
     assessmentQuestion.setAssessmentStageId(assessmentQuestionStage.getId());
@@ -87,9 +98,9 @@ public class AssessmentQuestionServiceImpl implements
     assessmentQuestion.setPinned(false);
     assessmentQuestionRepository.save(assessmentQuestion);
 
-    assessment.setLastRecommendationId(assessment.getLastRecommendationId() + 1);
+    assessment.setLastRecommendationNumber(assessment.getLastRecommendationNumber() + 1);
     assessmentRepository.save(assessment);
-    assessmentQuestionRepository.findAllByAssessmentId(assessmentId);
+    assessmentQuestionStageRepository.delete(assessmentQuestionStage);
     return assessmentQuestion;
   }
 

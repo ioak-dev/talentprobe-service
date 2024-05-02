@@ -46,19 +46,18 @@ public class AssessmentServiceImpl implements AssessmentService {
         assessment.setJobDescription(request.getJobDescription());
         assessment.setDuration(request.getDuration());
         assessment.setStatus(request.getStatus());
-        assessment.setLastRecommendationId(request.getLastRecommendationId());
+        assessment.setLastRecommendationNumber(request.getLastRecommendationNumber());
         return assessmentRepository.save(assessment);
       }
       else {
-        List<AIResponse> aiResponseList = aiService.getAIResponse(assessment.getJobDescription(),10) ;
+        List<AIResponse> aiResponseList = aiService.getAIResponse(assessment.getJobDescription(),50) ;
         assessmentQuestionStageService.deleteAndUpdateQuestionStage(aiResponseList, id);
-        assessmentQuestionService.updateQuestionsFromStage(id);
+        Assessment assessment1 = assessmentQuestionService.updateQuestionsFromStage(id);
         assessment.setName(request.getName());
         assessment.setJobDescription(request.getJobDescription());
         assessment.setDuration(request.getDuration());
         assessment.setStatus(request.getStatus());
-        assessment.setLastRecommendationId(assessmentQuestionStageService
-            .getLatRecommendationNumber(id));
+        assessment.setLastRecommendationNumber(assessment1.getLastRecommendationNumber());
         return assessmentRepository.save(assessment);
       }
     }

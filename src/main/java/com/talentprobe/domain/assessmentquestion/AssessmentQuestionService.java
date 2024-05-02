@@ -1,5 +1,6 @@
 package com.talentprobe.domain.assessmentquestion;
 
+import com.talentprobe.domain.assessment.Assessment;
 import java.util.List;
 
 public interface AssessmentQuestionService {
@@ -8,7 +9,7 @@ public interface AssessmentQuestionService {
 
   List<AssessmentQuestion> getAllByAssessmentId(String assessmentId);
 
-  void updateQuestionsFromStage(String assessmentId);
+  Assessment updateQuestionsFromStage(String assessmentId);
 
   AssessmentQuestion newQuestion(String assessmentId);
 

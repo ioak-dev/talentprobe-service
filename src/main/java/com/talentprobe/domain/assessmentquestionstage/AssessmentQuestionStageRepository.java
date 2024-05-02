@@ -7,4 +7,7 @@ public interface AssessmentQuestionStageRepository extends MongoRepository<Asses
   List<AssessmentQuestionStage> findAllByAssessmentId(String assessmentId);
 
   void deleteAllByAssessmentId(String assessmentId);
+
+  AssessmentQuestionStage findByAssessmentIdAndRecommendationNumber(String assessmentId,
+      long recommendationNumber);
 }
