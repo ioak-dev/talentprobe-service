@@ -56,20 +56,18 @@ public class AIServiceImpl implements AIService {
     List<AIResponse> aiResponseList = new ArrayList<>();
     try {
       HttpEntity<String> entity = createHttpEntity(jobDescription,noOfQues);
-      //ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
-      Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response.json");
+      ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
+     /* Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response.json");
       ResponseEntity<Object> responseEntity = ResponseEntity
           .ok()
           .header("header", "value")
           .body(StreamUtils.copyToString(resource.getInputStream(),
-              StandardCharsets.UTF_8));
+              StandardCharsets.UTF_8));*/
       aiResponseList = mapToAIResponse(responseEntity.getBody());
     } catch (RestClientException exception) {
       exception.printStackTrace();
       throw new ResponseStatusException(HttpStatus.GATEWAY_TIMEOUT,
           exception.getMessage());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
     }
     return aiResponseList;
   }
