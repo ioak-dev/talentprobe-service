@@ -40,6 +40,12 @@ public class AssessmentController {
     return ResponseEntity.ok(assessmentService.create(request));
   }
 
+  @PostMapping("/{id}/status/{status}")
+  public ResponseEntity<Assessment> updateStatus(@PathVariable String id,
+      @PathVariable Status status) {
+    return ResponseEntity.ok(assessmentService.updateStatus(status, id));
+  }
+
   @DeleteMapping(value = "/{id}")
   public void delete(@PathVariable String id) {
     assessmentService.delete(id);

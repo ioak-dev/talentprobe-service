@@ -32,7 +32,8 @@ public class AssessmentServiceImpl implements AssessmentService {
 
   @Override
   public Assessment create(Assessment assessment) {
-    assessment.setStatus(Status.New);
+    assessment.setStatus(Status.Draft);
+    //assessment.setSkillSet(updateSkillSet(assessment));
       return assessmentRepository.save(assessment);
     }
 
@@ -58,6 +59,7 @@ public class AssessmentServiceImpl implements AssessmentService {
         assessment.setDuration(request.getDuration());
         assessment.setStatus(request.getStatus());
         assessment.setLastRecommendationNumber(assessmentTemp.getLastRecommendationNumber());
+        //assessment.setSkillSet(updateSkillSet(request));
         return assessmentRepository.save(assessment);
       }
     }
@@ -73,5 +75,21 @@ public class AssessmentServiceImpl implements AssessmentService {
   @Override
   public void delete(String id) {
     assessmentRepository.deleteById(id);
+  }
+
+  @Override
+  public Assessment updateStatus(Status status, String id) {
+    Assessment assessment = new Assessment();
+    if (id != null) {
+      assessment = assessmentRepository.findById(id).orElseThrow(
+          () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Assessment Not found"));
+      assessment.setStatus(status);
+      assessmentRepository.save(assessment);
+    }
+    return assessment;
+  }
+
+  public String updateSkillSet(Assessment request) {
+    return aiService.getAISkillSetResponse(request.getJobDescription(), 4).getSkillSet();
   }
 }

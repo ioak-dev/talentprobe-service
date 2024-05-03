@@ -1,0 +1,14 @@
+{
+    "model": "gpt-4",
+    "messages": [
+        {
+            "role": "user",
+            "content": "Generate ${numberOfSkills} skills in JSON format with only the field named "skillSet". This field must have a ${numberOfSkills} skillSets. The JSON array must have the name "skillSet". This set of skills must be generated based on the ${jobDescription}."
+                   }
+    ],
+    "temperature": 1,
+    "max_tokens": 3071,
+    "top_p": 1,
+    "frequency_penalty": 0,
+    "presence_penalty": 0
+}

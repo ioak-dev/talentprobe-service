@@ -14,4 +14,5 @@ public interface AssessmentService {
 
   void delete(String id);
 
+  Assessment updateStatus(Status status, String id);
 }
