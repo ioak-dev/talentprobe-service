@@ -42,24 +42,30 @@ public class GptServiceImpl implements GptService {
   @Value("${gpt.url}")
   private String url;
 
+  @Value("${mock.enabled}")
+  private boolean isMockEnabled;
+
   @Override
   public List<GptResponse> getGptResponse(String usecase) {
-
     List<GptResponse> gptResponseList = new ArrayList<>();
     try {
+      if (isMockEnabled) {
+        Resource resource = resourceLoader.getResource(
+            "classpath:Gpt_Mock_Response_TestGenie.json");
+        ResponseEntity<Object> responseEntity = ResponseEntity
+            .ok()
+            .header("header", "value")
+            .body(StreamUtils.copyToString(resource.getInputStream(),
+                StandardCharsets.UTF_8));
+        return mapToGptResponse(responseEntity.getBody());
+      }
       HttpEntity<String> entity = createHttpEntity(usecase);
       ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
-     /* Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_TestGenie.json");
-      ResponseEntity<Object> responseEntity = ResponseEntity
-          .ok()
-          .header("header", "value")
-          .body(StreamUtils.copyToString(resource.getInputStream(),
-              StandardCharsets.UTF_8));*/
       gptResponseList = mapToGptResponse(responseEntity.getBody());
     } catch (RestClientException exception) {
       exception.printStackTrace();
     } catch (Exception e) {
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
     return gptResponseList;
