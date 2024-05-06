@@ -77,6 +77,12 @@ public class AIServiceImpl implements AIService {
     AiSkillSetResponse aiSkillSetResponse;
     try {
       HttpEntity<String> entity = createHttpEntityForSkillSet(jobDescription, numberOfSkills);
+/*      Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_SkillSet.json");
+      ResponseEntity<Object> responseEntity = ResponseEntity
+          .ok()
+          .header("header", "value")
+          .body(StreamUtils.copyToString(resource.getInputStream(),
+              StandardCharsets.UTF_8));*/
       ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
       aiSkillSetResponse = mapToSkillSetResponse(responseEntity.getBody());
     } catch (Exception e) {
@@ -233,6 +239,6 @@ public class AIServiceImpl implements AIService {
   @NoArgsConstructor
   public static class AiSkillSetResponse {
     @JsonProperty("skillSet")
-    private String skillSet;
+    private List<String> skillSet;
   }
 }

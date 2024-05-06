@@ -1,6 +1,7 @@
 package com.talentprobe.domain.assessment;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +28,7 @@ public class Assessment {
   private String duration;
   private Status status;
   private long lastRecommendationNumber;
-  private String skillSet;
+  private List<String> skillSet;
 
   @CreatedBy
   private String createdBy;

@@ -89,7 +89,7 @@ public class AssessmentServiceImpl implements AssessmentService {
     return assessment;
   }
 
-  public String updateSkillSet(Assessment request) {
+  public List<String> updateSkillSet(Assessment request) {
     return aiService.getAISkillSetResponse(request.getJobDescription(), 4).getSkillSet();
   }
 }
