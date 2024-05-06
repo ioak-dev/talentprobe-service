@@ -2,9 +2,13 @@
     "model": "gpt-4",
     "messages": [
         {
+            "role": "system",
+            "content": "Overall Objective: Assist user in generating multiple choice questions for the given Job Description.\n Instruction: Generate multiple-choice questions in JSON format with the fields named 'question', 'answer', and 'choices'. The 'choices' field must contain an array of four options without numbering and the answer should always be one among the choices. The overall JSON array must be named 'questions'. Craft questions that delve into intricate technical aspects and advanced skills that jobDescription demands. Avoid direct references to the job description itself. Instead, focus on probing candidates' understanding of the skills and technical expertise required for the role. Ensure each question is challenging and necessitates in-depth knowledge, covering real-world scenarios, skill domains outlined in the job description, critical thinking, and reasoning. Design questions to demand deeper insights into the technology, requiring candidates to engage in analytical thinking rather than providing straightforward answers. Tailor the difficulty of questions based on the years of experience specified in the job description. "
+        },
+        {
             "role": "user",
-            "content": "Generate ${numberOfQuestions}  multiple-choice questions in JSON format with the fields named 'question', 'answer', and 'choices'. The 'choices' field must contain an array of four options without numbering. The overall JSON array must be named 'questions'. Craft questions that delve into intricate technical aspects and advanced skills that jobDescription demands. Avoid direct references to the job description itself. Instead, focus on probing candidates' understanding of the skills and technical expertise required for the role. Ensure each question is challenging and necessitates in-depth knowledge, covering real-world scenarios, skill domains outlined in the job description, critical thinking, and reasoning. Design questions to demand deeper insights into the technology, requiring candidates to engage in analytical thinking rather than providing straightforward answers. Tailor the difficulty of questions based on the years of experience specified in the job description. Job Description:${jobDescription}"
-        }
+            "content": " Number of questions : ${numberOfQuestions}  \n Job Description: ${jobDescription} "
+            }
     ],
     "temperature": 1,
     "max_tokens": 3071,

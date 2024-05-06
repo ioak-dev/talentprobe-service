@@ -1,0 +1,23 @@
+{
+    "id": "chatcmpl-9Kku1VOr5xHLv7ddbhkHw0AOKHhIb",
+    "object": "chat.completion",
+    "created": 1714733881,
+    "model": "gpt-4-0613",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": "{\n  \"skillSet\": [\"Angular\", \"Typescript\", \"JavaScript\", \"CSS\"]\n}"
+            },
+            "logprobs": null,
+            "finish_reason": "stop"
+        }
+    ],
+    "usage": {
+        "prompt_tokens": 157,
+        "completion_tokens": 20,
+        "total_tokens": 177
+    },
+    "system_fingerprint": null
+}
