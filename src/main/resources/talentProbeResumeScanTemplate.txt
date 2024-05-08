@@ -1,0 +1,32 @@
+{
+    "model": "gpt-4",
+    "messages": [
+        {
+            "role": "system",
+            "content": "Please assist in generating below key points of the resume in JSON format. Ensure the following requirements are met:
+                        - 'Name': Provide the full name of the individual.
+                        - 'Overview': Offer a brief summary or overview.
+                        - 'Technical Skills': List technical skills as a direct array object without subtopics.
+                        - 'Domain Skills': List domain skills as a direct array object without subtopics.
+                        - 'Total Experience': Display total experience in years.
+                        - 'Industry Normalized Experience': Show experience normalized for the industry.
+                        - 'Current Designation': Present the current job title or designation.
+                        - 'Standardized Designation': Provide a standardized job title or designation.
+                        - 'Recent Experience': Highlight recent work experience in years
+                        - 'Longest Experience': Display the longest work experience in years
+                        - 'Average Experience per Company': Calculate and display the average experience per company.
+                        - 'Key Projects': Must Provide a single string object with comma separated project's one line summary about the key projects and the technologies used
+                        - 'Key Questions to be asked': List key questions.
+                        The overall JSON object should be named keyPoints."
+        },
+        {
+            "role": "user",
+            "content": " Resume : ${resume} "
+            }
+    ],
+    "temperature": 1,
+    "max_tokens": 3071,
+    "top_p": 1,
+    "frequency_penalty": 0,
+    "presence_penalty": 0
+}

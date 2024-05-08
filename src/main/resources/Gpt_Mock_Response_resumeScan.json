@@ -1,0 +1,23 @@
+{
+    "id": "chatcmpl-9MfNldhlvUzrnKb3vnBeYpnyxoScl",
+    "object": "chat.completion",
+    "created": 1715189317,
+    "model": "gpt-4-0613",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": "{\n  \"keyPoints\": {\n    \"Name\": \"Rohan Mehra\",\n    \"Overview\": \"Bachelor of Engineering in Computer Science & Engineering with a CGPA of 8.8 from RNS Institute of Technology. Currently working as a Software Development Engineer at Kickdrum. Proven experience in backend development, frontend development, and cloud services.\",\n    \"Technical Skills\": [\"C++\", \"Java\", \"C#\", \"JavaScript\", \"React\", \"TypeScript\", \"Spring boot\", \"ReactJS\", \"Spring Boot\", \"OpenAI\", \"JUnit\", \"XUnit\", \"AWS\", \"Azure\", \"Git\", \"Swagger\", \"Postgres\", \"MySQL\", \"DynamoDB\", \"Leaflet\", \"Folium\", \"GeoServer\"],\n    \"Domain Skills\": [\"Software Development\", \"Backend Development\", \"Frontend Development\", \"Cloud Services\", \"Web Component Development\", \"User Interface Enhancement\", \"Product Architecture\"],\n    \"Total Experience\": 1,\n    \"Industry Normalized Experience\": 1,\n    \"Current Designation\": \"Software Development Engineer\",\n    \"Standardized Designation\": \"Software Developer\",\n    \"Recent Experience\": 1,\n    \"Longest Experience\": 0.75,\n    \"Average Experience per Company\": 0.5,\n    \"Key Projects\": \"Multi Tenant Booking Engine, utilizing various technologies such as Java Spring Boot, Typescript, PostgreSQL, AWS. KDU Evaluator Tool developed for enhancing operational efficiency alongside maintaining resource optimization.\",\n    \"Key Questions to be asked\": [\"Can you describe your role in the Multi Tenant Booking Engine project?\", \"How have you improved operational efficiency in projects?\", \"Can you provide examples of how you've used AWS in your work?\", \"What strategies did you use to enhance user experience?\"]\n  }\n}"
+            },
+            "logprobs": null,
+            "finish_reason": "stop"
+        }
+    ],
+    "usage": {
+        "prompt_tokens": 1047,
+        "completion_tokens": 368,
+        "total_tokens": 1415
+    },
+    "system_fingerprint": null
+}

@@ -34,4 +34,9 @@ public class ResumeController {
     return ResponseEntity.ok(resumeService.scanResume(file));
   }
 
+  @GetMapping(value = "/download/{id}")
+  public ResponseEntity<Object> downloadResume(@PathVariable String id) {
+    return resumeService.downloadResume(id);
+  }
+
 }

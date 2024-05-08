@@ -28,7 +28,7 @@ public class Resume {
   private List<String> technicalSkills;
   private List<String> domainSkills;
   private String totalExperience;
-  private String industryExperience;
+  private String industryNormalizedExperience;
   private String currentDesignation;
   private String standardizedDesignation;
   private String recentExperience;

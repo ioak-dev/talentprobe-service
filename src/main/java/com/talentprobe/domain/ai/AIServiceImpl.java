@@ -91,6 +91,26 @@ public class AIServiceImpl implements AIService {
     return aiSkillSetResponse;
   }
 
+  @Override
+  public AIResumeResponse getAIResumeKeypoints(String content) {
+    AIResumeResponse resumeSummaryResource;
+    try {
+      HttpEntity<String> entity = createHttpEntityForResumeScan(content);
+      //ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
+      Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_resumeScan.json");
+      ResponseEntity<Object> responseEntity = ResponseEntity
+          .ok()
+          .header("header", "value")
+          .body(StreamUtils.copyToString(resource.getInputStream(),
+              StandardCharsets.UTF_8));
+      resumeSummaryResource = mapToResumeScreeningResponse(responseEntity.getBody());
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    return resumeSummaryResource;
+  }
+
+
   private HttpEntity<String> createHttpEntityForSkillSet(String jobDescription, int numberOfSkills) {
     String envApiKey = System.getenv("CHATGPT_API_KEY");
     String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
@@ -233,6 +253,79 @@ public class AIServiceImpl implements AIService {
     }
     return aiResponse;
   }
+
+  private HttpEntity<String> createHttpEntityForResumeScan(String resumeData) {
+    String envApiKey = System.getenv("CHATGPT_API_KEY");
+    String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.set("Authorization", gptAccessKey + " " + apiKey);
+    String payload = null;
+    try {
+      Resource resource = resourceLoader.getResource("classpath:talentProbeResumeScanTemplate.txt");
+      String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+      if (!content.isBlank()) {
+        String resumeContent = resumeData.replaceAll("\n", "\\\\n")
+            .replaceAll("\r", "\\\\r");
+        payload = content.replace("${resume}", resumeContent);
+      }
+    } catch (IOException exception) {
+      exception.printStackTrace();
+    }
+    return new HttpEntity<>(payload, headers);
+  }
+
+  private AIResumeResponse mapToResumeScreeningResponse(Object body) {
+    ObjectMapper objectMapper = new ObjectMapper();
+    AIResumeResponse aiResumeResponse = new AIResumeResponse();
+    try {
+      JsonNode rootNode = null;
+      if (body instanceof String) {
+        rootNode = objectMapper.readTree((String) body);
+      } else {
+        rootNode = objectMapper.valueToTree(body);
+      }
+      if (null != rootNode) {
+        JsonNode choicesNode = rootNode.get("choices");
+        if (choicesNode != null) {
+          if (choicesNode.isArray()) {
+            for (JsonNode choice : choicesNode) {
+              JsonNode messageNode = choice.get("message");
+              if (messageNode != null) {
+                String contentString = messageNode.get("content").asText();
+                JsonNode contentNode = objectMapper.readTree(contentString);
+                JsonNode keyPointsNode = contentNode.get("keyPoints");
+                if (null == keyPointsNode) {
+                  if (contentNode.isArray()) {
+                    for (JsonNode node : contentNode) {
+                      aiResumeResponse = objectMapper.treeToValue(node, AIResumeResponse.class);
+                    }
+                  }
+                } else if (keyPointsNode.isArray()) {
+                  for (JsonNode node : keyPointsNode) {
+                    aiResumeResponse = objectMapper.treeToValue(node, AIResumeResponse.class);
+                  }
+                } else {
+                  aiResumeResponse = objectMapper.treeToValue(keyPointsNode,
+                      AIResumeResponse.class);
+                }
+              }
+            }
+          }
+        }
+      } else {
+        log.error("Root node is missing in the response");
+        throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+            "Root node is missing in the response");
+      }
+    } catch (IOException e) {
+      log.error("Exception occurred " + e.getMessage());
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+    }
+    return aiResumeResponse;
+  }
+
 
   @Data
   @AllArgsConstructor

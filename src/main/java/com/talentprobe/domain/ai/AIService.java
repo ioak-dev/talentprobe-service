@@ -9,4 +9,6 @@ public interface AIService {
       int noOfQues);
 
   AiSkillSetResponse getAISkillSetResponse(String jobDescription, int numberOfSkills);
+
+  AIResumeResponse getAIResumeKeypoints(String content);
 }
