@@ -96,13 +96,13 @@ public class AIServiceImpl implements AIService {
     AIResumeResponse resumeSummaryResource;
     try {
       HttpEntity<String> entity = createHttpEntityForResumeScan(content);
-      //ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
+      ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
       Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_resumeScan.json");
-      ResponseEntity<Object> responseEntity = ResponseEntity
+      /*ResponseEntity<Object> responseEntity = ResponseEntity
           .ok()
           .header("header", "value")
           .body(StreamUtils.copyToString(resource.getInputStream(),
-              StandardCharsets.UTF_8));
+              StandardCharsets.UTF_8));*/
       resumeSummaryResource = mapToResumeScreeningResponse(responseEntity.getBody());
     } catch (Exception e) {
       throw new RuntimeException(e);
