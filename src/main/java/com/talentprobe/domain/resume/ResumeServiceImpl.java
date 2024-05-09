@@ -84,7 +84,11 @@ public class ResumeServiceImpl implements ResumeService {
   }
 
   private void mapDatabaseEntityFromAIResponse(AIResumeResponse aiResumeResponse, Resume resume) {
-    resume.setName(aiResumeResponse.getName());
+    String totalExperience = aiResumeResponse.getTotalExperience();
+    String derivedName =
+        (null == totalExperience || totalExperience.isBlank()) ? aiResumeResponse.getName()
+            : aiResumeResponse.getName() + "_" + totalExperience;
+    resume.setName(derivedName);
     resume.setOverview(aiResumeResponse.getOverview());
     resume.setTechnicalSkills(aiResumeResponse.getTechnicalSkills());
     resume.setDomainSkills(aiResumeResponse.getDomainSkills());
