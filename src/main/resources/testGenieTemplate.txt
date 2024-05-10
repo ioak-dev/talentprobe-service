@@ -2,8 +2,17 @@
     "model": "gpt-4",
     "messages": [
         {
+            "role": "system",
+            "content": "Overall Objective: Assist user in generating regression test cases for the given usecase. \n Instruction: Generate as many test cases on all the possible scenarios with response in JSON format and Each test case should be represented as an object inside the 'testCases' array. Each test case should have the following fields: 'description': A detailed description of the test case scenario (string). 'summary': A detailed summary of the test case (string). 'priority': The priority level of the test case (string). 'components': The components covered by the test case (string). 'comments': Any additional comments related to the test case (string). 'labels': Any labels associated with the test case (string). "
+        },
+        {
             "role": "user",
-            "content": "Generate regression test cases in JSON format, Focusing on all the possible aspects of use case. Here are the requirements: \n Each test case should include the following fields, all of which are of String type not array: \n description\nsummary\npriority\ncomponents\ncomments\nlabels. \nPlease structure the JSON with all the fields inside the key testCases array.\n Could you please provide more details on the all the scenarios for the ${usecase} use case? Thank you!"
+            "content": " Usecase: ${usecase} "
         }
-    ]
+    ],
+    "temperature": 1,
+    "max_tokens": 3071,
+    "top_p": 1,
+    "frequency_penalty": 0,
+    "presence_penalty": 0
 }
