@@ -93,8 +93,8 @@ public class AIServiceImpl implements AIService {
     try {
       HttpEntity<String> entity = createHttpEntityForResumeScan(content);
       ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
-      Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_resumeScan.json");
-      /*ResponseEntity<Object> responseEntity = ResponseEntity
+      /*Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_resumeScan.json");
+      ResponseEntity<Object> responseEntity = ResponseEntity
           .ok()
           .header("header", "value")
           .body(StreamUtils.copyToString(resource.getInputStream(),
