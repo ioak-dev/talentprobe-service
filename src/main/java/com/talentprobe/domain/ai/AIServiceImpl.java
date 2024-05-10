@@ -1,6 +1,5 @@
 package com.talentprobe.domain.ai;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talentprobe.domain.assessmentquestionstage.AssessmentQuestionStageService;
@@ -8,9 +7,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,8 +69,8 @@ public class AIServiceImpl implements AIService {
   }
 
   @Override
-  public AiSkillSetResponse getAISkillSetResponse(String jobDescription, int numberOfSkills) {
-    AiSkillSetResponse aiSkillSetResponse;
+  public List<String> getAISkillSetResponse(String jobDescription, int numberOfSkills) {
+    List<String> aiSkillSetResponse;
     try {
       HttpEntity<String> entity = createHttpEntityForSkillSet(jobDescription, numberOfSkills);
 /*      Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_SkillSet.json");
@@ -207,9 +203,9 @@ public class AIServiceImpl implements AIService {
     return list;
   }
 
-  private AiSkillSetResponse mapToSkillSetResponse(Object body) {
+  private List<String> mapToSkillSetResponse(Object body) {
     ObjectMapper objectMapper = new ObjectMapper();
-    AiSkillSetResponse aiResponse = new AiSkillSetResponse();
+    List<String> aiResponses = new ArrayList<>();
     try {
       JsonNode rootNode = null;
       if(body instanceof String) {
@@ -231,12 +227,14 @@ public class AIServiceImpl implements AIService {
                 if (null == questionNode) {
                   if (contentNode.isArray()) {
                     for (JsonNode node : contentNode) {
-                      aiResponse = objectMapper.treeToValue(node, AiSkillSetResponse.class);
+                      String aiResponse = objectMapper.treeToValue(node, String.class);
+                      aiResponses.add(aiResponse);
                     }
                   }
                 } else if (questionNode.isArray()) {
                   for (JsonNode node : questionNode) {
-                    aiResponse = objectMapper.treeToValue(node, AiSkillSetResponse.class);
+                    String aiResponse = objectMapper.treeToValue(node, String.class);
+                    aiResponses.add(aiResponse);
                   }
                 }
               }
@@ -251,7 +249,7 @@ public class AIServiceImpl implements AIService {
       log.error("Exception occurred "+e.getMessage());
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
     }
-    return aiResponse;
+    return aiResponses;
   }
 
   private HttpEntity<String> createHttpEntityForResumeScan(String resumeData) {
@@ -327,11 +325,4 @@ public class AIServiceImpl implements AIService {
   }
 
 
-  @Data
-  @AllArgsConstructor
-  @NoArgsConstructor
-  public static class AiSkillSetResponse {
-    @JsonProperty("skillSet")
-    private List<String> skillSet;
-  }
 }

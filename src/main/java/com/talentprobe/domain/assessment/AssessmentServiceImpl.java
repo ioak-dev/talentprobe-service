@@ -33,7 +33,7 @@ public class AssessmentServiceImpl implements AssessmentService {
   @Override
   public Assessment create(Assessment assessment) {
     assessment.setStatus(Status.Draft);
-    //assessment.setSkillSet(updateSkillSet(assessment));
+    assessment.setSkillSet(updateSkillSet(assessment));
       return assessmentRepository.save(assessment);
     }
 
@@ -59,7 +59,7 @@ public class AssessmentServiceImpl implements AssessmentService {
         assessment.setDuration(request.getDuration());
         assessment.setStatus(request.getStatus());
         assessment.setLastRecommendationNumber(assessmentTemp.getLastRecommendationNumber());
-        //assessment.setSkillSet(updateSkillSet(request));
+        assessment.setSkillSet(updateSkillSet(request));
         return assessmentRepository.save(assessment);
       }
     }
@@ -90,6 +90,6 @@ public class AssessmentServiceImpl implements AssessmentService {
   }
 
   public List<String> updateSkillSet(Assessment request) {
-    return aiService.getAISkillSetResponse(request.getJobDescription(), 4).getSkillSet();
+    return aiService.getAISkillSetResponse(request.getJobDescription(), 4);
   }
 }

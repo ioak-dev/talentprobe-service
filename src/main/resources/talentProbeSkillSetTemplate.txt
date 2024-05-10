@@ -3,8 +3,10 @@
     "messages": [
         {
             "role": "user",
-            "content": "Generate ${numberOfSkills} skills in JSON format with only the field named "skillSet". This field must have a ${numberOfSkills} skillSets. The JSON array must have the name "skillSet". This set of skills must be generated based on the ${jobDescription}."
-                   }
+            "content": "Generate a JSON response where the key 'skillSet' contains an array of strings representing skills.
+                        The number of skills in the array should match the value of ${numberOfSkills}, and these skills
+                        should be extracted from the provided job description, ${jobDescription}. Ensure the generated
+                        skills are of high quality and relevant to the job description. "  }
     ],
     "temperature": 1,
     "max_tokens": 3071,
