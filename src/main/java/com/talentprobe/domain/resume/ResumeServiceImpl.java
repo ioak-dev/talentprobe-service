@@ -99,9 +99,10 @@ public class ResumeServiceImpl implements ResumeService {
     resume.setRecentExperience(aiResumeResponse.getRecentExperience());
     resume.setLongestExperience(aiResumeResponse.getLongestExperience());
     resume.setAvgExperiencePerCompany(aiResumeResponse.getAvgExperiencePerCompany());
-    resume.setKeyProjects(aiResumeResponse.getKeyProjects());
+    resume.setAllProjects(aiResumeResponse.getAllProjects());
+    resume.setKeyProject(aiResumeResponse.getKeyProject());
     resume.setQuestionsToBeAsked(aiResumeResponse.getQuestionsToBeAsked());
-
+    resume.setEducation(aiResumeResponse.getEducation());
   }
 
   @Override

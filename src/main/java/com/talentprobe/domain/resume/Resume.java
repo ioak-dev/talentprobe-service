@@ -2,6 +2,7 @@ package com.talentprobe.domain.resume;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +26,8 @@ public class Resume {
   private String name;
   private byte[] attachment;
   private String overview;
-  private List<String> technicalSkills;
-  private List<String> domainSkills;
+  private Map<String, Object> technicalSkills;
+  private Map<String, Object> domainSkills;
   private String totalExperience;
   private String industryNormalizedExperience;
   private String currentDesignation;
@@ -34,8 +35,10 @@ public class Resume {
   private String recentExperience;
   private String longestExperience;
   private String avgExperiencePerCompany;
-  private String keyProjects;
-  private List<String> questionsToBeAsked;
+  private List<String> allProjects;
+  private String keyProject;
+  private Map<String, Object> questionsToBeAsked;
+  private String education;
 
   @CreatedBy
   private String createdBy;

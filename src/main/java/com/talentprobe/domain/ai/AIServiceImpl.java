@@ -267,7 +267,7 @@ public class AIServiceImpl implements AIService {
       String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
       if (!content.isBlank()) {
         String resumeContent = resumeData.replaceAll("\n", "\\\\n")
-            .replaceAll("\r", "\\\\r");
+            .replaceAll("\r", "\\\\r").replaceAll("\t", "\\\\t");
         payload = content.replace("${resume}", resumeContent);
       }
     } catch (IOException exception) {

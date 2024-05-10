@@ -2,6 +2,7 @@ package com.talentprobe.domain.ai;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,10 +21,10 @@ public class AIResumeResponse {
   private String overview;
 
   @JsonProperty("Technical Skills")
-  private List<String> technicalSkills;
+  private Map<String, Object> technicalSkills;
 
   @JsonProperty("Domain Skills")
-  private List<String> domainSkills;
+  private Map<String, Object> domainSkills;
 
   @JsonProperty("Total Experience")
   private String totalExperience;
@@ -46,9 +47,15 @@ public class AIResumeResponse {
   @JsonProperty("Average Experience per Company")
   private String avgExperiencePerCompany;
 
-  @JsonProperty("Key Projects")
-  private String keyProjects;
+  @JsonProperty("All Projects")
+  private List<String> allProjects;
+
+  @JsonProperty("Key Project")
+  private String keyProject;
 
   @JsonProperty("Key Questions to be asked")
-  private List<String> questionsToBeAsked;
+  private Map<String, Object> questionsToBeAsked;
+
+  @JsonProperty("Education")
+  private String education;
 }
