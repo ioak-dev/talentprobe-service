@@ -14,48 +14,48 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AIResumeResponse {
 
-  @JsonProperty("Name")
+  @JsonProperty("name")
   private String name;
 
-  @JsonProperty("Overview")
+  @JsonProperty("overview")
   private String overview;
 
-  @JsonProperty("Technical Skills")
+  @JsonProperty("technicalSkills")
   private Map<String, Object> technicalSkills;
 
-  @JsonProperty("Domain Skills")
+  @JsonProperty("domainSkills")
   private Map<String, Object> domainSkills;
 
-  @JsonProperty("Total Experience")
+  @JsonProperty("totalExperience")
   private String totalExperience;
 
-  @JsonProperty("Industry Normalized Experience")
+  @JsonProperty("industryNormalizedExperience")
   private String industryNormalizedExperience;
 
-  @JsonProperty("Current Designation")
+  @JsonProperty("currentDesignation")
   private String currentDesignation;
 
-  @JsonProperty("Standardized Designation")
+  @JsonProperty("standardizedDesignation")
   private String standardizedDesignation;
 
-  @JsonProperty("Recent Experience")
+  @JsonProperty("recentExperience")
   private String recentExperience;
 
-  @JsonProperty("Longest Experience")
+  @JsonProperty("longestExperience")
   private String longestExperience;
 
-  @JsonProperty("Average Experience per Company")
+  @JsonProperty("averageExperiencePerCompany")
   private String avgExperiencePerCompany;
 
-  @JsonProperty("All Projects")
+  @JsonProperty("allProjects")
   private List<String> allProjects;
 
-  @JsonProperty("Key Project")
+  @JsonProperty("keyProject")
   private String keyProject;
 
-  @JsonProperty("Key Questions to be asked")
+  @JsonProperty("keyQuestionsToBeAsked")
   private Map<String, Object> questionsToBeAsked;
 
-  @JsonProperty("Education")
+  @JsonProperty("education")
   private String education;
 }
