@@ -52,6 +52,7 @@ public class AIServiceImpl implements AIService {
     List<AIResponse> aiResponseList = new ArrayList<>();
     try {
       HttpEntity<String> entity = createHttpEntity(jobDescription,noOfQues);
+      log.info("Making gpt call for questions generation");
       ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
      /* Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response.json");
       ResponseEntity<Object> responseEntity = ResponseEntity
@@ -79,6 +80,7 @@ public class AIServiceImpl implements AIService {
           .header("header", "value")
           .body(StreamUtils.copyToString(resource.getInputStream(),
               StandardCharsets.UTF_8));*/
+      log.info("Making gpt call for skill set generation");
       ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
       aiSkillSetResponse = mapToSkillSetResponse(responseEntity.getBody());
     } catch (Exception e) {
@@ -92,6 +94,7 @@ public class AIServiceImpl implements AIService {
     AIResumeResponse resumeSummaryResource;
     try {
       HttpEntity<String> entity = createHttpEntityForResumeScan(content);
+      log.info("Making gpt call for resume key points generation");
       ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
       /*Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_resumeScan.json");
       ResponseEntity<Object> responseEntity = ResponseEntity
@@ -108,6 +111,7 @@ public class AIServiceImpl implements AIService {
 
 
   private HttpEntity<String> createHttpEntityForSkillSet(String jobDescription, int numberOfSkills) {
+    log.info("Creating skill set http entity for gpt payload");
     String envApiKey = System.getenv("CHATGPT_API_KEY");
     String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
 
@@ -131,7 +135,7 @@ public class AIServiceImpl implements AIService {
   }
 
   private HttpEntity<String> createHttpEntity(String jobDescription,int noOfQues) {
-
+    log.info("Creating questions http entity for gpt payload");
     String envApiKey = System.getenv("CHATGPT_API_KEY");
     String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
 
@@ -155,6 +159,7 @@ public class AIServiceImpl implements AIService {
   }
 
   private List<AIResponse> mapToAIResponse(Object body) {
+    log.info("mapping AI response to questions");
     ObjectMapper objectMapper = new ObjectMapper();
     List<AIResponse> list = new ArrayList<>();
       try {
@@ -204,6 +209,7 @@ public class AIServiceImpl implements AIService {
   }
 
   private List<String> mapToSkillSetResponse(Object body) {
+    log.info("mapping AI response to skill sets");
     ObjectMapper objectMapper = new ObjectMapper();
     List<String> aiResponses = new ArrayList<>();
     try {
@@ -253,6 +259,7 @@ public class AIServiceImpl implements AIService {
   }
 
   private HttpEntity<String> createHttpEntityForResumeScan(String resumeData) {
+    log.info("Creating resume scan http entity for gpt payload");
     String envApiKey = System.getenv("CHATGPT_API_KEY");
     String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
 
@@ -275,6 +282,7 @@ public class AIServiceImpl implements AIService {
   }
 
   private AIResumeResponse mapToResumeScreeningResponse(Object body) {
+    log.info("mapping AI response to resume key points");
     ObjectMapper objectMapper = new ObjectMapper();
     AIResumeResponse aiResumeResponse = new AIResumeResponse();
     try {
