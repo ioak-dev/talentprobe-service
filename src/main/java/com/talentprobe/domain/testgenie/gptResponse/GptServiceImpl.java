@@ -60,6 +60,7 @@ public class GptServiceImpl implements GptService {
         return mapToGptResponse(responseEntity.getBody());
       }
       HttpEntity<String> entity = createHttpEntity(usecase);
+      log.info("Making gpt call for the use case");
       ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
       gptResponseList = mapToGptResponse(responseEntity.getBody());
     } catch (RestClientException exception) {
@@ -73,7 +74,7 @@ public class GptServiceImpl implements GptService {
   }
 
   private HttpEntity<String> createHttpEntity(String usecase) {
-
+    log.info("Creating http entity for gpt payload");
     String envApiKey = System.getenv("CHATGPT_API_KEY");
     String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
 
@@ -86,7 +87,7 @@ public class GptServiceImpl implements GptService {
       String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
       if (!content.isBlank()) {
         String sanitizedUseCase = usecase.replace("\n", "\\\\n")
-            .replace("\r", "\\\\r");
+            .replace("\r", "\\\\r").replace("\"", "");
         payload = content.replace("${usecase}", sanitizedUseCase);
       }
     } catch (IOException exception) {

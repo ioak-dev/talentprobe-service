@@ -2,17 +2,14 @@ package com.talentprobe.domain.testgenie.testcase;
 
 import com.talentprobe.domain.testgenie.gptResponse.GptResponse;
 import com.talentprobe.domain.testgenie.gptResponse.GptService;
-import com.talentprobe.domain.testgenie.usecase.UseCase;
-import com.talentprobe.domain.testgenie.usecase.UseCaseService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Slf4j
 public class TestCaseServiceImpl implements TestCaseService {
 
   @Autowired
@@ -21,13 +18,11 @@ public class TestCaseServiceImpl implements TestCaseService {
   @Autowired
   private GptService gptService;
 
-  @Autowired
-  private UseCaseService useCaseService;
 
   @Override
-  public List<TestCase> getTestCaseForSuiteAndUseCase(String suiteId, String usecaseId) {
-    UseCase useCase = useCaseService.getUseCaseById(suiteId, usecaseId);
-    List<GptResponse> gptResponseList = gptService.getGptResponse(useCase.getDescription());
+  public List<TestCase> getTestCaseForSuiteAndUseCase(String suiteId, String usecaseId,String description) {
+    List<GptResponse> gptResponseList = gptService.getGptResponse(description);
+    log.info("Successfully generated test cases for use case");
     List<TestCase> testCases = new ArrayList<>();
     if (!gptResponseList.isEmpty()) {
       gptResponseList.forEach(

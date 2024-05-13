@@ -25,6 +25,8 @@ public class UseCase {
 
   private String suiteId;
 
+  private String useCaseName;
+
   private String description;
 
   @CreatedBy

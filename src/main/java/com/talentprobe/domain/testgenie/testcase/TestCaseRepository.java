@@ -8,4 +8,6 @@ public interface TestCaseRepository extends MongoRepository<TestCase,String> {
 
   List<TestCase> findAllBySuiteId(String suiteId);
 
+  void deleteAllBySuiteIdAndUseCaseId(String suiteId,String usecaseId);
+
 }

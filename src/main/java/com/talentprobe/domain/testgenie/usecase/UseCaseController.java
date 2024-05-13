@@ -1,5 +1,6 @@
 package com.talentprobe.domain.testgenie.usecase;
 
+import com.talentprobe.domain.testgenie.testcase.TestCase;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +27,13 @@ public class UseCaseController {
   }
 
   @PostMapping("/{id}/usecase")
-  public ResponseEntity<UseCase> createUseCase(@PathVariable String id,
+  public ResponseEntity<List<TestCase>> createUseCase(@PathVariable String id,
       @RequestBody UseCase useCase){
     return ResponseEntity.ok(useCaseService.createUseCaseForSuite(id,useCase));
   }
 
   @PutMapping("/{id}/usecase/{usecaseid}")
-  public ResponseEntity<UseCase> updateUseCase(@PathVariable String id,
+  public ResponseEntity<List<TestCase>> updateUseCase(@PathVariable String id,
       @PathVariable String usecaseid,@RequestBody UseCase useCase){
     return ResponseEntity.ok(useCaseService.updateUseCase(id,usecaseid,useCase));
   }
