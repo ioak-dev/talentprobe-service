@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface TestCaseService {
 
-  List<TestCase> getTestCaseForSuiteAndUseCase(String suiteId, String usecaseId,String description);
+  List<TestCase> getTestCasesForSuiteIdAndUseCaseId(String suiteId, String usecaseId);
+
+  void constructTestCaseFromGptResponse(String suiteId, String usecaseId,String description);
 
 }

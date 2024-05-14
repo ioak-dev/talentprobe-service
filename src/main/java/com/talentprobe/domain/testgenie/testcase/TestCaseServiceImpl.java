@@ -20,7 +20,7 @@ public class TestCaseServiceImpl implements TestCaseService {
 
 
   @Override
-  public List<TestCase> getTestCaseForSuiteAndUseCase(String suiteId, String usecaseId,String description) {
+  public void constructTestCaseFromGptResponse(String suiteId, String usecaseId,String description) {
     List<GptResponse> gptResponseList = gptService.getGptResponse(description);
     log.info("Successfully generated test cases for use case");
     List<TestCase> testCases = new ArrayList<>();
@@ -41,6 +41,10 @@ public class TestCaseServiceImpl implements TestCaseService {
       );
       testCaseRepository.saveAll(testCases);
     }
+  }
+
+
+  public List<TestCase> getTestCasesForSuiteIdAndUseCaseId(String suiteId, String usecaseId){
     List<TestCase> testCaseList = testCaseRepository.findAllBySuiteIdAndUseCaseId(suiteId, usecaseId);
     return testCaseList;
   }

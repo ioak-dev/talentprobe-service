@@ -27,13 +27,13 @@ public class UseCaseController {
   }
 
   @PostMapping("/{id}/usecase")
-  public ResponseEntity<List<TestCase>> createUseCase(@PathVariable String id,
+  public ResponseEntity<UseCase> createUseCase(@PathVariable String id,
       @RequestBody UseCase useCase){
     return ResponseEntity.ok(useCaseService.createUseCaseForSuite(id,useCase));
   }
 
   @PutMapping("/{id}/usecase/{usecaseid}")
-  public ResponseEntity<List<TestCase>> updateUseCase(@PathVariable String id,
+  public ResponseEntity<UseCase> updateUseCase(@PathVariable String id,
       @PathVariable String usecaseid,@RequestBody UseCase useCase){
     return ResponseEntity.ok(useCaseService.updateUseCase(id,usecaseid,useCase));
   }

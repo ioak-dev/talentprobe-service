@@ -33,22 +33,24 @@ public class UseCaseServiceImpl implements UseCaseService {
   }
 
   @Override
-  public List<TestCase> createUseCaseForSuite(String suiteId, UseCase useCase) {
+  public UseCase createUseCaseForSuite(String suiteId, UseCase useCase) {
     log.info("Creating Use case for suiteId "+suiteId);
+    UseCase responseUsecase;
     if (useCase.getDescription() != null && !useCase.getDescription().isEmpty()) {
       UseCase request = new UseCase();
       request.setId(useCase.getId());
       request.setUseCaseName(useCase.getUseCaseName());
       request.setDescription(useCase.getDescription());
       request.setSuiteId(suiteId);
-      UseCase responseUsecase = useCaseRepository.save(request);
+      responseUsecase = useCaseRepository.save(request);
       log.info("Generating test cases for use case");
-      return testCaseService.getTestCaseForSuiteAndUseCase(suiteId, responseUsecase.getId(),
+      testCaseService.constructTestCaseFromGptResponse(suiteId, responseUsecase.getId(),
           responseUsecase.getDescription());
     } else {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
           "Use case description can not null");
     }
+    return responseUsecase;
   }
 
   @Override
@@ -59,27 +61,23 @@ public class UseCaseServiceImpl implements UseCaseService {
   }
 
   @Override
-  public List<TestCase> updateUseCase(String suiteId, String useCaseId, UseCase useCaseDetails) {
+  public UseCase updateUseCase(String suiteId, String useCaseId, UseCase useCaseDetails) {
     log.info("Updating use case for id "+ useCaseId);
     Optional<UseCase> existingUseCase = useCaseRepository.findByIdAndSuiteId(useCaseId, suiteId);
     if (!existingUseCase.isPresent()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_RESPONSE);
     }
     UseCase usecase = existingUseCase.get();
-    List<TestCase> responseTestCasesList = new ArrayList<>();
     usecase.setUseCaseName(useCaseDetails.getUseCaseName());
     if (useCaseDetails.getDescription() != null &&
         !usecase.getDescription().equals(useCaseDetails.getDescription())) {
       usecase.setDescription(useCaseDetails.getDescription());
       testCaseRepository.deleteAllBySuiteIdAndUseCaseId(suiteId,useCaseId);
       log.info("Generating test cases for use case");
-      responseTestCasesList = testCaseService.getTestCaseForSuiteAndUseCase(suiteId, useCaseId,
+      testCaseService.constructTestCaseFromGptResponse(suiteId, useCaseId,
           useCaseDetails.getDescription());
-    } else {
-      responseTestCasesList = testCaseRepository.findAllBySuiteIdAndUseCaseId(suiteId, useCaseId);
     }
-    useCaseRepository.save(usecase);
-    return responseTestCasesList;
+    return useCaseRepository.save(usecase);
   }
 
   @Override

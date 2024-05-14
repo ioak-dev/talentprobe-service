@@ -7,11 +7,11 @@ public interface UseCaseService {
 
   List<UseCase> getUseCasesForSuite(String suiteId);
 
-  List<TestCase> createUseCaseForSuite(String suiteId, UseCase useCase);
+  UseCase createUseCaseForSuite(String suiteId, UseCase useCase);
 
   UseCase getUseCaseById(String suiteId, String useCaseId);
 
-  List<TestCase> updateUseCase(String suiteId, String useCaseId, UseCase useCaseDetails);
+ UseCase updateUseCase(String suiteId, String useCaseId, UseCase useCaseDetails);
 
   void deleteUseCase(String suiteId, String useCaseId);
 }
