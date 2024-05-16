@@ -36,9 +36,6 @@ public class AIServiceImpl implements AIService {
   @Autowired
   private RestTemplate restTemplate;
 
-  @Value("${gpt.apiKey}")
-  private String gptApiKey;
-
   @Value("${gpt.accessKey}")
   private String gptAccessKey;
 
@@ -112,12 +109,10 @@ public class AIServiceImpl implements AIService {
 
   private HttpEntity<String> createHttpEntityForSkillSet(String jobDescription, int numberOfSkills) {
     log.info("Creating skill set http entity for gpt payload");
-    String envApiKey = System.getenv("CHATGPT_API_KEY");
-    String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.set("Authorization", gptAccessKey + " " + apiKey);
+    headers.set("Authorization", gptAccessKey);
     String payload = null;
     try {
       Resource resource = resourceLoader.getResource("classpath:talentProbeSkillSetTemplate.txt");
@@ -136,12 +131,9 @@ public class AIServiceImpl implements AIService {
 
   private HttpEntity<String> createHttpEntity(String jobDescription,int noOfQues) {
     log.info("Creating questions http entity for gpt payload");
-    String envApiKey = System.getenv("CHATGPT_API_KEY");
-    String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
-
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.set("Authorization", gptAccessKey + " " + apiKey);
+    headers.set("Authorization", gptAccessKey);
     String payload = null;
     try {
       Resource resource = resourceLoader.getResource("classpath:talentProbeTemplate.txt");
@@ -260,12 +252,9 @@ public class AIServiceImpl implements AIService {
 
   private HttpEntity<String> createHttpEntityForResumeScan(String resumeData) {
     log.info("Creating resume scan http entity for gpt payload");
-    String envApiKey = System.getenv("CHATGPT_API_KEY");
-    String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
-
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.set("Authorization", gptAccessKey + " " + apiKey);
+    headers.set("Authorization", gptAccessKey);
     String payload = null;
     try {
       Resource resource = resourceLoader.getResource("classpath:talentProbeResumeScanTemplate.txt");

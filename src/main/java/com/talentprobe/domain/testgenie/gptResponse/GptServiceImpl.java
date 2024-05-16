@@ -33,9 +33,6 @@ public class GptServiceImpl implements GptService {
   @Autowired
   private RestTemplate restTemplate;
 
-  @Value("${gpt.apiKey}")
-  private String gptApiKey;
-
   @Value("${gpt.accessKey}")
   private String gptAccessKey;
 
@@ -75,12 +72,9 @@ public class GptServiceImpl implements GptService {
 
   private HttpEntity<String> createHttpEntity(String usecase) {
     log.info("Creating http entity for gpt payload");
-    String envApiKey = System.getenv("CHATGPT_API_KEY");
-    String apiKey = null == envApiKey || envApiKey.isBlank() ? gptApiKey : envApiKey;
-
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.set("Authorization", gptAccessKey + " " + apiKey);
+    headers.set("Authorization", gptAccessKey);
     String payload = null;
     try {
       Resource resource = resourceLoader.getResource("classpath:testGenieTemplate.txt");

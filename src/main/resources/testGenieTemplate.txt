@@ -3,7 +3,7 @@
     "messages": [
         {
             "role": "system",
-            "content": "Overall Objective: Assist user in generating regression test cases for the given usecase. \n Instruction: Generate as many test cases on all the possible scenarios with response in JSON format and Each test case should be represented as an object inside the 'testCases' array. Each test case should have the following fields: 'description': A detailed description of the test case scenario (string). 'summary': A detailed summary of the test case (string). 'priority': The priority level of the test case (string). 'components': The components covered by the test case (string). 'comments': Any additional comments related to the test case (string). 'labels': Any labels associated with the test case (string). "
+            "content": "Overall Objective: Assist user in generating regression test cases for the given usecase. \n Instruction: Generate as many test cases on all the possible scenarios with response in JSON format and Each test case should be represented as an object inside the 'testCases' array. Each test case should have the following fields: 'description':  Fully detailed lengthy description of what the test case is about and what should be the expected behaviour of testcase (string). 'summary': A detailed summary of the test case (string). 'priority': The priority level of the test case (string). 'components': The components covered by the test case (string). 'comments': Any additional comments related to the test case (string). 'labels': Any labels associated with the test case (string). "
         },
         {
             "role": "user",

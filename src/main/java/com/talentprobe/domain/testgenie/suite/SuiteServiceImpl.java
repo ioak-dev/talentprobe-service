@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Slf4j
 public class SuiteServiceImpl implements SuiteService {
 
   private static final String ERROR_RESPONSE = "Suite does not exists";
@@ -80,12 +82,14 @@ public class SuiteServiceImpl implements SuiteService {
   @Override
   public ResponseEntity<Object> exportSuite(String suiteId, ExportMode type) {
     try {
+      log.info("Creating temporary directory path");
       Path tempDirPath = Files.createTempDirectory("TestcaseData");
       String timestamp = new SimpleDateFormat(DATE_FORMAT).format(new Date());
       String fileName = "testcase_" + timestamp + ".csv";
       Path filePath = tempDirPath.resolve(fileName);
       List<TestCase> testCaseList = testCaseRepository.findAllBySuiteId(suiteId);
       if (type.equals(JSON)) {
+        log.info("Returning json response for the suite id");
         return ResponseEntity.ok().contentType(MediaType.valueOf(APPLICATION_JSON_VALUE))
             .body(testCaseList);
       }
@@ -103,6 +107,7 @@ public class SuiteServiceImpl implements SuiteService {
       }
       byte[] fileContent = Files.readAllBytes(filePath);
       ByteArrayResource resource = new ByteArrayResource(fileContent);
+      log.info("Creating CSV file as response");
       return ResponseEntity.ok()
           .header(HEADER_NAME, HEADER_VALUES + fileName).contentLength(fileContent.length)
           .contentType(MediaType.parseMediaType("text/csv")).body(resource);
