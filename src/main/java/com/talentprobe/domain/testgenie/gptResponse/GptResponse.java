@@ -1,6 +1,7 @@
 package com.talentprobe.domain.testgenie.gptResponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class GptResponse {
 
   @JsonProperty("description")
-  private String description;
+  private GptDescriptionResponse description;
 
   @JsonProperty("summary")
   private String summary;
@@ -29,4 +30,21 @@ public class GptResponse {
 
   @JsonProperty("labels")
   private String labels;
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @Builder
+  public static class GptDescriptionResponse {
+
+    @JsonProperty("overview")
+    private String overview;
+
+    @JsonProperty("steps")
+    private List<String> steps;
+
+    @JsonProperty("expectedOutcome")
+    private String expectedOutcome;
+
+  }
 }

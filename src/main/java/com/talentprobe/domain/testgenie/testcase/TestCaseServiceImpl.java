@@ -2,6 +2,7 @@ package com.talentprobe.domain.testgenie.testcase;
 
 import com.talentprobe.domain.testgenie.gptResponse.GptResponse;
 import com.talentprobe.domain.testgenie.gptResponse.GptService;
+import com.talentprobe.domain.testgenie.testcase.TestCase.TestDescriptionResource;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +28,14 @@ public class TestCaseServiceImpl implements TestCaseService {
     if (!gptResponseList.isEmpty()) {
       gptResponseList.forEach(
           gptResponse -> {
+            TestDescriptionResource testDescriptionResource=new TestDescriptionResource();
             TestCase testCase = new TestCase();
             testCase.setSuiteId(suiteId);
             testCase.setUseCaseId(usecaseId);
-            testCase.setDescription(gptResponse.getDescription());
+            testDescriptionResource.setOverview(gptResponse.getDescription().getOverview());
+            testDescriptionResource.setSteps(gptResponse.getDescription().getSteps());
+            testDescriptionResource.setExpectedOutcome(gptResponse.getDescription().getExpectedOutcome());
+            testCase.setDescription(testDescriptionResource);
             testCase.setSummary(gptResponse.getSummary());
             testCase.setComments(gptResponse.getComments());
             testCase.setPriority(gptResponse.getPriority());

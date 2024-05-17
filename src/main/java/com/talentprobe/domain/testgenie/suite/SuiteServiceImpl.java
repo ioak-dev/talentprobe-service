@@ -12,6 +12,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.talentprobe.domain.testgenie.export.ExportMode;
 import com.talentprobe.domain.testgenie.testcase.TestCase;
+import com.talentprobe.domain.testgenie.testcase.TestCase.TestDescriptionResource;
 import com.talentprobe.domain.testgenie.testcase.TestCaseRepository;
 import java.io.BufferedWriter;
 import java.nio.charset.StandardCharsets;
@@ -20,7 +21,9 @@ import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
@@ -132,7 +135,7 @@ public class SuiteServiceImpl implements SuiteService {
     for (TestCase testCase : testCaseList) {
       List<String> recordValue = new ArrayList<>();
       recordValue.add(suiteName);
-      recordValue.add(testCase.getDescription());
+      recordValue.add(buildDescriptionFromGptResponse(testCase.getDescription()));
       recordValue.add(testCase.getSummary());
       recordValue.add(testCase.getPriority());
       recordValue.add(testCase.getComments());
@@ -141,6 +144,18 @@ public class SuiteServiceImpl implements SuiteService {
       rowData.add(recordValue);
     }
     return rowData;
+  }
+
+  public String buildDescriptionFromGptResponse(TestDescriptionResource testDescriptionResource){
+    Map<String,String> descriptionMap=new LinkedHashMap<>();
+    descriptionMap.put("overview",testDescriptionResource.getOverview());
+    descriptionMap.put("steps",String.join("\n", testDescriptionResource.getSteps()));
+    descriptionMap.put("expectedOutcome",testDescriptionResource.getExpectedOutcome());
+    StringBuilder stringBuilder=new StringBuilder();
+    for(Map.Entry<String,String> entry: descriptionMap.entrySet()){
+      stringBuilder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+    }
+    return stringBuilder.toString().trim();
   }
 
   @Override

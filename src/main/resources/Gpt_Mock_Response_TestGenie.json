@@ -1,23 +1,23 @@
 {
-    "id": "chatcmpl-9HVHWvyJQjB9FNOi5OLpUBN8AIt4h",
+    "id": "chatcmpl-9PnAvTKdEqMbnIIfaQRmg3f0zx3JU",
     "object": "chat.completion",
-    "created": 1713958850,
-    "model": "gpt-3.5-turbo-0125",
+    "created": 1715934257,
+    "model": "gpt-4-0613",
     "choices": [
         {
             "index": 0,
             "message": {
                 "role": "assistant",
-                "content": "{ \"testCases\": [\n    {\n      \"description\": \"Verify user is able to login successfully with valid credentials\",\n      \"summary\": \"Positive scenario for successful login\",\n      \"priority\": \"High\",\n      \"components\": \"Test case components\",\n      \"comments\": \"Test case comments\",\n      \"labels\": \"positive, login\"   },\n    {\n      \"description\": \"Verify user receives an error message when entering invalid credentials\",\n      \"summary\": \"Negative scenario for invalid login\",\n      \"priority\": \"High\",\n      \"components\": \"Test case components\",\n      \"comments\": \"Test case comments\",\n      \"labels\": \"negative, login\"   }\n  ]\n}  "
+                "content": "{\n    \"testCases\": [\n        {\n            \"description\": {\n                \"overview\": \"This test case is designed to verify if the user is able to edit the article title and description on the left section of the page.\",\n                \"steps\": [\n                    \"Step 1: Open the Article edit page.\",\n                    \"Step 2: Edit the Article title and description.\",\n                    \"Step 3: Click on the 'Save' button.\"\n                ],\n                \"expectedOutcome\": \"The article title and description should be updated successfully.\"\n            },\n            \"summary\": \"Edit and save the article title and description.\",\n            \"priority\": \"High\",\n            \"components\": \"Article edit page, Article description\",\n            \"comments\": \"Ensure that the page is correctly aligned after the update.\",\n            \"labels\": \"Article, edit_page, Title, Description\"\n        },\n        {\n            \"description\": {\n                \"overview\": \"This test case is designed to verify if the user is able to change the article category from the right section of the page.\",\n                \"steps\": [\n                    \"Step 1: Open the Article edit page.\",\n                    \"Step 2: Click on 'Choose category'.\",\n                    \"Step 3: Select a category from the popup in tree format.\",\n                    \"Step 4: Click on the 'Save' button.\"\n                ],\n                \"expectedOutcome\": \"The article category should be updated successfully.\"\n            },\n            \"summary\": \"Change and save the article category.\",\n            \"priority\": \"High\",\n            \"components\": \"Article edit page, Article category\",\n            \"comments\": \"Ensure that the updated category is shown in the right section after save.\",\n            \"labels\": \"Article, edit_page, Category\"\n        },\n        {\n            \"description\": {\n                \"overview\": \"This test case is designed to verify if the user is able to cancel the changes and the prompt works correctly.\",\n                \"steps\": [\n                    \"Step 1: Open the Article edit page.\",\n                    \"Step 2: Edit the article title or description or both.\",\n                    \"Step 3: Click on 'Cancel' button.\",\n                    \"Step 4: In the prompt, click on 'Ignore and go back'.\"\n                ],\n                \"expectedOutcome\": \"The page should return to the previous page and the changes should not be saved.\"\n            },\n            \"summary\": \"Cancel changes and ignore the prompt.\",\n            \"priority\": \"High\",\n            \"components\": \"Article edit page, Prompt\",\n            \"comments\": \"Ensure that the prompt appears when clicking on 'Cancel' button.\",\n            \"labels\": \"Article, edit_page, Cancel, Prompt\"\n        },\n        {\n            \"description\": {\n                \"overview\": \"This test case is designed to verify if the user can cancel changes and save through the prompt.\",\n                \"steps\": [\n                    \"Step 1: Open the Article edit page.\",\n                    \"Step 2: Edit the article title or description or both.\",\n                    \"Step 3: Click on 'Cancel' button.\",\n                    \"Step 4: In the prompt, click on 'Save and go back'.\"\n                ],\n                \"expectedOutcome\": \"The page should return to the previous page and the changes should be saved.\"\n            },\n            \"summary\": \"Cancel changes and save through the prompt.\",\n            \"priority\": \"High\",\n            \"components\": \"Article edit page, Prompt\",\n            \"comments\": \"Ensure that the prompt offers the option to save changes.\",\n            \"labels\": \"Article, edit_page, Cancel, Prompt, Save\"\n        }\n    ]\n}"
             },
             "logprobs": null,
             "finish_reason": "stop"
         }
     ],
     "usage": {
-        "prompt_tokens": 138,
-        "completion_tokens": 173,
-        "total_tokens": 311
+        "prompt_tokens": 307,
+        "completion_tokens": 730,
+        "total_tokens": 1037
     },
-    "system_fingerprint": "fp_c2295e73ad"
+    "system_fingerprint": null
 }

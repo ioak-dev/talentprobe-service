@@ -2,6 +2,7 @@ package com.talentprobe.domain.testgenie.testcase;
 
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +28,7 @@ public class TestCase {
 
   private String useCaseId;
 
-  private String description;
+  private TestDescriptionResource description;
 
   private String summary;
 
@@ -50,5 +51,18 @@ public class TestCase {
 
   @LastModifiedDate
   private ZonedDateTime lastModifiedDate;
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @Builder
+  public static class TestDescriptionResource {
+
+    private String overview;
+
+    private List<String> steps;
+
+    private String expectedOutcome;
+  }
 
 }
