@@ -42,16 +42,29 @@ public class AIServiceImpl implements AIService {
   @Value("${gpt.url}")
   private String url;
 
+  @Value("${mock.enabled}")
+  private boolean isMockEnabled;
+
   @Override
   public List<AIResponse> getAIResponse(String jobDescription,
       int noOfQues) {
 
     List<AIResponse> aiResponseList = new ArrayList<>();
     try {
+      if (isMockEnabled) {
+        Resource resource = resourceLoader.getResource(
+            "classpath:Gpt_Mock_Response_TalentProbe.json");
+        ResponseEntity<Object> responseEntity = ResponseEntity
+            .ok()
+            .header("header", "value")
+            .body(StreamUtils.copyToString(resource.getInputStream(),
+                StandardCharsets.UTF_8));
+        return mapToAIResponse(responseEntity.getBody());
+      }
       HttpEntity<String> entity = createHttpEntity(jobDescription,noOfQues);
       log.info("Making gpt call for questions generation");
       ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
-     /* Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response.json");
+     /* Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_TalentProbe.json");
       ResponseEntity<Object> responseEntity = ResponseEntity
           .ok()
           .header("header", "value")
@@ -62,6 +75,9 @@ public class AIServiceImpl implements AIService {
       exception.printStackTrace();
       throw new ResponseStatusException(HttpStatus.GATEWAY_TIMEOUT,
           exception.getMessage());
+    } catch (Exception e){
+      e.printStackTrace();
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
     }
     return aiResponseList;
   }
@@ -70,6 +86,16 @@ public class AIServiceImpl implements AIService {
   public List<String> getAISkillSetResponse(String jobDescription, int numberOfSkills) {
     List<String> aiSkillSetResponse;
     try {
+      if (isMockEnabled) {
+        Resource resource = resourceLoader.getResource(
+            "classpath:Gpt_Mock_Response_SkillSet.json");
+        ResponseEntity<Object> responseEntity = ResponseEntity
+            .ok()
+            .header("header", "value")
+            .body(StreamUtils.copyToString(resource.getInputStream(),
+                StandardCharsets.UTF_8));
+        return mapToSkillSetResponse(responseEntity.getBody());
+      }
       HttpEntity<String> entity = createHttpEntityForSkillSet(jobDescription, numberOfSkills);
 /*      Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_SkillSet.json");
       ResponseEntity<Object> responseEntity = ResponseEntity
@@ -90,6 +116,16 @@ public class AIServiceImpl implements AIService {
   public AIResumeResponse getAIResumeKeypoints(String content) {
     AIResumeResponse resumeSummaryResource;
     try {
+      if (isMockEnabled) {
+        Resource resource = resourceLoader.getResource(
+            "classpath:Gpt_Mock_Response_resumeScan.json");
+        ResponseEntity<Object> responseEntity = ResponseEntity
+            .ok()
+            .header("header", "value")
+            .body(StreamUtils.copyToString(resource.getInputStream(),
+                StandardCharsets.UTF_8));
+        return mapToResumeScreeningResponse(responseEntity.getBody());
+      }
       HttpEntity<String> entity = createHttpEntityForResumeScan(content);
       log.info("Making gpt call for resume key points generation");
       ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
