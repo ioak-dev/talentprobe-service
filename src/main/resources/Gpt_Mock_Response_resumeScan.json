@@ -1,23 +1,23 @@
 {
-    "id": "chatcmpl-9MfNldhlvUzrnKb3vnBeYpnyxoScl",
-    "object": "chat.completion",
-    "created": 1715189317,
-    "model": "gpt-4-0613",
-    "choices": [
-        {
-            "index": 0,
-            "message": {
-                "role": "assistant",
-                "content": "{\n  \"keyPoints\": {\n    \"Name\": \"Rohan Mehra\",\n    \"Overview\": \"Bachelor of Engineering in Computer Science & Engineering with a CGPA of 8.8 from RNS Institute of Technology. Currently working as a Software Development Engineer at Kickdrum. Proven experience in backend development, frontend development, and cloud services.\",\n    \"Technical Skills\": [\"C++\", \"Java\", \"C#\", \"JavaScript\", \"React\", \"TypeScript\", \"Spring boot\", \"ReactJS\", \"Spring Boot\", \"OpenAI\", \"JUnit\", \"XUnit\", \"AWS\", \"Azure\", \"Git\", \"Swagger\", \"Postgres\", \"MySQL\", \"DynamoDB\", \"Leaflet\", \"Folium\", \"GeoServer\"],\n    \"Domain Skills\": [\"Software Development\", \"Backend Development\", \"Frontend Development\", \"Cloud Services\", \"Web Component Development\", \"User Interface Enhancement\", \"Product Architecture\"],\n    \"Total Experience\": 1,\n    \"Industry Normalized Experience\": 1,\n    \"Current Designation\": \"Software Development Engineer\",\n    \"Standardized Designation\": \"Software Developer\",\n    \"Recent Experience\": 1,\n    \"Longest Experience\": 0.75,\n    \"Average Experience per Company\": 0.5,\n    \"Key Projects\": \"Multi Tenant Booking Engine, utilizing various technologies such as Java Spring Boot, Typescript, PostgreSQL, AWS. KDU Evaluator Tool developed for enhancing operational efficiency alongside maintaining resource optimization.\",\n    \"Key Questions to be asked\": [\"Can you describe your role in the Multi Tenant Booking Engine project?\", \"How have you improved operational efficiency in projects?\", \"Can you provide examples of how you've used AWS in your work?\", \"What strategies did you use to enhance user experience?\"]\n  }\n}"
-            },
-            "logprobs": null,
-            "finish_reason": "stop"
-        }
-    ],
-    "usage": {
-        "prompt_tokens": 1047,
-        "completion_tokens": 368,
-        "total_tokens": 1415
-    },
-    "system_fingerprint": null
+  "id": "chatcmpl-9QsNr5p6IYKCDPGKgjsc01eY2VOvu",
+  "object": "chat.completion",
+  "created": 1716192607,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n\"keyPoints\": {\n\"name\": \"Pradeep Shetty\",\n\"overview\": \"Senior Software Engineer with 6 years of experience in Front-end development using JavaScript, Angular, TypeScript, ReactJS, Node Js, Express Js, Mongo DB, HTML5, CSS3, Bootstrap, Docker Basics, and AWS Basics.\",\n\"technicalSkills\": {\n\"programmingLanguage\": [\"JavaScript\", \"Angular\", \"TypeScript\", \"ReactJS\", \"Node JS\", \"Express JS\"],\n\"databases\": [\"Mongo DB\", \"mySql\"],\n\"tools\": [\"HTML5\", \"CSS3\", \"Bootstrap\", \"Docker Basics\", \"AWS Basics\", \"Jira\", \"Confluence\", \"Git\"],\n\"lifecycleManagement\": [\"Full lifecycle application development\", \"Requirement analysis\", \"Testing\", \"Version control systems\"],\n\"unitTesting\": [\"Jasmine\", \"Karma\"],\n\"IDEsAndTools\": [\"VS Code\",\"Postman\"]\n},\n\"domainSkills\": {\n\"industries\": [\"Mutual Fund\", \"Healthcare\", \"HRMS\", \"Industries\", \"Analytics & Data Science\", \"Loan\", \"Travel\", \"Fashion\"],\n\"softwareDevelopment\": [\"Design system\", \"Develop Proof of Concepts (POCs)\", \"Base architecture creation\", \"Peer code reviews\", \"Maintain code in version control systems\", \"Participation in Requirement analysis\"],\n\"agilePractices\": [\"Participation in scrum meetings\", \"Use of Jira for task updates\"],\n\"fullStackDevelopment\": [\"Experience in front-end (HTML, CSS, JavaScript) and back-end (Node.js, Express) technologies\", \"Implementation of single page applications\"]\n},\n\"totalExperience\": \"6 years\",\n\"industryNormalizedExperience\": \"6 years\",\n\"currentDesignation\": \"Senior Software Engineer\",\n\"standardizedDesignation\": \"Senior Software Engineer\",\n\"recentExperience\": \"1 year\",\n\"longestExperience\": \"3 years\",\n\"averageExperiencePerCompany\": \"2 years\",\n\"allProjects\": [\n\"Tata Mutual Fund - Developed and maintained web applications using Angular 14.\",\n\"UBER - Development of the CT Scan Module using  Angular 12 and Node.js.\",\n\"Act-Hrms - Centralize and automate HR functions using Angular 10, NodeJS, and mySql.\",\n\"Ada - Developed solutions to solve complex business and technology challenges using Angular 10, NodeJS, and mySql.\",\n\"Mobileum - Advanced analytics and data science solutions for telecoms using Angular 9, NodeJS, and mySql.\",\n\"Loan Application - Developed a loan application system using Angular 7, NodeJS, and mySql.\",\n\"Travel Planning App-Admin - Developed a travel planning application using Angular 7, NodeJS, and mySql.\",\n\"Couture Scrud - A multipurpose Fashion industry application using ReactJS, NodeJS, and MySql.\"\n],\n\"keyProject\": \"Couture Scrud - A multipurpose application for the fashion industry. Developed Restful web services using ReactJS and maintained state management using React states. Built reusable components and modules to be used across the application.\",\n\"keyQuestionsToBeAsked\": {\n\"technicalAspects\": [\n\"How did you ensure the maintainability of your code during your projects?\",\n\"How did you use Angular CLI in your projects?\",\n\"How do you implement Reactive forms in Angular and their Validations?\",\n\"What strategies did you use to optimize components for maximum performance and efficiency?\",\n\"What practices did you implement to secure user data and the application?\"\n],\n\"overallResume\": [\n\"In your role as a Frontend Developer, how did you collaborate with UI/UX designers?\",\n\"How did you use Jira and Confluence in your work?\",\n\"Can you give an example of how you applied your knowledge of full lifecycle application development?\",\n\"How have you incorporated CI/CD pipeline in your work?\",\n\"How do you approach debugging sessions to ensure the reliability and performance of applications?\"\n]\n},\n\"education\": \"MCA\"\n}\n}"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 3205,
+    "completion_tokens": 800,
+    "total_tokens": 4005
+  },
+  "system_fingerprint": null
 }
