@@ -148,12 +148,12 @@ public class SuiteServiceImpl implements SuiteService {
 
   public String buildDescriptionFromGptResponse(TestDescriptionResource testDescriptionResource){
     Map<String,String> descriptionMap=new LinkedHashMap<>();
-    descriptionMap.put("overview",testDescriptionResource.getOverview());
-    descriptionMap.put("steps",String.join("\n", testDescriptionResource.getSteps()));
-    descriptionMap.put("expectedOutcome",testDescriptionResource.getExpectedOutcome());
+    descriptionMap.put("Overview",testDescriptionResource.getOverview());
+    descriptionMap.put("Test steps",String.join("\n", testDescriptionResource.getSteps()));
+    descriptionMap.put("Expected outcome",testDescriptionResource.getExpectedOutcome());
     StringBuilder stringBuilder=new StringBuilder();
     for(Map.Entry<String,String> entry: descriptionMap.entrySet()){
-      stringBuilder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+      stringBuilder.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n\n");
     }
     return stringBuilder.toString().trim();
   }
