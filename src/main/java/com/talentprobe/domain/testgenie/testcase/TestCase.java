@@ -30,6 +30,8 @@ public class TestCase {
 
   private TestDescriptionResource description;
 
+  private String serializedDescription;
+
   private String summary;
 
   private String priority;
