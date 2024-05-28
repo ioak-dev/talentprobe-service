@@ -24,6 +24,7 @@ public class AssessmentQuestionServiceImpl implements
 
   @Override
   public AssessmentQuestion create(AssessmentQuestion request, String assessmentId) {
+    request.setPinned(false);
     request.setAssessmentId(assessmentId);
     return assessmentQuestionRepository.save(request);
   }

@@ -33,7 +33,7 @@ public class AssessmentServiceImpl implements AssessmentService {
   @Override
   public Assessment create(Assessment assessment) {
     assessment.setStatus(Status.Draft);
-    assessment.setSkillSet(updateSkillSet(assessment));
+    //assessment.setSkillSet(updateSkillSet(assessment));
       return assessmentRepository.save(assessment);
     }
 
