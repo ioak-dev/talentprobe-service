@@ -1,5 +1,6 @@
 package com.talentprobe.domain.ai;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talentprobe.domain.assessmentquestionstage.AssessmentQuestionStageService;
@@ -309,6 +310,7 @@ public class AIServiceImpl implements AIService {
   private AIResumeResponse mapToResumeScreeningResponse(Object body) {
     log.info("mapping AI response to resume key points");
     ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE,false);
     AIResumeResponse aiResumeResponse = new AIResumeResponse();
     try {
       JsonNode rootNode = null;
@@ -325,7 +327,7 @@ public class AIServiceImpl implements AIService {
               JsonNode messageNode = choice.get("message");
               if (messageNode != null) {
                 String contentString = messageNode.get("content").asText();
-                JsonNode contentNode = objectMapper.readTree(contentString);
+                JsonNode contentNode = objectMapper.readTree(contentString.replace("`",""));
                 JsonNode keyPointsNode = contentNode.get("keyPoints");
                 if (null == keyPointsNode) {
                   if (contentNode.isArray()) {

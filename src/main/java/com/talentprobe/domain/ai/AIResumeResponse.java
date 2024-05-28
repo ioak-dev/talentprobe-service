@@ -1,5 +1,7 @@
 package com.talentprobe.domain.ai;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AIResumeResponse {
 
   @JsonProperty("name")
@@ -21,9 +24,11 @@ public class AIResumeResponse {
   private String overview;
 
   @JsonProperty("technicalSkills")
+  @JsonIgnore
   private Map<String, Object> technicalSkills;
 
   @JsonProperty("domainSkills")
+  @JsonIgnore
   private Map<String, Object> domainSkills;
 
   @JsonProperty("totalExperience")
@@ -51,6 +56,7 @@ public class AIResumeResponse {
   private List<String> allProjects;
 
   @JsonProperty("keyProject")
+  @JsonIgnore
   private String keyProject;
 
   @JsonProperty("keyQuestionsToBeAsked")
