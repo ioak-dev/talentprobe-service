@@ -39,6 +39,7 @@ public class Resume {
   private String keyProject;
   private Map<String, Object> questionsToBeAsked;
   private String education;
+  private Object output;
 
   @CreatedBy
   private String createdBy;

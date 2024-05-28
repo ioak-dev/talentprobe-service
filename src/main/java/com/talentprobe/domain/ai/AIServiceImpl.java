@@ -312,6 +312,7 @@ public class AIServiceImpl implements AIService {
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE,false);
     AIResumeResponse aiResumeResponse = new AIResumeResponse();
+    Object resumeData = null;
     try {
       JsonNode rootNode = null;
       if (body instanceof String) {
@@ -329,6 +330,7 @@ public class AIServiceImpl implements AIService {
                 String contentString = messageNode.get("content").asText();
                 JsonNode contentNode = objectMapper.readTree(contentString.replace("`",""));
                 JsonNode keyPointsNode = contentNode.get("keyPoints");
+                resumeData =keyPointsNode;
                 if (null == keyPointsNode) {
                   if (contentNode.isArray()) {
                     for (JsonNode node : contentNode) {
@@ -356,6 +358,7 @@ public class AIServiceImpl implements AIService {
       log.error("Exception occurred " + e.getMessage());
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
+    aiResumeResponse.setOutput(resumeData);
     return aiResumeResponse;
   }
 

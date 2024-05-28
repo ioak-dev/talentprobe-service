@@ -61,4 +61,6 @@ public class AIResumeResponse {
 
   @JsonProperty("education")
   private String education;
+
+  private Object output;
 }

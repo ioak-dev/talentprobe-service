@@ -1,12 +1,16 @@
 package com.talentprobe.domain.resume;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talentprobe.domain.ai.AIResumeResponse;
 import com.talentprobe.domain.ai.AIService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -20,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+
+@Slf4j
 @Service
 public class ResumeServiceImpl implements ResumeService {
 
@@ -103,6 +109,12 @@ public class ResumeServiceImpl implements ResumeService {
     resume.setKeyProject(aiResumeResponse.getKeyProject());
     resume.setQuestionsToBeAsked(aiResumeResponse.getQuestionsToBeAsked());
     resume.setEducation(aiResumeResponse.getEducation());
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      resume.setOutput(mapper.writeValueAsString(aiResumeResponse.getOutput()));
+    } catch (JsonProcessingException e) {
+      log.error("GPT resume response mapping to output field failed");
+    }
   }
 
   @Override
