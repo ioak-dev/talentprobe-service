@@ -21,7 +21,7 @@ WORKDIR /app
 COPY build/libs/talent-probe-0.0.1-SNAPSHOT.war /app/app.war
 
 # Expose the port that the application will run on
-EXPOSE 8080
+EXPOSE 8125
 
 ENV MONGODB_URI mongodb://localhost:27017
 ENV MONGODB_DB talentprobe
