@@ -1,0 +1,32 @@
+version: '3.5'
+services:
+    mongo:
+        image: mongo:4.2.3-bionic
+        container_name: mongo
+        restart: always
+        ports:
+            - 27017:27017
+        networks:
+            lb-net:
+                aliases:
+                    - mongo.docker
+
+    talent-probe:
+        container_name: talent-probe
+        restart: always
+        environment:
+            MONGODB_DB: talentprobe
+            MONGODB_URI: mongodb://mongo.docker:27017
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        ports:
+            - "8080:8080"
+        networks:
+            lb-net:
+                aliases:
+                    - backend.docker
+
+networks:
+    lb-net:
+        name: legalbot-network
