@@ -110,7 +110,7 @@ public class GptServiceImpl implements GptService {
             JsonNode messageNode = choice.get("message");
             if (messageNode != null) {
               String contentString = messageNode.get("content").asText();
-              JsonNode contentNode = objectMapper.readTree(contentString);
+              JsonNode contentNode = objectMapper.readTree(contentString.replace("`",""));
               JsonNode testCaseNode = contentNode.get("testCases");
               log.info("Extracted testCases array from response");
               if (testCaseNode != null && testCaseNode.isArray()) {
