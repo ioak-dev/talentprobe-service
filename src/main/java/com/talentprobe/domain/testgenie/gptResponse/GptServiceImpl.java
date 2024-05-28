@@ -1,5 +1,6 @@
 package com.talentprobe.domain.testgenie.gptResponse;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -94,6 +95,7 @@ public class GptServiceImpl implements GptService {
 
   private List<GptResponse> mapToGptResponse(Object body) {
     ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+    objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
     List<GptResponse> gptResponseList = new ArrayList<>();
     try {
       log.info("Extracting the gpt response and mapping to domain");
@@ -110,7 +112,8 @@ public class GptServiceImpl implements GptService {
             JsonNode messageNode = choice.get("message");
             if (messageNode != null) {
               String contentString = messageNode.get("content").asText();
-              JsonNode contentNode = objectMapper.readTree(contentString.replace("`",""));
+              JsonNode contentNode = objectMapper.readTree(
+                  removeInvalidCharacters(contentString));
               JsonNode testCaseNode = contentNode.get("testCases");
               log.info("Extracted testCases array from response");
               if (testCaseNode != null && testCaseNode.isArray()) {
@@ -138,4 +141,14 @@ public class GptServiceImpl implements GptService {
     }
     return gptResponseList;
   }
+
+  public String removeInvalidCharacters(String input) {
+    String sanitizedString;
+    if (input.startsWith("```json")) {
+      sanitizedString = input.replaceAll("^```json", "");
+      return sanitizedString.replace("`", "");
+    }
+    return input;
+  }
+
 }
