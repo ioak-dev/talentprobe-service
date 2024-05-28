@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,9 +85,9 @@ public class GptServiceImpl implements GptService {
       }
     } catch (IOException exception) {
       exception.printStackTrace();
-    }catch (Exception exception){
+    } catch (Exception exception) {
       log.error(exception.getMessage());
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,exception.getMessage());
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
     }
     return new HttpEntity<>(payload, headers);
   }
@@ -97,11 +96,12 @@ public class GptServiceImpl implements GptService {
     ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
     List<GptResponse> gptResponseList = new ArrayList<>();
     try {
+      log.info("Extracting the gpt response and mapping to domain");
       JsonNode rootNode = null;
-      if (body instanceof Map) {
-        rootNode = objectMapper.valueToTree(body);
-      } else if (body instanceof String) {
+      if (body instanceof String) {
         rootNode = objectMapper.readTree((String) body);
+      } else {
+        rootNode = objectMapper.valueToTree(body);
       }
       if (rootNode != null) {
         JsonNode choicesNode = rootNode.get("choices");
@@ -112,7 +112,8 @@ public class GptServiceImpl implements GptService {
               String contentString = messageNode.get("content").asText();
               JsonNode contentNode = objectMapper.readTree(contentString);
               JsonNode testCaseNode = contentNode.get("testCases");
-              if (testCaseNode!=null && testCaseNode.isArray()) {
+              log.info("Extracted testCases array from response");
+              if (testCaseNode != null && testCaseNode.isArray()) {
                 for (JsonNode node : testCaseNode) {
                   GptResponse gptResponse = objectMapper.treeToValue(node, GptResponse.class);
                   gptResponseList.add(gptResponse);
@@ -122,15 +123,18 @@ public class GptServiceImpl implements GptService {
           }
         } else {
           log.error("'choices' node is missing in the response");
-          throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,"Choices node is missing in the response");
+          throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+              "Choices node is missing in the response");
         }
       }
     } catch (IOException e) {
       e.printStackTrace();
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Root node is missing in the response");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+          "Root node is missing in the response");
     } catch (Exception e) {
       log.error(e.getMessage());
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Error occurred while processing");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+          "Error occurred while processing");
     }
     return gptResponseList;
   }
