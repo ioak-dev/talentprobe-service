@@ -2,6 +2,7 @@ package com.talentprobe.domain.testgenie.testcase;
 
 import com.talentprobe.domain.testgenie.gptResponse.GptResponse;
 import com.talentprobe.domain.testgenie.gptResponse.GptService;
+import com.talentprobe.domain.testgenie.suite.SuiteService;
 import com.talentprobe.domain.testgenie.testcase.TestCase.TestDescriptionResource;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,9 @@ public class TestCaseServiceImpl implements TestCaseService {
   @Autowired
   private GptService gptService;
 
+  @Autowired
+  private SuiteService suiteService;
+
 
   @Override
   public void constructTestCaseFromGptResponse(String suiteId, String usecaseId,String description) {
@@ -35,6 +39,7 @@ public class TestCaseServiceImpl implements TestCaseService {
             testDescriptionResource.setOverview(gptResponse.getDescription().getOverview());
             testDescriptionResource.setSteps(gptResponse.getDescription().getSteps());
             testDescriptionResource.setExpectedOutcome(gptResponse.getDescription().getExpectedOutcome());
+            testCase.setSerializedDescription(suiteService.buildDescriptionFromGptResponse(testDescriptionResource));
             testCase.setDescription(testDescriptionResource);
             testCase.setSummary(gptResponse.getSummary());
             testCase.setComments(gptResponse.getComments());
