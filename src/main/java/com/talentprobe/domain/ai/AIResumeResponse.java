@@ -24,11 +24,9 @@ public class AIResumeResponse {
   private String overview;
 
   @JsonProperty("technicalSkills")
-  @JsonIgnore
   private Map<String, Object> technicalSkills;
 
   @JsonProperty("domainSkills")
-  @JsonIgnore
   private Map<String, Object> domainSkills;
 
   @JsonProperty("totalExperience")
@@ -56,7 +54,6 @@ public class AIResumeResponse {
   private List<String> allProjects;
 
   @JsonProperty("keyProject")
-  @JsonIgnore
   private String keyProject;
 
   @JsonProperty("keyQuestionsToBeAsked")
