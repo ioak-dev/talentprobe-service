@@ -1,6 +1,7 @@
 package com.talentprobe.domain.testgenie.suite;
 
 import com.talentprobe.domain.testgenie.export.ExportMode;
+import com.talentprobe.domain.testgenie.testcase.TestCase.TestDescriptionResource;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 
@@ -17,4 +18,6 @@ public interface SuiteService {
   ResponseEntity<Object> exportSuite(String suiteId, ExportMode type);
 
   Suite getSuiteById(String suiteId);
+
+  String buildDescriptionFromGptResponse(TestDescriptionResource testDescriptionResource);
 }
