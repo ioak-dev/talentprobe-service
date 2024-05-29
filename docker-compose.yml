@@ -1,18 +1,7 @@
 version: '3.5'
 services:
-    mongo:
-        image: mongo:4.2.3-bionic
-        container_name: mongo
-        restart: always
-        ports:
-            - 27017:27017
-        networks:
-            lb-net:
-                aliases:
-                    - mongo.docker
-
-    talent-probe:
-        container_name: talent-probe
+    talentprobeservice:
+        container_name: talentprobeservice
         restart: always
         environment:
             MONGODB_DB: talentprobe
@@ -23,10 +12,10 @@ services:
         ports:
             - "8125:8125"
         networks:
-            lb-net:
-                aliases:
-                    - backend.docker
+          ioak-net:
+            aliases:
+              - talentprobeservice.docker
 
 networks:
-    lb-net:
-        name: legalbot-network
+  ioak-net:
+    external: true
