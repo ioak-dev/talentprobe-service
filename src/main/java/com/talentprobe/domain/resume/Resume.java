@@ -23,23 +23,8 @@ public class Resume {
 
   @Id
   private String id;
-  private String name;
   private byte[] attachment;
-  private String overview;
-  private Map<String, Object> technicalSkills;
-  private Map<String, Object> domainSkills;
-  private String totalExperience;
-  private String industryNormalizedExperience;
-  private String currentDesignation;
-  private String standardizedDesignation;
-  private String recentExperience;
-  private String longestExperience;
-  private String avgExperiencePerCompany;
-  private List<String> allProjects;
-  private String keyProject;
-  private Map<String, Object> questionsToBeAsked;
-  private String education;
-  private Object output;
+  private Object data;
 
   @CreatedBy
   private String createdBy;

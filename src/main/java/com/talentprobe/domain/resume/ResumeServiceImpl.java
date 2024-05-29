@@ -79,7 +79,14 @@ public class ResumeServiceImpl implements ResumeService {
       }
       AIResumeResponse aiResumeResponse = aiService.getAIResumeKeypoints(extractedText);
       // Create the Database entity and save in DB
-      mapDatabaseEntityFromAIResponse(aiResumeResponse, resume);
+      ObjectMapper mapper = new ObjectMapper();
+      try {
+        resume.setData(mapper.writeValueAsString(aiResumeResponse.getData()));
+      } catch (JsonProcessingException exp) {
+        log.error("GPT resume response mapping to output field failed");
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+            exp.getMessage());
+      }
       resume.setAttachment(fileBytes);
       resumeRepository.save(resume);
     } catch (IOException exception) {
@@ -89,33 +96,6 @@ public class ResumeServiceImpl implements ResumeService {
     return resume;
   }
 
-  private void mapDatabaseEntityFromAIResponse(AIResumeResponse aiResumeResponse, Resume resume) {
-    String totalExperience = aiResumeResponse.getTotalExperience();
-    String derivedName =
-        (null == totalExperience || totalExperience.isBlank()) ? aiResumeResponse.getName()
-            : aiResumeResponse.getName() + "_" + totalExperience;
-    resume.setName(derivedName);
-    resume.setOverview(aiResumeResponse.getOverview());
-    resume.setTechnicalSkills(aiResumeResponse.getTechnicalSkills());
-    resume.setDomainSkills(aiResumeResponse.getDomainSkills());
-    resume.setTotalExperience(aiResumeResponse.getTotalExperience());
-    resume.setIndustryNormalizedExperience(aiResumeResponse.getIndustryNormalizedExperience());
-    resume.setCurrentDesignation(aiResumeResponse.getCurrentDesignation());
-    resume.setStandardizedDesignation(aiResumeResponse.getStandardizedDesignation());
-    resume.setRecentExperience(aiResumeResponse.getRecentExperience());
-    resume.setLongestExperience(aiResumeResponse.getLongestExperience());
-    resume.setAvgExperiencePerCompany(aiResumeResponse.getAvgExperiencePerCompany());
-    resume.setAllProjects(aiResumeResponse.getAllProjects());
-    resume.setKeyProject(aiResumeResponse.getKeyProject());
-    resume.setQuestionsToBeAsked(aiResumeResponse.getQuestionsToBeAsked());
-    resume.setEducation(aiResumeResponse.getEducation());
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      resume.setOutput(mapper.writeValueAsString(aiResumeResponse.getOutput()));
-    } catch (JsonProcessingException e) {
-      log.error("GPT resume response mapping to output field failed");
-    }
-  }
 
   @Override
   public ResponseEntity<Object> downloadResume(String id) {
@@ -126,7 +106,7 @@ public class ResumeServiceImpl implements ResumeService {
     Resume resume = resumeData.get();
     byte[] attachment = resume.getAttachment();
     String extension = detectFileExtension(attachment);
-    String fileName = resume.getName() + extension;
+    String fileName = resume.getId() + extension;
     MediaType mediaType = "pdf".equals(extension) ? MediaType.APPLICATION_PDF :
         MediaType.APPLICATION_OCTET_STREAM;
     HttpHeaders headers = new HttpHeaders();
