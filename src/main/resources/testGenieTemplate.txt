@@ -7,7 +7,7 @@
         },
         {
             "role": "user",
-            "content": " Usecase: ${usecase} "
+            "content": "Usecase: ${usecase}"
         }
     ],
     "temperature": 1,

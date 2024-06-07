@@ -1,9 +1,7 @@
 package com.talentprobe.domain.testgenie.usecase;
 
-import com.talentprobe.domain.testgenie.testcase.TestCase;
 import com.talentprobe.domain.testgenie.testcase.TestCaseRepository;
 import com.talentprobe.domain.testgenie.testcase.TestCaseService;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -34,13 +32,14 @@ public class UseCaseServiceImpl implements UseCaseService {
 
   @Override
   public UseCase createUseCaseForSuite(String suiteId, UseCase useCase) {
-    log.info("Creating Use case for suiteId "+suiteId);
+    log.info("Creating Use case for suiteId " + suiteId);
     UseCase responseUsecase;
     if (useCase.getDescription() != null && !useCase.getDescription().isEmpty()) {
       UseCase request = new UseCase();
       request.setId(useCase.getId());
       request.setUseCaseName(useCase.getUseCaseName());
-      request.setDescription(useCase.getDescription());
+      String description = cleanText(useCase.getDescription());
+      request.setDescription(description);
       request.setSuiteId(suiteId);
       responseUsecase = useCaseRepository.save(request);
       log.info("Generating test cases for use case");
@@ -53,6 +52,10 @@ public class UseCaseServiceImpl implements UseCaseService {
     return responseUsecase;
   }
 
+  private String cleanText(String description) {
+    return description.replaceAll("\\s+", " ").trim();
+  }
+
   @Override
   public UseCase getUseCaseById(String suiteId, String useCaseId) {
     Optional<UseCase> useCase = useCaseRepository.findByIdAndSuiteId(useCaseId, suiteId);
@@ -62,7 +65,7 @@ public class UseCaseServiceImpl implements UseCaseService {
 
   @Override
   public UseCase updateUseCase(String suiteId, String useCaseId, UseCase useCaseDetails) {
-    log.info("Updating use case for id "+ useCaseId);
+    log.info("Updating use case for id " + useCaseId);
     Optional<UseCase> existingUseCase = useCaseRepository.findByIdAndSuiteId(useCaseId, suiteId);
     if (!existingUseCase.isPresent()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_RESPONSE);
@@ -71,8 +74,9 @@ public class UseCaseServiceImpl implements UseCaseService {
     usecase.setUseCaseName(useCaseDetails.getUseCaseName());
     if (useCaseDetails.getDescription() != null &&
         !usecase.getDescription().equals(useCaseDetails.getDescription())) {
-      usecase.setDescription(useCaseDetails.getDescription());
-      testCaseRepository.deleteAllBySuiteIdAndUseCaseId(suiteId,useCaseId);
+      String description = cleanText(useCaseDetails.getDescription());
+      usecase.setDescription(description);
+      testCaseRepository.deleteAllBySuiteIdAndUseCaseId(suiteId, useCaseId);
       log.info("Generating test cases for use case");
       testCaseService.constructTestCaseFromGptResponse(suiteId, useCaseId,
           useCaseDetails.getDescription());
@@ -85,7 +89,7 @@ public class UseCaseServiceImpl implements UseCaseService {
     if (!useCaseRepository.existsByIdAndSuiteId(useCaseId, suiteId)) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_RESPONSE);
     }
-    log.info("Deleting the use case for id "+useCaseId);
+    log.info("Deleting the use case for id " + useCaseId);
     useCaseRepository.deleteByIdAndSuiteId(useCaseId, suiteId);
   }
 

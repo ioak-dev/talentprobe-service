@@ -80,9 +80,9 @@ public class GptServiceImpl implements GptService {
       Resource resource = resourceLoader.getResource("classpath:testGenieTemplate.txt");
       String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
       if (!content.isBlank()) {
-        String sanitizedUseCase = usecase.replace("\n", "\\\\n")
-            .replace("\r", "\\\\r").replace("\"", "");
-        payload = content.replace("${usecase}", sanitizedUseCase);
+        String sanitizedUseCase = usecase.replace("\\", "\\\\").replace("\n", "\\\\n")
+            .replace("\r", "\\\\r").replace("\"", "\\\"");
+        payload = content.replace("${usecase}", sanitizedUseCase.trim());
       }
     } catch (IOException exception) {
       exception.printStackTrace();
