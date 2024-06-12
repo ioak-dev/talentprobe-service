@@ -66,7 +66,6 @@ public class GptServiceImpl implements GptService {
     } catch (Exception e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
-
     return gptResponseList;
   }
 
@@ -77,12 +76,16 @@ public class GptServiceImpl implements GptService {
     headers.set("Authorization", gptAccessKey);
     String payload = null;
     try {
+      ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
       Resource resource = resourceLoader.getResource("classpath:testGenieTemplate.txt");
       String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
       if (!content.isBlank()) {
         String sanitizedUseCase = usecase.replace("\\", "\\\\").replace("\n", "\\\\n")
-            .replace("\r", "\\\\r").replace("\"", "\\\"");
+            .replace("\r", "\\\\r").replace("\t", "\\t")
+            .replace("\"", "\\\"");
         payload = content.replace("${usecase}", sanitizedUseCase.trim());
+        JsonNode jsonNode = objectMapper.readTree(payload);
+        payload = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
       }
     } catch (IOException exception) {
       exception.printStackTrace();
@@ -132,12 +135,8 @@ public class GptServiceImpl implements GptService {
       }
     } catch (IOException e) {
       e.printStackTrace();
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-          "Root node is missing in the response");
     } catch (Exception e) {
       log.error(e.getMessage());
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-          "Error occurred while processing");
     }
     return gptResponseList;
   }
