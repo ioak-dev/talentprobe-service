@@ -69,6 +69,33 @@ public class GptServiceImpl implements GptService {
     return gptResponseList;
   }
 
+  @Override
+  public List<GptResponse> getGptResponseForConsolidatedUseCase(String usecase) {
+    List<GptResponse> gptResponseList = new ArrayList<>();
+    try {
+      if (isMockEnabled) {
+        Resource resource = resourceLoader.getResource(
+            "classpath:Gpt_Mock_Response_TestGenie.json");
+        ResponseEntity<Object> responseEntity = ResponseEntity
+            .ok()
+            .header("header", "value")
+            .body(StreamUtils.copyToString(resource.getInputStream(),
+                StandardCharsets.UTF_8));
+        return mapToGptResponse(responseEntity.getBody());
+      }
+      HttpEntity<String> entity = createHttpEntityForApplicationTestCases(usecase);
+      log.info("Making gpt call for the consolidated use case");
+      ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
+      gptResponseList = mapToGptResponse(responseEntity.getBody());
+    } catch (RestClientException exception) {
+      exception.printStackTrace();
+      throw new ResponseStatusException(HttpStatus.GATEWAY_TIMEOUT, exception.getMessage());
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+    }
+    return gptResponseList;
+  }
+
   private HttpEntity<String> createHttpEntity(String usecase) {
     log.info("Creating http entity for gpt payload");
     HttpHeaders headers = new HttpHeaders();
@@ -148,6 +175,33 @@ public class GptServiceImpl implements GptService {
       return sanitizedString.replace("`", "");
     }
     return input;
+  }
+
+  private HttpEntity<String> createHttpEntityForApplicationTestCases(String usecase) {
+    log.info("Creating http entity for gpt payload for Application TestCases");
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.set("Authorization", gptAccessKey);
+    String payload = null;
+    try {
+      ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+      Resource resource = resourceLoader.getResource("classpath:testGenieApplicationTestCasesTemplate.txt");
+      String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+      if (!content.isBlank()) {
+        String sanitizedUseCase = usecase.replace("\\", "\\\\").replace("\n", "\\\\n")
+            .replace("\r", "\\\\r").replace("\t", "\\t")
+            .replace("\"", "\\\"");
+        payload = content.replace("${usecases}", sanitizedUseCase.trim());
+        JsonNode jsonNode = objectMapper.readTree(payload);
+        payload = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
+      }
+    } catch (IOException exception) {
+      exception.printStackTrace();
+    } catch (Exception exception) {
+      log.error(exception.getMessage());
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+    }
+    return new HttpEntity<>(payload, headers);
   }
 
 }
