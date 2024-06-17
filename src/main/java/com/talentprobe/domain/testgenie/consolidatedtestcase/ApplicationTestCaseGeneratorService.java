@@ -5,6 +5,8 @@ import java.util.List;
 public interface ApplicationTestCaseGeneratorService {
 
 
-  List<ApplicationTestCase> generateConsolidatedTestCase(String suiteId);
+  void generateConsolidatedTestCase(String suiteId);
+
+  List<ApplicationTestCase> getAllConsolidatedTestCase(String suiteId);
 
 }

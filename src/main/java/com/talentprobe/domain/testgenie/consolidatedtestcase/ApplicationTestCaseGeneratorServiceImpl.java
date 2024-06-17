@@ -32,7 +32,7 @@ public class ApplicationTestCaseGeneratorServiceImpl implements
   private ApplicationTestCaseGeneratorRepository applicationTestCaseGeneratorRepository;
 
   @Override
-  public List<ApplicationTestCase> generateConsolidatedTestCase(String suiteId) {
+  public void generateConsolidatedTestCase(String suiteId) {
     List<UseCase> useCaseList = useCaseRepository.findBySuiteId(suiteId);
     StringBuilder constructUseCaseDescription = new StringBuilder();
     if(useCaseList==null || useCaseList.isEmpty()){
@@ -43,6 +43,7 @@ public class ApplicationTestCaseGeneratorServiceImpl implements
         constructUseCaseDescription.toString().trim());
     log.info("Successfully generated test cases for application use case");
     applicationTestCaseGeneratorRepository.deleteAll();
+    log.info("Flushed all the old data and saving new one");
     List<ApplicationTestCase> applicationTestCaseList = new ArrayList<>();
     if (!gptResponseList.isEmpty()) {
       gptResponseList.forEach(
@@ -67,6 +68,11 @@ public class ApplicationTestCaseGeneratorServiceImpl implements
       );
       applicationTestCaseGeneratorRepository.saveAll(applicationTestCaseList);
     }
+  }
+
+  @Override
+  public List<ApplicationTestCase> getAllConsolidatedTestCase(String suiteId) {
+    log.info("Retrieve all the testcase from database");
     return applicationTestCaseGeneratorRepository.findAll();
   }
 }

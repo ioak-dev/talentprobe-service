@@ -19,9 +19,14 @@ public class ApplicationTestCaseGeneratorController {
   private ApplicationTestCaseGeneratorService applicationTestCaseGeneratorService;
 
 
+  @PostMapping("/{suiteId}/usecase/testcase")
+  public void generateConsolidatedTestCases(@PathVariable String suiteId){
+    applicationTestCaseGeneratorService.generateConsolidatedTestCase(suiteId);
+  }
+
   @GetMapping("/{suiteId}/usecase/testcase")
-  public ResponseEntity<List<ApplicationTestCase>> generateConsolidatedTestCases(@PathVariable String suiteId){
-    return ResponseEntity.ok(applicationTestCaseGeneratorService.generateConsolidatedTestCase(suiteId));
+  public ResponseEntity<List<ApplicationTestCase>> getAllConsolidatedUseCase(@PathVariable String suiteId){
+    return ResponseEntity.ok(applicationTestCaseGeneratorService.getAllConsolidatedTestCase(suiteId));
   }
 
 }
