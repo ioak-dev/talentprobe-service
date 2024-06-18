@@ -1,6 +1,5 @@
 package com.talentprobe.domain.testgenie.usecase;
 
-import com.talentprobe.domain.testgenie.testcase.TestCase;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

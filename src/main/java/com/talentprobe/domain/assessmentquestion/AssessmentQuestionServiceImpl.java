@@ -45,10 +45,10 @@ public class AssessmentQuestionServiceImpl implements
     if (deletedQuestionsCount == 0) {
       firstXAssessmentQuestionStages = assessmentQuestionStageList.stream()
           .filter(stage -> stage.getRecommendationNumber() >= 1 &&
-              stage.getRecommendationNumber() <= 10)
-          .limit(10)
+              stage.getRecommendationNumber() <= 20)
+          .limit(20)
           .toList();
-      assessment.setLastRecommendationNumber(10);
+      assessment.setLastRecommendationNumber(20);
     } else {
       firstXAssessmentQuestionStages = assessmentQuestionStageList.stream()
           .filter(stage -> stage.getRecommendationNumber() >= 1 &&

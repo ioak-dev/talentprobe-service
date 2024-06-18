@@ -3,7 +3,6 @@ package com.talentprobe.domain.ai;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.talentprobe.domain.assessmentquestionstage.AssessmentQuestionStageService;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -30,9 +29,6 @@ public class AIServiceImpl implements AIService {
 
   @Autowired
   private ResourceLoader resourceLoader;
-
-  @Autowired
-  private AssessmentQuestionStageService assessmentQuestionStageService;
 
   @Autowired
   private RestTemplate restTemplate;
@@ -65,12 +61,6 @@ public class AIServiceImpl implements AIService {
       HttpEntity<String> entity = createHttpEntity(jobDescription,noOfQues);
       log.info("Making gpt call for questions generation");
       ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
-     /* Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_TalentProbe.json");
-      ResponseEntity<Object> responseEntity = ResponseEntity
-          .ok()
-          .header("header", "value")
-          .body(StreamUtils.copyToString(resource.getInputStream(),
-              StandardCharsets.UTF_8));*/
       aiResponseList = mapToAIResponse(responseEntity.getBody());
     } catch (RestClientException exception) {
       exception.printStackTrace();
@@ -98,12 +88,6 @@ public class AIServiceImpl implements AIService {
         return mapToSkillSetResponse(responseEntity.getBody());
       }
       HttpEntity<String> entity = createHttpEntityForSkillSet(jobDescription, numberOfSkills);
-/*      Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_SkillSet.json");
-      ResponseEntity<Object> responseEntity = ResponseEntity
-          .ok()
-          .header("header", "value")
-          .body(StreamUtils.copyToString(resource.getInputStream(),
-              StandardCharsets.UTF_8));*/
       log.info("Making gpt call for skill set generation");
       ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
       aiSkillSetResponse = mapToSkillSetResponse(responseEntity.getBody());
@@ -130,12 +114,6 @@ public class AIServiceImpl implements AIService {
       HttpEntity<String> entity = createHttpEntityForResumeScan(content);
       log.info("Making gpt call for resume key points generation");
       ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, entity, Object.class);
-      /*Resource resource = resourceLoader.getResource("classpath:Gpt_Mock_Response_resumeScan.json");
-      ResponseEntity<Object> responseEntity = ResponseEntity
-          .ok()
-          .header("header", "value")
-          .body(StreamUtils.copyToString(resource.getInputStream(),
-              StandardCharsets.UTF_8));*/
       resumeSummaryResource = mapToResumeScreeningResponse(responseEntity.getBody());
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -207,7 +185,8 @@ public class AIServiceImpl implements AIService {
                 JsonNode messageNode = choice.get("message");
                 if (messageNode != null) {
                   String contentString = messageNode.get("content").asText();
-                  JsonNode contentNode = objectMapper.readTree(contentString);
+                  JsonNode contentNode = objectMapper.readTree(
+                      removeInvalidCharacters(contentString));
                   JsonNode questionNode = contentNode.get("questions");
                   if (null == questionNode) {
                     if (contentNode.isArray()) {
@@ -235,6 +214,15 @@ public class AIServiceImpl implements AIService {
         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
       }
     return list;
+  }
+
+  public String removeInvalidCharacters(String input) {
+    String sanitizedString;
+    if (input.startsWith("```json")) {
+      sanitizedString = input.replaceAll("^```json", "").replaceAll("/", "");
+      return sanitizedString.replace("`", "");
+    }
+    return input;
   }
 
   private List<String> mapToSkillSetResponse(Object body) {

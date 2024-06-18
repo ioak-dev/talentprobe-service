@@ -1,6 +1,5 @@
 package com.talentprobe.domain.testgenie.usecase;
 
-import com.talentprobe.domain.testgenie.testcase.TestCase;
 import java.util.List;
 
 public interface UseCaseService {

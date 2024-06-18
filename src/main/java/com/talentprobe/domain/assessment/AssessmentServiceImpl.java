@@ -51,7 +51,7 @@ public class AssessmentServiceImpl implements AssessmentService {
         return assessmentRepository.save(assessment);
       }
       else {
-        List<AIResponse> aiResponseList = aiService.getAIResponse(request.getJobDescription(),20) ;
+        List<AIResponse> aiResponseList = aiService.getAIResponse(request.getJobDescription(),25) ;
         assessmentQuestionStageService.deleteAndUpdateQuestionStage(aiResponseList, id);
         Assessment assessmentTemp = assessmentQuestionService.updateQuestionsFromStage(id);
         assessment.setName(request.getName());
@@ -59,7 +59,7 @@ public class AssessmentServiceImpl implements AssessmentService {
         assessment.setDuration(request.getDuration());
         assessment.setStatus(request.getStatus());
         assessment.setLastRecommendationNumber(assessmentTemp.getLastRecommendationNumber());
-        assessment.setSkillSet(updateSkillSet(request));
+        //assessment.setSkillSet(updateSkillSet(request));
         return assessmentRepository.save(assessment);
       }
     }
