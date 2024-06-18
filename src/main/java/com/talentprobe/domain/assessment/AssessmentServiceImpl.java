@@ -59,7 +59,7 @@ public class AssessmentServiceImpl implements AssessmentService {
         assessment.setDuration(request.getDuration());
         assessment.setStatus(request.getStatus());
         assessment.setLastRecommendationNumber(assessmentTemp.getLastRecommendationNumber());
-        //assessment.setSkillSet(updateSkillSet(request));
+        assessment.setSkillSet(updateSkillSet(request));
         return assessmentRepository.save(assessment);
       }
     }

@@ -245,7 +245,8 @@ public class AIServiceImpl implements AIService {
               JsonNode messageNode = choice.get("message");
               if (messageNode != null) {
                 String contentString = messageNode.get("content").asText();
-                JsonNode contentNode = objectMapper.readTree(contentString);
+                JsonNode contentNode = objectMapper.readTree(
+                    removeInvalidCharacters(contentString));
                 JsonNode questionNode = contentNode.get("skillSet");
                 if (null == questionNode) {
                   if (contentNode.isArray()) {
