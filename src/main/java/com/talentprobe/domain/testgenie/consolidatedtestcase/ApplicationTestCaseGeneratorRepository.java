@@ -4,4 +4,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ApplicationTestCaseGeneratorRepository extends MongoRepository<ApplicationTestCase,String> {
 
+
+  boolean existsBySuiteId(String suiteId);
 }
