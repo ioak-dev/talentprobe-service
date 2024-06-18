@@ -87,6 +87,7 @@ public class ResumeServiceImpl implements ResumeService {
             exp.getMessage());
       }
       resume.setAttachment(fileBytes);
+      resume.setFileName(file.getOriginalFilename());
       resumeRepository.save(resume);
     } catch (IOException exception) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,

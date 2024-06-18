@@ -23,6 +23,7 @@ public class Resume {
   private String id;
   private byte[] attachment;
   private Object data;
+  private String fileName;
 
   @CreatedBy
   private String createdBy;
