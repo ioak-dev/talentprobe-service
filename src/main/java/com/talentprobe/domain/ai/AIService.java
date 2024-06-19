@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface AIService {
 
-  List<AIResponse> getAIResponse(String jobDescription,
+  AIResponse getAIResponse(String jobDescription,
       int noOfQues);
 
   List<String> getAISkillSetResponse(String jobDescription, int numberOfSkills);

@@ -43,10 +43,9 @@ public class AIServiceImpl implements AIService {
   private boolean isMockEnabled;
 
   @Override
-  public List<AIResponse> getAIResponse(String jobDescription,
+  public AIResponse getAIResponse(String jobDescription,
       int noOfQues) {
-
-    List<AIResponse> aiResponseList = new ArrayList<>();
+    AIResponse aiResponseList = new AIResponse();
     try {
       if (isMockEnabled) {
         Resource resource = resourceLoader.getResource(
@@ -165,10 +164,12 @@ public class AIServiceImpl implements AIService {
     return new HttpEntity<>(payload, headers);
   }
 
-  private List<AIResponse> mapToAIResponse(Object body) {
+  private AIResponse mapToAIResponse(Object body) {
     log.info("mapping AI response to questions");
     ObjectMapper objectMapper = new ObjectMapper();
-    List<AIResponse> list = new ArrayList<>();
+    objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE,false);
+    List<Object> list = new ArrayList<>();
+    AIResponse aiResponse = new AIResponse();
       try {
         JsonNode rootNode = null;
         if(body instanceof String) {
@@ -191,15 +192,17 @@ public class AIServiceImpl implements AIService {
                   if (null == questionNode) {
                     if (contentNode.isArray()) {
                       for (JsonNode node : contentNode) {
-                        AIResponse aiResponse = objectMapper.treeToValue(node, AIResponse.class);
-                        list.add(aiResponse);
+                        Object aiResponseTemp = objectMapper.treeToValue(node, Object.class);
+                        list.add(aiResponseTemp);
+                        aiResponse.setQuestions(list);
                       }
                     }
                   } else if (questionNode.isArray()) {
                     for (JsonNode node : questionNode) {
-                      AIResponse aiResponse = objectMapper.treeToValue(node, AIResponse.class);
-                      list.add(aiResponse);
+                      Object aiResponseTemp = objectMapper.treeToValue(node, Object.class);
+                      list.add(aiResponseTemp);
                     }
+                    aiResponse.setQuestions(list);
                   }
                 }
               }
@@ -213,7 +216,7 @@ public class AIServiceImpl implements AIService {
         log.error("Exception occurred "+e.getMessage());
         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
       }
-    return list;
+    return aiResponse;
   }
 
   public String removeInvalidCharacters(String input) {

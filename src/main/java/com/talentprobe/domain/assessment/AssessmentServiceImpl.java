@@ -51,7 +51,7 @@ public class AssessmentServiceImpl implements AssessmentService {
         return assessmentRepository.save(assessment);
       }
       else {
-        List<AIResponse> aiResponseList = aiService.getAIResponse(request.getJobDescription(),25) ;
+        AIResponse aiResponseList = aiService.getAIResponse(request.getJobDescription(),25) ;
         assessmentQuestionStageService.deleteAndUpdateQuestionStage(aiResponseList, id);
         Assessment assessmentTemp = assessmentQuestionService.updateQuestionsFromStage(id);
         assessment.setName(request.getName());

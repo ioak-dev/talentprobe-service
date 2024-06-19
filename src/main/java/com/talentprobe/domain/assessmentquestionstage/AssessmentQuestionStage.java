@@ -29,6 +29,7 @@ public class AssessmentQuestionStage {
   private String answer;
   private List<String> choices;
   private long recommendationNumber;
+  private Object data;
 
   @CreatedBy
   private String createdBy;
