@@ -43,7 +43,7 @@ public class ApplicationTestCaseGeneratorServiceImpl implements
     List<GptResponse> gptResponseList = gptService.getGptResponseForConsolidatedUseCase(
         constructUseCaseDescription.toString().trim());
     log.info("Successfully generated test cases for application use case");
-    applicationTestCaseGeneratorRepository.deleteAll();
+    applicationTestCaseGeneratorRepository.deleteAllBySuiteId(suiteId);
     log.info("Flushed all the old data and saving new one");
     List<ApplicationTestCase> applicationTestCaseList = new ArrayList<>();
     if (!gptResponseList.isEmpty()) {
@@ -78,6 +78,6 @@ public class ApplicationTestCaseGeneratorServiceImpl implements
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,
           "Test cases not found for the suite: " + suiteId);
     }
-    return applicationTestCaseGeneratorRepository.findAll();
+    return applicationTestCaseGeneratorRepository.findAllBySuiteId(suiteId);
   }
 }
