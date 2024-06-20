@@ -25,9 +25,6 @@ public class AssessmentQuestionStage {
   private String id;
   private String assessmentId;
   private Type type;
-  private String question;
-  private String answer;
-  private List<String> choices;
   private long recommendationNumber;
   private Object data;
 

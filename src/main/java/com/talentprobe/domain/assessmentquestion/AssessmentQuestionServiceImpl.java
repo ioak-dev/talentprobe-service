@@ -100,10 +100,7 @@ public class AssessmentQuestionServiceImpl implements
       assessmentQuestion = new AssessmentQuestion();
     }
     assessmentQuestion.setAssessmentId(request.getAssessmentId());
-    assessmentQuestion.setQuestion(request.getQuestion());
-    assessmentQuestion.setAnswer(request.getAnswer());
     assessmentQuestion.setType(request.getType());
-    assessmentQuestion.setChoices(request.getChoices());
     assessmentQuestion.setPinned(request.getPinned());
     assessmentQuestion.setData(request.getData());
     assessmentQuestionRepository.save(assessmentQuestion);
