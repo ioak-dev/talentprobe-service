@@ -105,6 +105,7 @@ public class AssessmentQuestionServiceImpl implements
     assessmentQuestion.setType(request.getType());
     assessmentQuestion.setChoices(request.getChoices());
     assessmentQuestion.setPinned(request.getPinned());
+    assessmentQuestion.setData(request.getData());
     assessmentQuestionRepository.save(assessmentQuestion);
     return assessmentQuestion;
   }
