@@ -3,6 +3,7 @@ package com.talentprobe.domain.ai;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.talentprobe.domain.util.GptModelSelector;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ public class AIServiceImpl implements AIService {
 
   @Value("${mock.enabled}")
   private boolean isMockEnabled;
+
+  @Autowired
+  private GptModelSelector modelSelector;
 
   @Override
   public AIResponse getAIResponse(String jobDescription,
@@ -123,11 +127,11 @@ public class AIServiceImpl implements AIService {
 
   private HttpEntity<String> createHttpEntityForSkillSet(String jobDescription, int numberOfSkills) {
     log.info("Creating skill set http entity for gpt payload");
-
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", gptAccessKey);
     String payload = null;
+    String modelName=modelSelector.getModelName();
     try {
       Resource resource = resourceLoader.getResource("classpath:talentProbeSkillSetTemplate.txt");
       String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
@@ -135,7 +139,7 @@ public class AIServiceImpl implements AIService {
         String job = jobDescription.replaceAll("\n","\\\\n")
             .replaceAll("\r","\\\\r");
         payload = content.replace("${jobDescription}", job)
-            .replace("${numberOfSkills}", String.valueOf(numberOfSkills));
+            .replace("${numberOfSkills}", String.valueOf(numberOfSkills)).replace("${model.name}",modelName);
       }
     } catch (IOException exception) {
       exception.printStackTrace();
@@ -149,6 +153,7 @@ public class AIServiceImpl implements AIService {
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", gptAccessKey);
     String payload = null;
+    String modelName=modelSelector.getModelName();
     try {
       Resource resource = resourceLoader.getResource("classpath:talentProbeTemplate.txt");
       String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
@@ -156,7 +161,7 @@ public class AIServiceImpl implements AIService {
         String job = jobDescription.replaceAll("\n","\\\\n")
             .replaceAll("\r","\\\\r");
         payload = content.replace("${numberOfQuestions}", String.valueOf(noOfQues))
-            .replace("${jobDescription}", job);
+            .replace("${jobDescription}", job).replace("${model.name}",modelName);
       }
     } catch (IOException exception) {
       exception.printStackTrace();
@@ -285,13 +290,14 @@ public class AIServiceImpl implements AIService {
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", gptAccessKey);
     String payload = null;
+    String modelName=modelSelector.getModelName();
     try {
       Resource resource = resourceLoader.getResource("classpath:talentProbeResumeScanTemplate.txt");
       String content = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
       if (!content.isBlank()) {
         String resumeContent = resumeData.replaceAll("\n", "\\\\n")
             .replaceAll("\r", "\\\\r").replaceAll("\t", "\\\\t");
-        payload = content.replace("${resume}", resumeContent);
+        payload = content.replace("${resume}", resumeContent).replace("${model.name}",modelName);
       }
     } catch (IOException exception) {
       exception.printStackTrace();

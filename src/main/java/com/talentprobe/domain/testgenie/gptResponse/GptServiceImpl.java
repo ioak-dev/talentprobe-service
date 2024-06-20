@@ -3,6 +3,7 @@ package com.talentprobe.domain.testgenie.gptResponse;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.talentprobe.domain.util.GptModelSelector;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ public class GptServiceImpl implements GptService {
 
   @Value("${mock.enabled}")
   private boolean isMockEnabled;
+
+  @Autowired
+  private GptModelSelector modelSelector;
 
   @Override
   public List<GptResponse> getGptResponse(String usecase) {
@@ -102,6 +106,7 @@ public class GptServiceImpl implements GptService {
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", gptAccessKey);
     String payload = null;
+    String modelName=modelSelector.getModelName();
     try {
       ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
       Resource resource = resourceLoader.getResource("classpath:testGenieTemplate.txt");
@@ -110,7 +115,7 @@ public class GptServiceImpl implements GptService {
         String sanitizedUseCase = usecase.replace("\\", "\\\\").replace("\n", "\\\\n")
             .replace("\r", "\\\\r").replace("\t", "\\t")
             .replace("\"", "\\\"");
-        payload = content.replace("${usecase}", sanitizedUseCase.trim());
+        payload = content.replace("${usecase}", sanitizedUseCase.trim()).replace("${model.name}",modelName);
         JsonNode jsonNode = objectMapper.readTree(payload);
         payload = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
       }
@@ -183,6 +188,7 @@ public class GptServiceImpl implements GptService {
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Authorization", gptAccessKey);
     String payload = null;
+    String modelName=modelSelector.getModelName();
     try {
       ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
       Resource resource = resourceLoader.getResource("classpath:testGenieApplicationTestCasesTemplate.txt");
@@ -191,7 +197,7 @@ public class GptServiceImpl implements GptService {
         String sanitizedUseCase = usecase.replace("\\", "\\\\").replace("\n", "\\\\n")
             .replace("\r", "\\\\r").replace("\t", "\\t")
             .replace("\"", "\\\"");
-        payload = content.replace("${usecases}", sanitizedUseCase.trim());
+        payload = content.replace("${usecases}", sanitizedUseCase.trim()).replace("${model.name}",modelName);
         JsonNode jsonNode = objectMapper.readTree(payload);
         payload = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
       }
