@@ -61,10 +61,8 @@ public class AssessmentQuestionServiceImpl implements
     firstXAssessmentQuestionStages.forEach(stage -> {
       AssessmentQuestion assessmentQuestion = new AssessmentQuestion();
       assessmentQuestion.setAssessmentId(stage.getAssessmentId());
-      assessmentQuestion.setQuestion(stage.getQuestion());
-      assessmentQuestion.setAnswer(stage.getAnswer());
+      assessmentQuestion.setData(stage.getData());
       assessmentQuestion.setType(stage.getType());
-      assessmentQuestion.setChoices(stage.getChoices());
       assessmentQuestion.setPinned(false);
       assessmentQuestionList.add(assessmentQuestion);
     });
@@ -82,10 +80,8 @@ public class AssessmentQuestionServiceImpl implements
             assessment.getLastRecommendationNumber() + 1);
     AssessmentQuestion assessmentQuestion = new AssessmentQuestion();
     assessmentQuestion.setAssessmentId(assessmentQuestionStage.getAssessmentId());
-    assessmentQuestion.setQuestion(assessmentQuestionStage.getQuestion());
-    assessmentQuestion.setAnswer(assessmentQuestionStage.getAnswer());
+    assessmentQuestion.setData(assessmentQuestionStage.getData());
     assessmentQuestion.setType(assessmentQuestionStage.getType());
-    assessmentQuestion.setChoices(assessmentQuestionStage.getChoices());
     assessmentQuestion.setPinned(false);
     assessmentQuestionRepository.save(assessmentQuestion);
 
@@ -109,6 +105,7 @@ public class AssessmentQuestionServiceImpl implements
     assessmentQuestion.setType(request.getType());
     assessmentQuestion.setChoices(request.getChoices());
     assessmentQuestion.setPinned(request.getPinned());
+    assessmentQuestion.setData(request.getData());
     assessmentQuestionRepository.save(assessmentQuestion);
     return assessmentQuestion;
   }
