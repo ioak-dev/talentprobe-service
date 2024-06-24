@@ -7,7 +7,7 @@
     },
     {
       "role": "user",
-      "content": "Please use the following use case to generate minimum 10 or more test cases. Usecase: ${usecase}"
+      "content": "Please use the following use case to generate minimum 10-15 or more test cases. Usecase: ${usecase}"
     }
   ],
   "temperature": 1,

@@ -7,7 +7,7 @@
     },
     {
       "role": "user",
-      "content": "Please use the following consolidated application use cases to generate minimum 20-25 or more test cases. Usecase : ${usecases}"
+      "content": "Please use the following consolidated application use cases to generate minimum 30-35 or more test cases. Usecase : ${usecases}"
     }
   ],
   "temperature": 1,
