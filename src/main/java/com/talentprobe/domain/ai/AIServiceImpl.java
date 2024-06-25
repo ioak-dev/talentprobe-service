@@ -227,7 +227,8 @@ public class AIServiceImpl implements AIService {
   public String removeInvalidCharacters(String input) {
     String sanitizedString;
     if (input.startsWith("```json")) {
-      sanitizedString = input.replaceAll("^```json", "").replaceAll("/", "");
+      sanitizedString = input.replaceAll("^```json", "")
+          .replaceAll("^(String)", "").replaceAll("/", "");
       return sanitizedString.replace("`", "");
     }
     return input;
@@ -325,7 +326,7 @@ public class AIServiceImpl implements AIService {
               JsonNode messageNode = choice.get("message");
               if (messageNode != null) {
                 String contentString = messageNode.get("content").asText();
-                JsonNode contentNode = objectMapper.readTree(contentString.replace("`",""));
+                JsonNode contentNode = objectMapper.readTree(removeInvalidCharacters(contentString));
                 aiResumeResponse.setData(contentNode.get("keyPoints"));
               }
             }
