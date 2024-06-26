@@ -177,7 +177,7 @@ public class GptServiceImpl implements GptService {
     String sanitizedString;
     if (input.startsWith("```json")) {
       sanitizedString = input.replaceAll("^```json", "");
-      return sanitizedString.replace("`", "");
+      return sanitizedString.replace("`", "").replaceAll("^(String)","");
     }
     return input;
   }
