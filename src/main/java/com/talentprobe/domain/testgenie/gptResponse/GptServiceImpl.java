@@ -143,7 +143,7 @@ public class GptServiceImpl implements GptService {
       if (rootNode != null) {
         JsonNode dataNode = rootNode.get("data");
         if (dataNode != null) {
-        JsonNode choicesNode = rootNode.get("choices");
+        JsonNode choicesNode = dataNode.get("choices");
         if (choicesNode != null && choicesNode.isArray()) {
           for (JsonNode choice : choicesNode) {
             JsonNode messageNode = choice.get("message");

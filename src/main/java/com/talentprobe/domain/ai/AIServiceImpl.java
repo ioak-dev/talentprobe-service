@@ -186,7 +186,7 @@ public class AIServiceImpl implements AIService {
         if(null!=rootNode) {
           JsonNode dataNode = rootNode.get("data");
           if (dataNode != null) {
-            JsonNode choicesNode = rootNode.get("choices");
+            JsonNode choicesNode = dataNode.get("choices");
             if (choicesNode != null) {
               if (choicesNode.isArray()) {
                 for (JsonNode choice : choicesNode) {
@@ -252,7 +252,7 @@ public class AIServiceImpl implements AIService {
       if(null!=rootNode) {
         JsonNode dataNode = rootNode.get("data");
         if (dataNode != null) {
-          JsonNode choicesNode = rootNode.get("choices");
+          JsonNode choicesNode = dataNode.get("choices");
           if (choicesNode != null) {
             if (choicesNode.isArray()) {
               for (JsonNode choice : choicesNode) {
