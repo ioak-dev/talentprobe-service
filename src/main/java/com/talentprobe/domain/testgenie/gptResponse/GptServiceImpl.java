@@ -141,6 +141,8 @@ public class GptServiceImpl implements GptService {
         rootNode = objectMapper.valueToTree(body);
       }
       if (rootNode != null) {
+        JsonNode dataNode = rootNode.get("data");
+        if (dataNode != null) {
         JsonNode choicesNode = rootNode.get("choices");
         if (choicesNode != null && choicesNode.isArray()) {
           for (JsonNode choice : choicesNode) {
@@ -148,7 +150,7 @@ public class GptServiceImpl implements GptService {
             if (messageNode != null) {
               String contentString = messageNode.get("content").asText();
               JsonNode contentNode = objectMapper.readTree(
-                  removeInvalidCharacters(contentString));
+                      removeInvalidCharacters(contentString));
               JsonNode testCaseNode = contentNode.get("testCases");
               log.info("Extracted testCases array from response");
               if (testCaseNode != null && testCaseNode.isArray()) {
@@ -159,6 +161,7 @@ public class GptServiceImpl implements GptService {
               }
             }
           }
+        }
         } else {
           log.error("'choices' node is missing in the response");
           throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
