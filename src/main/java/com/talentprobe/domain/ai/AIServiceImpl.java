@@ -184,30 +184,33 @@ public class AIServiceImpl implements AIService {
           rootNode = objectMapper.valueToTree(body);
         }
         if(null!=rootNode) {
-          JsonNode choicesNode = rootNode.get("choices");
-          if (choicesNode != null) {
-            if (choicesNode.isArray()) {
-              for (JsonNode choice : choicesNode) {
-                JsonNode messageNode = choice.get("message");
-                if (messageNode != null) {
-                  String contentString = messageNode.get("content").asText();
-                  JsonNode contentNode = objectMapper.readTree(
-                      removeInvalidCharacters(contentString));
-                  JsonNode questionNode = contentNode.get("questions");
-                  if (null == questionNode) {
-                    if (contentNode.isArray()) {
-                      for (JsonNode node : contentNode) {
+          JsonNode dataNode = rootNode.get("data");
+          if (dataNode != null) {
+            JsonNode choicesNode = rootNode.get("choices");
+            if (choicesNode != null) {
+              if (choicesNode.isArray()) {
+                for (JsonNode choice : choicesNode) {
+                  JsonNode messageNode = choice.get("message");
+                  if (messageNode != null) {
+                    String contentString = messageNode.get("content").asText();
+                    JsonNode contentNode = objectMapper.readTree(
+                            removeInvalidCharacters(contentString));
+                    JsonNode questionNode = contentNode.get("questions");
+                    if (null == questionNode) {
+                      if (contentNode.isArray()) {
+                        for (JsonNode node : contentNode) {
+                          Object aiResponseTemp = objectMapper.treeToValue(node, Object.class);
+                          list.add(aiResponseTemp);
+                          aiResponse.setQuestions(list);
+                        }
+                      }
+                    } else if (questionNode.isArray()) {
+                      for (JsonNode node : questionNode) {
                         Object aiResponseTemp = objectMapper.treeToValue(node, Object.class);
                         list.add(aiResponseTemp);
-                        aiResponse.setQuestions(list);
                       }
+                      aiResponse.setQuestions(list);
                     }
-                  } else if (questionNode.isArray()) {
-                    for (JsonNode node : questionNode) {
-                      Object aiResponseTemp = objectMapper.treeToValue(node, Object.class);
-                      list.add(aiResponseTemp);
-                    }
-                    aiResponse.setQuestions(list);
                   }
                 }
               }
@@ -247,27 +250,30 @@ public class AIServiceImpl implements AIService {
         rootNode = objectMapper.valueToTree(body);
       }
       if(null!=rootNode) {
-        JsonNode choicesNode = rootNode.get("choices");
-        if (choicesNode != null) {
-          if (choicesNode.isArray()) {
-            for (JsonNode choice : choicesNode) {
-              JsonNode messageNode = choice.get("message");
-              if (messageNode != null) {
-                String contentString = messageNode.get("content").asText();
-                JsonNode contentNode = objectMapper.readTree(
-                    removeInvalidCharacters(contentString));
-                JsonNode questionNode = contentNode.get("skillSet");
-                if (null == questionNode) {
-                  if (contentNode.isArray()) {
-                    for (JsonNode node : contentNode) {
+        JsonNode dataNode = rootNode.get("data");
+        if (dataNode != null) {
+          JsonNode choicesNode = rootNode.get("choices");
+          if (choicesNode != null) {
+            if (choicesNode.isArray()) {
+              for (JsonNode choice : choicesNode) {
+                JsonNode messageNode = choice.get("message");
+                if (messageNode != null) {
+                  String contentString = messageNode.get("content").asText();
+                  JsonNode contentNode = objectMapper.readTree(
+                          removeInvalidCharacters(contentString));
+                  JsonNode questionNode = contentNode.get("skillSet");
+                  if (null == questionNode) {
+                    if (contentNode.isArray()) {
+                      for (JsonNode node : contentNode) {
+                        String aiResponse = objectMapper.treeToValue(node, String.class);
+                        aiResponses.add(aiResponse);
+                      }
+                    }
+                  } else if (questionNode.isArray()) {
+                    for (JsonNode node : questionNode) {
                       String aiResponse = objectMapper.treeToValue(node, String.class);
                       aiResponses.add(aiResponse);
                     }
-                  }
-                } else if (questionNode.isArray()) {
-                  for (JsonNode node : questionNode) {
-                    String aiResponse = objectMapper.treeToValue(node, String.class);
-                    aiResponses.add(aiResponse);
                   }
                 }
               }
@@ -319,15 +325,18 @@ public class AIServiceImpl implements AIService {
         rootNode = objectMapper.valueToTree(body);
       }
       if (null != rootNode) {
-        JsonNode choicesNode = rootNode.get("choices");
-        if (choicesNode != null) {
-          if (choicesNode.isArray()) {
-            for (JsonNode choice : choicesNode) {
-              JsonNode messageNode = choice.get("message");
-              if (messageNode != null) {
-                String contentString = messageNode.get("content").asText();
-                JsonNode contentNode = objectMapper.readTree(removeInvalidCharacters(contentString));
-                aiResumeResponse.setData(contentNode.get("keyPoints"));
+        JsonNode dataNode = rootNode.get("data");
+        if (dataNode != null) {
+          JsonNode choicesNode = dataNode.get("choices");
+          if (choicesNode != null) {
+            if (choicesNode.isArray()) {
+              for (JsonNode choice : choicesNode) {
+                JsonNode messageNode = choice.get("message");
+                if (messageNode != null) {
+                  String contentString = messageNode.get("content").asText();
+                  JsonNode contentNode = objectMapper.readTree(removeInvalidCharacters(contentString));
+                  aiResumeResponse.setData(contentNode.get("keyPoints"));
+                }
               }
             }
           }
