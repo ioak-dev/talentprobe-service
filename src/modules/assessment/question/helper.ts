@@ -8,6 +8,7 @@ import {
 } from "./model";
 const { getCollection } = require("../../../lib/dbutils");
 import * as Gptutils from "../../../lib/gptutils";
+import { getQuestionPrompt } from "./prompt";
 
 export const updateAssessmentQuestion = async (
   id: string,
@@ -67,16 +68,27 @@ export const deleteAssessmentQuestion = async (
 
 export const generateQuestions = async (
   id: string,
-  count: number,
+  count: string,
   text: any
 ) => {
-  await Gptutils.predict(count, text);
   const model = getGlobalCollection(
     assessmentQuestionCollection,
     assessmentQuestionSchema
   );
 
-  return {};
+  const gptResponse = await Gptutils.predict(getQuestionPrompt(count, text));
+
+  const _payload: any[] = [];
+  gptResponse?.questions?.forEach((item: any) =>
+    _payload.push({
+      insertOne: {
+        document: { type: "MultipleChoice", assessmentId: id, data: item },
+      },
+    })
+  );
+  await model.bulkWrite(_payload);
+
+  return gptResponse?.questions?.length;
 
   // return await model.create(data);
 };

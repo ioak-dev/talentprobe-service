@@ -14,6 +14,8 @@ services:
       ONEAUTH_API: https://api.ioak.io:8010/api
       ONEAUTH_API_KEY: fc2076f5-bee6-4b94-974f-5e110495b048
       ONEAUTH_REALM_ID: 219
+      DODO_URL: https://api.ioak.io:8120
+      DODO_KEY: e6bacf5e598649e7ab52ce6fca446924
       PORT: 8095
     ports:
       - 8095:8095

@@ -14,5 +14,7 @@ require("./modules/company/route")(router);
 require("./modules/budget/route")(router);
 require("./modules/assessment/route")(router);
 require("./modules/assessment/question/route")(router);
+require("./modules/assessment/responseheader/route")(router);
+require("./modules/assessment/responsedetail/route")(router);
 
 module.exports = router;
