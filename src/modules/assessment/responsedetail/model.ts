@@ -3,15 +3,16 @@ var mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const assessmentResponsedetailSchema = new Schema(
   {
-    assessmentId: { type: String },
-    type: { type: String },
-    data: { type: JSON },
-    pinned: { type: Boolean },
+    responseId: { type: String },
+    questionId: { type: String },
+    answer: { type: String },
+    isSubmitted: { type: Boolean },
+    score: { type: Number },
   },
   { timestamps: true }
 );
 
-const assessmentResponsedetailCollection = "assessment.assessmentResponsedetail";
+const assessmentResponsedetailCollection = "assessment.responsedetail";
 
 // module.exports = mongoose.model('bookmarks', articleSchema);
 export { assessmentResponsedetailSchema, assessmentResponsedetailCollection };

@@ -16,9 +16,9 @@ services:
       ONEAUTH_REALM_ID: 219
       DODO_URL: https://api.ioak.io:8120
       DODO_KEY: e6bacf5e598649e7ab52ce6fca446924
-      PORT: 8095
+      PORT: 8125
     ports:
-      - 8095:8095
+      - 8125:8125
     networks:
       ioak-net:
         aliases:
