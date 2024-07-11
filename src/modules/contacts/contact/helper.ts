@@ -41,7 +41,7 @@ export const createContact = async (data: any) => {
   return await model.create(data);
 };
 
-export const deleteContact = async (id: string, questionId: string) => {
+export const deleteContact = async (id: string) => {
   const model = getGlobalCollection(contactCollection, contactSchema);
-  return await model.deleteMany({ _id: questionId, assessmentId: id });
+  return await model.deleteMany({ _id: id });
 };

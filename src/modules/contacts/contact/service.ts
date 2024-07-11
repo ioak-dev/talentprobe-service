@@ -35,8 +35,7 @@ export const createContact = async (req: any, res: any) => {
 
 export const deleteContact = async (req: any, res: any) => {
   const response: any = await Helper.deleteContact(
-    req.params.id,
-    req.params.questionId
+    req.params.id
   );
   res.status(200);
   res.send(response);
