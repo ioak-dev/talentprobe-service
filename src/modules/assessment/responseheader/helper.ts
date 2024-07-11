@@ -60,7 +60,6 @@ export const createAssessmentResponseheader = async (id: string, data: any) => {
   let responseHeader = null;
   if (existingresponseHeader.length === 0) {
     const questions = await getAssessmentQuestion(id);
-    console.log(questions.length);
     responseHeader = await model.create({
       assessmentId: id,
       ...data,
@@ -71,7 +70,7 @@ export const createAssessmentResponseheader = async (id: string, data: any) => {
     responseHeader = existingresponseHeader[0];
   }
 
-  const responseId = responseHeader.responseId;
+  const responseId = responseHeader._id;
 
   if (responseHeader.hasSubmitted) {
     return {
@@ -93,7 +92,8 @@ export const createAssessmentResponseheader = async (id: string, data: any) => {
         type: nextQuestion.question.type,
       },
       responseId,
-      currentQuestionNumber: 1,
+      referenceId: nextQuestion._id,
+      currentQuestionNumber: responseHeader.answered + 1,
       totalQuestions: responseHeader.totalQuestions,
     };
   }
@@ -114,4 +114,31 @@ export const deleteAssessmentResponseheader = async (
     assessmentResponseheaderSchema
   );
   return await model.deleteMany({ _id: questionId, assessmentId: id });
+};
+
+export const updateScore = async (responseId: string, score: number) => {
+  const model = getGlobalCollection(
+    assessmentResponseheaderCollection,
+    assessmentResponseheaderSchema
+  );
+
+  await model.updateOne({ _id: responseId }, { $inc: { score, answered: 1 } });
+};
+
+export const finalizeResponse = async (responseId: string) => {
+  const model = getGlobalCollection(
+    assessmentResponseheaderCollection,
+    assessmentResponseheaderSchema
+  );
+
+  await model.updateOne({ _id: responseId }, { isSubmitted: true });
+};
+
+export const getResponseHeaderById = async (responseId: string) => {
+  const model = getGlobalCollection(
+    assessmentResponseheaderCollection,
+    assessmentResponseheaderSchema
+  );
+
+  return await model.findOne({ _id: responseId });
 };

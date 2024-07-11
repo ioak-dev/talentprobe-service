@@ -9,6 +9,7 @@ const assessmentResponseheaderSchema = new Schema(
     familyName: { type: String },
     isSubmitted: { type: Boolean },
     score: { type: Number },
+    answered: { type: Number },
     totalQuestions: { type: Number },
   },
   { timestamps: true }

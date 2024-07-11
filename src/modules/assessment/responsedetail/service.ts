@@ -22,8 +22,7 @@ export const updateAssessmentResponsedetail = async (req: any, res: any) => {
 };
 
 export const createAssessmentResponsedetail = async (req: any, res: any) => {
-  const userId = req.user.user_id;
-  const response: any = await Helper.createAssessmentResponsedetail(req.body);
+  const response: any = await Helper.createAssessmentResponsedetail(req.params.id, req.params.responseId, req.body);
   res.status(200);
   res.send(response);
   res.end();
