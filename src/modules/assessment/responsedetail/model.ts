@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const assessmentResponsedetailSchema = new Schema(
   {
     responseId: { type: String },
-    questionId: { type: String },
+    question: { type: JSON },
     answer: { type: String },
     isSubmitted: { type: Boolean },
     score: { type: Number },

@@ -6,6 +6,8 @@ import {
   assessmentResponseheaderCollection,
   assessmentResponseheaderSchema,
 } from "./model";
+import { getAssessmentQuestion } from "../question/helper";
+import { importQuestions, getNextQuestion } from "../responsedetail/helper";
 const { getCollection } = require("../../../lib/dbutils");
 import * as Gptutils from "../../../lib/gptutils";
 
@@ -45,13 +47,62 @@ export const getAssessmentResponseheader = async (id: string) => {
   return await model.find({ assessmentId: id });
 };
 
-export const createAssessmentResponseheader = async (data: any) => {
+export const createAssessmentResponseheader = async (id: string, data: any) => {
   const model = getGlobalCollection(
     assessmentResponseheaderCollection,
     assessmentResponseheaderSchema
   );
 
-  return await model.create(data);
+  const existingresponseHeader = await model.find({
+    assessmentId: id,
+    email: data.email,
+  });
+  let responseHeader = null;
+  if (existingresponseHeader.length === 0) {
+    const questions = await getAssessmentQuestion(id);
+    console.log(questions.length);
+    responseHeader = await model.create({
+      assessmentId: id,
+      ...data,
+      totalQuestions: questions.length,
+    });
+    await importQuestions(responseHeader._id, questions);
+  } else {
+    responseHeader = existingresponseHeader[0];
+  }
+
+  const responseId = responseHeader.responseId;
+
+  if (responseHeader.hasSubmitted) {
+    return {
+      hasSubmitted: true,
+      responseId,
+      totalQuestions: responseHeader.totalQuestions,
+    };
+  }
+
+  const nextQuestion = await getNextQuestion(responseId);
+
+  if (nextQuestion) {
+    return {
+      hasSubmitted: false,
+      question: {
+        questionId: nextQuestion.question._id,
+        question: nextQuestion.question.data.question,
+        choices: nextQuestion.question.data.choices,
+        type: nextQuestion.question.type,
+      },
+      responseId,
+      currentQuestionNumber: 1,
+      totalQuestions: responseHeader.totalQuestions,
+    };
+  }
+
+  return {
+    hasSubmitted: true,
+    responseId,
+    totalQuestions: responseHeader.totalQuestions,
+  };
 };
 
 export const deleteAssessmentResponseheader = async (

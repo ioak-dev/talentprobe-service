@@ -22,8 +22,7 @@ export const updateAssessmentResponseheader = async (req: any, res: any) => {
 };
 
 export const createAssessmentResponseheader = async (req: any, res: any) => {
-  const userId = req.user.user_id;
-  const response: any = await Helper.createAssessmentResponseheader(req.body);
+  const response: any = await Helper.createAssessmentResponseheader(req.params.id, req.body);
   res.status(200);
   res.send(response);
   res.end();

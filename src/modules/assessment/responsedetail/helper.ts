@@ -8,6 +8,7 @@ import {
 } from "./model";
 const { getCollection } = require("../../../lib/dbutils");
 import * as Gptutils from "../../../lib/gptutils";
+import { response } from "express";
 
 export const updateAssessmentResponsedetail = async (
   id: string,
@@ -63,4 +64,39 @@ export const deleteAssessmentResponsedetail = async (
     assessmentResponsedetailSchema
   );
   return await model.deleteMany({ _id: questionId, assessmentId: id });
+};
+
+export const importQuestions = async (responseId: string, questions: any[]) => {
+  const model = getGlobalCollection(
+    assessmentResponsedetailCollection,
+    assessmentResponsedetailSchema
+  );
+
+  const _payload: any[] = [];
+  questions.forEach((question: any) =>
+    _payload.push({
+      insertOne: {
+        document: { question, answer: null, isSubmitted: false, score: 0 },
+      },
+    })
+  );
+  await model.bulkWrite(_payload);
+};
+
+export const getNextQuestion = async (responseId: string) => {
+  const model = getGlobalCollection(
+    assessmentResponsedetailCollection,
+    assessmentResponsedetailSchema
+  );
+
+  const response = await model.aggregate([
+    { $match: { responseId } },
+    { $sample: { size: 1 } },
+  ]);
+
+  if (response.length > 0) {
+    return response[0];
+  }
+
+  return null;
 };

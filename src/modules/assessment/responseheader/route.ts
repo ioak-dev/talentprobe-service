@@ -8,8 +8,7 @@ import {
 
 module.exports = function (router: any) {
   router.post(
-    "/assessment/:id/responseheader",
-    authorizeApi,
+    "/assessment/:id/response",
     createAssessmentResponseheader
   );
   router.delete(

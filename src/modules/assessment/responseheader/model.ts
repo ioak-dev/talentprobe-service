@@ -6,9 +6,10 @@ const assessmentResponseheaderSchema = new Schema(
     assessmentId: { type: String },
     email: { type: String },
     givenName: { type: String },
-    lastName: { type: String },
+    familyName: { type: String },
     isSubmitted: { type: Boolean },
     score: { type: Number },
+    totalQuestions: { type: Number },
   },
   { timestamps: true }
 );
