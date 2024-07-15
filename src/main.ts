@@ -18,8 +18,16 @@ const sessionSchema = require("./modules/session");
 const userSchema = require("./modules/user");
 
 const databaseUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017";
-mongoose.connect(databaseUri, {
-});
+
+mongoose.connect(databaseUri, {})
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1); // Optional: Exit process if unable to connect to DB
+  });
+
 mongoose.pluralize(undefined);
 
 const app = express();
@@ -54,53 +62,53 @@ const server = new ApolloServer({
   playground: true,
 });
 
-server.start().then(() => server.applyMiddleware({ app }))
-
+server.start()
+  .then(() => {
+    server.applyMiddleware({ app });
+    // Start the server after Apollo Server is ready
+    app.listen({ port: process.env.PORT || 4000 }, () =>
+      console.log(
+        `🚀 Server ready at http://localhost:${process.env.PORT || 4000}${server.graphqlPath}`
+      )
+    );
+  })
+  .catch((error: any) => {
+    console.error("Error starting Apollo Server:", error);
+    process.exit(1); // Optional: Exit process if unable to start Apollo Server
+  });
 
 app.use(cors());
 
 app.get("/hello", (_: any, res: any) => {
-  res.send(
-    "basic connection to server works. database connection is not validated"
-  );
+  res.send("basic connection to server works. database connection is not validated");
   res.end();
 });
 
-app.use(express.json({ limit: 5000000 }));
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/api", ApiRoute);
 
-app.use((_: any, res: any) => {
-  res.status(404);
-  res.send("Not found");
-  res.end();
+app.use((req: any, res: any) => {
+  res.status(404).send("Not found");
 });
 
 app.use((err: any, req: any, res: any, next: any) => {
-  res.status(500).send(err.stack);
-  // .send(err.name + ": " + err.message + "\n\nDetails:\n" + err.stack);
+  console.error(err.stack);
+  res.status(500).send("Internal Server Error");
 });
 
-app.listen({ port: process.env.PORT || 4000 }, () =>
-  console.log(
-    `🚀 Server ready at http://localhost:${process.env.PORT || 4000}${
-      server.graphqlPath
-    }`
-  )
-);
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+  // Optionally, shut down the server gracefully
+  // process.exit(1);
+});
 
-// server
-//   .listen({ port: process.env.PORT || 4000 })
-//   .then(({ url }: any) => console.log(`Server started at ${url}`));
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+  // Optionally, shut down the server gracefully
+  // process.exit(1);
+});
 
 // Server startup scripts
 initializeSequences();
-
-// process.on("uncaughtException", (err) => {
-//   console.log(`Uncaught Exception: ${err.message}`);
-//   process.exit(1);
-// });

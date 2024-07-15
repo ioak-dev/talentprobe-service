@@ -71,12 +71,14 @@ export const generateQuestions = async (
   count: string,
   text: any
 ) => {
+  console.log("*1");
   const model = getGlobalCollection(
     assessmentQuestionCollection,
     assessmentQuestionSchema
   );
 
   const gptResponse = await Gptutils.predict(getQuestionPrompt(count, text));
+  console.log("*2");
 
   const _payload: any[] = [];
   gptResponse?.questions?.forEach((item: any) =>
@@ -86,7 +88,9 @@ export const generateQuestions = async (
       },
     })
   );
+  console.log("*3");
   await model.bulkWrite(_payload);
+  console.log("*4");
 
   return gptResponse?.questions?.length;
 
