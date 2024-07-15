@@ -4,11 +4,16 @@ import {
   updateAssessmentResponsedetail,
   getAssessmentResponsedetail,
   deleteAssessmentResponsedetail,
+  getAssessmentResponsedetailByResponseId
 } from "./service";
 
 const selfRealm = 100;
 
 module.exports = function (router: any) {
+  router.get(
+    "/assessment/:id/response-detail/:responseId",
+    getAssessmentResponsedetailByResponseId
+  )
   router.post(
     "/assessment/:id/response/:responseId",
     createAssessmentResponsedetail

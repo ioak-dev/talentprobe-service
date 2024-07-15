@@ -51,6 +51,15 @@ export const getAssessmentResponsedetail = async (id: string) => {
   return await model.find({ assessmentId: id });
 };
 
+export const getAssessmentResponsedetailByResponseId= async (responseId: string) => {
+  const model = getGlobalCollection(
+    assessmentResponsedetailCollection,
+    assessmentResponsedetailSchema
+  );
+
+  return await model.find({ responseId });
+};
+
 export const deleteAssessmentResponsedetail = async (
   id: string,
   questionId: string

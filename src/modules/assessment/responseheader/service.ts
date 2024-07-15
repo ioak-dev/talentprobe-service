@@ -1,8 +1,14 @@
 import * as Helper from "./helper";
 
 export const getAssessmentResponseheader = async (req: any, res: any) => {
-  const userId = req.user.user_id;
   const response: any[] = await Helper.getAssessmentResponseheader(req.params.id);
+  res.status(200);
+  res.send(response);
+  res.end();
+};
+
+export const getAssessmentResponseheaderById = async (req: any, res: any) => {
+  const response: any[] = await Helper.getAssessmentResponseheaderById(req.params.responseId);
   res.status(200);
   res.send(response);
   res.end();
@@ -39,8 +45,8 @@ export const deleteAssessmentResponseheader = async (req: any, res: any) => {
   res.end();
 };
 
-export const getAssessmentResponseheaderByResponseId = async (req: any, res: any) => {
-  const response: any = await Helper.getAssessmentResponseheaderByResponseId(req.params.id, req.params.responseId);
+export const reloadAssessmentResponse = async (req: any, res: any) => {
+  const response: any = await Helper.reloadAssessmentResponse(req.params.id, req.params.responseId);
   res.status(200);
   res.send(response);
   res.end();

@@ -4,7 +4,8 @@ import {
   updateAssessmentResponseheader,
   getAssessmentResponseheader,
   deleteAssessmentResponseheader,
-  getAssessmentResponseheaderByResponseId
+  reloadAssessmentResponse,
+  getAssessmentResponseheaderById
 } from "./service";
 
 module.exports = function (router: any) {
@@ -13,8 +14,16 @@ module.exports = function (router: any) {
     createAssessmentResponseheader
   );
   router.get(
+    "/assessment/:id/response",
+    getAssessmentResponseheader
+  );
+  router.get(
     "/assessment/:id/response/:responseId",
-    getAssessmentResponseheaderByResponseId
+    getAssessmentResponseheaderById
+  );
+  router.get(
+    "/assessment/:id/response/:responseId/reload",
+    reloadAssessmentResponse
   );
   router.delete(
     "/assessment/:id/responseheader/:responseId",

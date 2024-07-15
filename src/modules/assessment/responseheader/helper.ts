@@ -47,7 +47,16 @@ export const getAssessmentResponseheader = async (id: string) => {
   return await model.find({ assessmentId: id });
 };
 
-export const getAssessmentResponseheaderByResponseId = async (
+export const getAssessmentResponseheaderById = async (responseId: string) => {
+  const model = getGlobalCollection(
+    assessmentResponseheaderCollection,
+    assessmentResponseheaderSchema
+  );
+
+  return await model.findOne({ _id: responseId });
+};
+
+export const reloadAssessmentResponse = async (
   id: string,
   responseId: string
 ) => {
