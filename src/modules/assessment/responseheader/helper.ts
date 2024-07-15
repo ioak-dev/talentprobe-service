@@ -47,6 +47,46 @@ export const getAssessmentResponseheader = async (id: string) => {
   return await model.find({ assessmentId: id });
 };
 
+export const getAssessmentResponseheaderByResponseId = async (
+  id: string,
+  responseId: string
+) => {
+  const model = getGlobalCollection(
+    assessmentResponseheaderCollection,
+    assessmentResponseheaderSchema
+  );
+
+  const responseHeader = await model.findOne({
+    assessmentId: id,
+    _id: responseId,
+  });
+
+  // return await model.find({ assessmentId: id, _id: responseId });
+  const nextQuestion = await getNextQuestion(responseId);
+
+  if (nextQuestion) {
+    return {
+      hasSubmitted: false,
+      question: {
+        questionId: nextQuestion.question._id,
+        question: nextQuestion.question.data.question,
+        choices: nextQuestion.question.data.choices,
+        type: nextQuestion.question.type,
+      },
+      responseId,
+      referenceId: nextQuestion._id,
+      currentQuestionNumber: responseHeader.answered + 1,
+      totalQuestions: responseHeader.totalQuestions,
+    };
+  }
+
+  return {
+    hasSubmitted: true,
+    responseId,
+    totalQuestions: responseHeader.totalQuestions,
+  };
+};
+
 export const createAssessmentResponseheader = async (id: string, data: any) => {
   const model = getGlobalCollection(
     assessmentResponseheaderCollection,
@@ -64,6 +104,8 @@ export const createAssessmentResponseheader = async (id: string, data: any) => {
       assessmentId: id,
       ...data,
       totalQuestions: questions.length,
+      answered: 0,
+      score: 0,
     });
     await importQuestions(responseHeader._id, questions);
   } else {

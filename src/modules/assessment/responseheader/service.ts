@@ -38,3 +38,10 @@ export const deleteAssessmentResponseheader = async (req: any, res: any) => {
   res.send(response);
   res.end();
 };
+
+export const getAssessmentResponseheaderByResponseId = async (req: any, res: any) => {
+  const response: any = await Helper.getAssessmentResponseheaderByResponseId(req.params.id, req.params.responseId);
+  res.status(200);
+  res.send(response);
+  res.end();
+};
