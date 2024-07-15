@@ -47,7 +47,6 @@ export const generateQuestions = async (req: any, res: any) => {
     req.params.count,
     req.body.text
   );
-  console.log("*5");
   console.log(response);
   res.status(200);
   res.send({ response });
