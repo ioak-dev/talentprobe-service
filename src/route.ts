@@ -18,5 +18,5 @@ require("./modules/assessment/responseheader/route")(router);
 require("./modules/assessment/responsedetail/route")(router);
 
 require("./modules/contacts/contact/route")(router);
-
+require("./modules/resume/route")(router);
 module.exports = router;
