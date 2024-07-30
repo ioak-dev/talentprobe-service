@@ -12,7 +12,7 @@ const selfRealm = 100;
 
 module.exports = function (router: any) {
   router.get("/resume", authorizeApi, getResume);
-  router.get("/resume/:id", getResumeById);
-  router.post("/resume", upload.single("file"), scanResume);
+  router.get("/resume/:id",authorizeApi, getResumeById);
+  router.post("/resume", upload.single("file"),authorizeApi, scanResume);
 
 };

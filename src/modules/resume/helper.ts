@@ -26,9 +26,10 @@ export const getResumeById = async (id: string) => {
 
 
 export const scanResume = async (file: any) => {
+  console.log('scanResume processing started');
   const model = getGlobalCollection(resumeCollection, resumeSchema);
-
   const extn = path.extname(file.originalname);
+  const fileName = file.originalname;
   let content ='';
   try {
     if(extn==='.pdf'){
@@ -43,11 +44,10 @@ export const scanResume = async (file: any) => {
       throw new Error("Unsupported file type");
     }
     const response = await Gptutils.predict(getResumePrompt(content));
-
     const payload = {
       data: response?.keyPoints,
-      attachment: file,
-      filename: file.filename,
+      attachment: file.buffer,
+      filename: fileName,
     };
     console.log('gpt call for resume scan done');
     return await model.create(payload);
