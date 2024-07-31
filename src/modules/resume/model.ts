@@ -5,7 +5,7 @@ const resumeSchema = new Schema(
   {
     attachment: { type: Buffer },
     data: { type: JSON },
-    filename: { type: String },
+    fileName: { type: String },
   },
   { timestamps: true }
 );

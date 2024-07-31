@@ -47,7 +47,7 @@ export const scanResume = async (file: any) => {
     const payload = {
       data: response?.keyPoints,
       attachment: file.buffer,
-      filename: fileName,
+      fileName: fileName,
     };
     console.log('gpt call for resume scan done');
     return await model.create(payload);
