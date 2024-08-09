@@ -12,11 +12,8 @@ import {getTestCaseGenPrompt} from "./prompt";
 
 export const getAllUseCases = async (id: string) => {
     const model = getGlobalCollection(usecaseCollection, usecaseSchema);
-    const response = await model.find({ suiteId: id });
-    if (response.length > 0) {
-        return response[0];
-    }
-    return null;
+    return await model.find({ suiteId: id });
+
 };
 
 export const createUseCase = async (id: string, data: any) => {
@@ -82,7 +79,7 @@ console.log('test cases gpt call');
 
 export const updateUseCaseById = async (
     id: string,
-    suiteId: string,
+    usecaseid: string,
     data: any,
 ) => {
     const model = getGlobalCollection(
@@ -94,8 +91,8 @@ export const updateUseCaseById = async (
         updateOne: {
             filter: {
                 // _id: item._id,
-                _id: id,
-                suiteId: suiteId
+                _id: usecaseid,
+                suiteId: id
             },
             update: {
                 ...data,
@@ -109,7 +106,7 @@ export const updateUseCaseById = async (
         testcaseSchema
     );
 
-    await testCaseModel.deleteMany({suiteId: suiteId, usecaseId: id })
+    await testCaseModel.deleteMany({suiteId: id, usecaseId: usecaseid })
     await testCaseModel.create(response);
     return await model.bulkWrite(_payload);
 };
