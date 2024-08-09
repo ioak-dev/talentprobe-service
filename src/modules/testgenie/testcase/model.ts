@@ -1,11 +1,11 @@
 var mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
-const testCaseSchema = new Schema(
+const testcaseSchema = new Schema(
   {
     suiteId: { type: String },
     useCaseId: { type: String },
-    description: { type: JSON },
+    description : {type : JSON},
     serializedDescription: { type: String },
     summary: { type: String },
     priority: { type: String },
@@ -16,5 +16,6 @@ const testCaseSchema = new Schema(
   { timestamps: true }
 );
 
-const testCaseCollection = "testcase";
-export { testCaseSchema, testCaseCollection };
+const testcaseCollection = "testcase";
+
+export { testcaseSchema, testcaseCollection };

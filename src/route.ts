@@ -16,8 +16,7 @@ require("./modules/assessment/route")(router);
 require("./modules/assessment/question/route")(router);
 require("./modules/assessment/responseheader/route")(router);
 require("./modules/assessment/responsedetail/route")(router);
-require("./modules/suite/route")(router)
-require("./modules/testcase/route")(router)
-require("./modules/usecase/route")(router)
-
+require("./modules/testgenie/suite/route")(router)
+require("./modules/testgenie/testcase/route")(router);
+require("./modules/testgenie/usecase/route")(router);
 module.exports = router;

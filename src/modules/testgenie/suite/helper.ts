@@ -1,4 +1,4 @@
-import { getGlobalCollection } from "../../lib/dbutils";
+import { getGlobalCollection } from "../../../lib/dbutils";
 import fs from 'fs-extra';
 import path from 'path';
 import { format } from 'date-fns';
@@ -8,12 +8,8 @@ import {
   suiteCollection,
   suiteSchema,
 } from "./model";
-import { model } from "mongoose";
-import { testCaseCollection, testCaseSchema } from "../testcase/model";
-const { getCollection } = require("../../lib/dbutils");
+import { testcaseCollection, testcaseSchema } from "../testcase/model";
 const DATE_FORMAT = 'yyyyMMdd_HHmmss';
-const HEADER_NAME = 'Content-Disposition';
-const HEADER_VALUES = 'attachment; filename=';
 
 
 export const getAllSuite = async () => {
@@ -41,7 +37,7 @@ export const deleteSuiteById = async (
     suiteCollection,
     suiteSchema
   );
-  return await model.deleteMany({ _id: id });
+  return await model.deleteOne({ _id: id });
 };
 
 
@@ -52,7 +48,11 @@ export const getSuiteById = async (
     suiteCollection,
     suiteSchema
   );
-  return await model.find({ _id: id });
+  const response = await model.find({ _id: id });
+  if (response.length > 0) {
+    return response[0];
+  }
+  return null;
 };
 
 
@@ -68,7 +68,6 @@ export const updateSuiteById = async (
   _payload.push({
     updateOne: {
       filter: {
-        // _id: item._id,
         _id: id,
       },
       update: {
@@ -92,10 +91,7 @@ export async function exportSuite(suiteId: string, type: string) {
 
     console.log(tempDirPath)
     console.log(fileName)
-    const model = getGlobalCollection(
-      testCaseCollection,
-      testCaseSchema
-    );
+    const model = getGlobalCollection(testcaseCollection,testcaseSchema);
 
     const testCaseList = await model.find({});
     console.log(testCaseList)

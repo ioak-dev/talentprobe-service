@@ -1,4 +1,4 @@
-import { authorizeApi } from "../../middlewares";
+import { authorizeApi } from "../../../middlewares";
 import {
   getAllSuite,
   createSuite,

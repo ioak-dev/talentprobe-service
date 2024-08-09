@@ -6,14 +6,14 @@ const _MODEL_NAME_GPT4 = "gpt-4o";
 const _MODEL_NAME = _MODEL_NAME_GPT4;
 
 export const getTestCaseGenPrompt = (text: string) => {
-  const testGenPrompt = cloneDeep(_RESUME_PROMPT);
-  testGenPrompt.messages[1].content = Handlebars.compile(
-    testGenPrompt.messages[1].content
-  )({resume: text, modelName: _MODEL_NAME });
-  return testGenPrompt;
+  const testGeniePrompt = cloneDeep(_TESTGENIE_PROMPT);
+  testGeniePrompt.messages[1].content = Handlebars.compile(
+      testGeniePrompt.messages[1].content
+  )({ usecase: text, modelName: _MODEL_NAME });
+  return testGeniePrompt;
 };
 
-const _RESUME_PROMPT = {
+const _TESTGENIE_PROMPT = {
   model: _MODEL_NAME,
   messages: [
     {
@@ -24,7 +24,7 @@ const _RESUME_PROMPT = {
     {
       role: "user",
       content:
-        " Please use the following use case to generate minimum 10-15 or more test cases. Usecase: ${usecase} ",
+        "Please use the following use case to generate minimum 10-15 or more test cases. Usecase: {{usecase}}",
     },
   ],
   temperature: 1,
