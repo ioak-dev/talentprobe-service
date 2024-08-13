@@ -21,7 +21,7 @@ export const createUseCase = async (id: string, data: any) => {
     const testCaseModel = getGlobalCollection(testcaseCollection,testcaseSchema);
 
     const response = await model.create(data);
-    const gptResponse= await Gptutils.predict(getTestCaseGenPrompt(data))
+    const gptResponse= await Gptutils.predict(getTestCaseGenPrompt(data.description));
     const _testCasesPayload: any[] = [];
     gptResponse?.testCases?.forEach((item: any) =>
         _testCasesPayload.push({
@@ -30,7 +30,8 @@ export const createUseCase = async (id: string, data: any) => {
             },
         })
     );
-    return await testCaseModel.bulkWrite(_testCasesPayload);
+    testCaseModel.bulkWrite(_testCasesPayload);
+    return response;
 };
 
 /*export const updateUseCaseById = async (
@@ -100,7 +101,7 @@ export const updateUseCaseById = async (
             upsert: true,
         },
     });
-    const response= await Gptutils.predict(getTestCaseGenPrompt(data))
+    const response= await Gptutils.predict(getTestCaseGenPrompt(data.description))
     const testCaseModel = getGlobalCollection(
         testcaseCollection,
         testcaseSchema
