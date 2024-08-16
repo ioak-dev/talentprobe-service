@@ -5,14 +5,6 @@ const _MODEL_NAME_GPT3 = "gpt-3.5-turbo";
 const _MODEL_NAME_GPT4 = "gpt-4o";
 const _MODEL_NAME = _MODEL_NAME_GPT4;
 
-export const getResumePrompt = (text: string) => {
-  const resumePrompt = cloneDeep(_RESUME_PROMPT);
-  resumePrompt.messages[1].content = Handlebars.compile(
-      resumePrompt.messages[1].content
-  )({resume: text, modelName: _MODEL_NAME });
-  return resumePrompt;
-};
-
 const _RESUME_PROMPT = {
   model: _MODEL_NAME,
   messages: [
@@ -32,4 +24,12 @@ const _RESUME_PROMPT = {
   top_p: 1,
   frequency_penalty: 0,
   presence_penalty: 0,
+};
+
+export const getResumePrompt = (text: string) => {
+  const resumePrompt = cloneDeep(_RESUME_PROMPT);
+  resumePrompt.messages[1].content = Handlebars.compile(
+      resumePrompt.messages[1].content
+  )({resume: text, modelName: _MODEL_NAME });
+  return resumePrompt;
 };
