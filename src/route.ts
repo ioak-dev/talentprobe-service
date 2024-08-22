@@ -16,6 +16,7 @@ require("./modules/assessment/route")(router);
 require("./modules/assessment/question/route")(router);
 require("./modules/assessment/responseheader/route")(router);
 require("./modules/assessment/responsedetail/route")(router);
+require("./modules/ocr/route")(router);
 
 require("./modules/contacts/contact/route")(router);
 
