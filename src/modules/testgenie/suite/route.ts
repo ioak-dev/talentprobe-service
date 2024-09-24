@@ -11,16 +11,16 @@ import {
 const selfRealm = 100;
 
 module.exports = function (router: any) {
-  router.get("/suite", getAllSuite);
+  router.get("/suite",authorizeApi, getAllSuite);
 
-  router.post("/suite",createSuite);
+  router.post("/suite",authorizeApi, createSuite);
 
-  router.put("/suite/:id",updateSuiteById);
+  router.put("/suite/:id",authorizeApi, updateSuiteById);
 
-  router.delete("/suite/:id",deleteSuiteById);
+  router.delete("/suite/:id",authorizeApi,deleteSuiteById);
 
-  router.get("/suite/:id", getSuiteById);
+  router.get("/suite/:id",authorizeApi, getSuiteById);
 
-  router.get("/export-suite/:id", exportSuite);
+  router.get("/export-suite/:id",authorizeApi, exportSuite);
 }
 

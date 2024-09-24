@@ -8,10 +8,10 @@ import {
 } from "./service";
 
 module.exports = function (router: any) {
-  router.get("/suite/:id/usecase", getAllUseCases);
-  router.post("/suite/:id/usecase", createUseCase);
-  router.put("/suite/:id/usecase/:usecaseid",updateUseCaseById);
-  router.delete("/suite/:id/usecase/:usecaseid", deleteUseCaseById);
-  router.get("/suite/:id/usecase/:usecaseid", getUseCaseById);
+  router.get("/suite/:id/usecase",authorizeApi, getAllUseCases);
+  router.post("/suite/:id/usecase",authorizeApi, createUseCase);
+  router.put("/suite/:id/usecase/:usecaseid",authorizeApi, updateUseCaseById);
+  router.delete("/suite/:id/usecase/:usecaseid",authorizeApi, deleteUseCaseById);
+  router.get("/suite/:id/usecase/:usecaseid",authorizeApi, getUseCaseById);
 
 };

@@ -5,13 +5,6 @@ const _MODEL_NAME_GPT3 = "gpt-3.5-turbo";
 const _MODEL_NAME_GPT4 = "gpt-4o";
 const _MODEL_NAME = _MODEL_NAME_GPT4;
 
-export const getTestCaseGenPrompt = (text: string) => {
-  const testGeniePrompt = cloneDeep(_TESTGENIE_PROMPT);
-  testGeniePrompt.messages[1].content = Handlebars.compile(
-      testGeniePrompt.messages[1].content
-  )({ usecase: text, modelName: _MODEL_NAME });
-  return testGeniePrompt;
-};
 
 const _TESTGENIE_PROMPT = {
   model: _MODEL_NAME,
@@ -32,4 +25,12 @@ const _TESTGENIE_PROMPT = {
   top_p: 1,
   frequency_penalty: 0,
   presence_penalty: 0,
+};
+
+export const getTestCaseGenPrompt = (text: string) => {
+  const testGeniePrompt = cloneDeep(_TESTGENIE_PROMPT);
+  testGeniePrompt.messages[1].content = Handlebars.compile(
+      testGeniePrompt.messages[1].content
+  )({ usecase: text, modelName: _MODEL_NAME });
+  return testGeniePrompt;
 };
