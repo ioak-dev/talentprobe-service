@@ -20,13 +20,15 @@ export const createUseCase = async (id: string, data: any) => {
     const model = getGlobalCollection(usecaseCollection,usecaseSchema);
     const testCaseModel = getGlobalCollection(testcaseCollection,testcaseSchema);
 
-    const response = await model.create(data);
+    const _payload: any[] = [];
+    _payload.push({suiteId: id,description: data.description});
+    const response = await model.create(_payload);
     const gptResponse= await Gptutils.predict(getTestCaseGenPrompt(data.description));
     const _testCasesPayload: any[] = [];
     gptResponse?.testCases?.forEach((item: any) =>
         _testCasesPayload.push({
             insertOne: {
-                document: {suiteId: id, useCaseId: response.id,description: { overview:item.description.overview, steps: item.description.steps, expectedOutcome: item.description.expectedOutcome },summary:item.summary ,priority:item.priority ,comments:item.comments ,components:item.components ,labels:item.labels},
+                document: {suiteId: id, useCaseId: response [0]._id,description: { overview:item.description.overview, steps: item.description.steps, expectedOutcome: item.description.expectedOutcome },summary:item.summary ,priority:item.priority ,comments:item.comments ,components:item.components ,labels:item.labels},
             },
         })
     );
