@@ -5,7 +5,7 @@ const suiteSchema = new Schema(
   {
     name: { type: String },
   },
-  { timestamps: true }
+  {  timestamps: { createdAt: 'createdDate', updatedAt: 'lastModifiedDate' } }
 );
 
 const suiteCollection = "suite";

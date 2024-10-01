@@ -13,7 +13,7 @@ const testcaseSchema = new Schema(
     components: { type: String },
     labels: { type: String },
   },
-  { timestamps: true }
+  {  timestamps: { createdAt: 'createdDate', updatedAt: 'lastModifiedDate' }}
 );
 
 const testcaseCollection = "testcase";
