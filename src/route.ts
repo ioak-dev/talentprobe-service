@@ -19,4 +19,5 @@ require("./modules/assessment/responsedetail/route")(router);
 require("./modules/testgenie/suite/route")(router)
 require("./modules/testgenie/testcase/route")(router);
 require("./modules/testgenie/usecase/route")(router);
+require("./modules/testgenie/consolidatedtestcase/route")(router);
 module.exports = router;
