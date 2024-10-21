@@ -1,0 +1,92 @@
+import * as Gptutils from "../../../lib/gptutils";
+
+const axios = require("axios");
+import { getGlobalCollection } from "../../../lib/dbutils";
+import {
+    usecaseCollection,
+    usecaseSchema,
+} from "./model";
+import {testcaseCollection, testcaseSchema} from "../testcase/model";
+import {getTestCaseGenPrompt} from "./prompt";
+
+
+export const getAllUseCases = async (id: string) => {
+    const model = getGlobalCollection(usecaseCollection, usecaseSchema);
+    return await model.find({ suiteId: id });
+
+};
+
+export const createUseCase = async (id: string, data: any) => {
+    const model = getGlobalCollection(usecaseCollection,usecaseSchema);
+    const testCaseModel = getGlobalCollection(testcaseCollection,testcaseSchema);
+
+    const _payload: any[] = [];
+    _payload.push({suiteId: id,description: data.description});
+    const response = await model.create(_payload);
+    const gptResponse= await Gptutils.predict(getTestCaseGenPrompt(data.description));
+    const _testCasesPayload: any[] = [];
+    gptResponse?.testCases?.forEach((item: any) =>
+        _testCasesPayload.push({
+            insertOne: {
+                document: {suiteId: id, useCaseId: response [0]._id,description: { overview:item.description.overview, steps: item.description.steps, expectedOutcome: item.description.expectedOutcome },summary:item.summary ,priority:item.priority ,comments:item.comments ,components:item.components ,labels:item.labels},
+            },
+        })
+    );
+    testCaseModel.bulkWrite(_testCasesPayload);
+    return response;
+};
+
+export const updateUseCaseById = async (
+    id: string,
+    usecaseid: string,
+    data: any,
+) => {
+    const model = getGlobalCollection(
+        usecaseCollection,
+        usecaseSchema
+    );
+    const _payload: any[] = [];
+    _payload.push({
+        updateOne: {
+            filter: {
+                _id: usecaseid,
+                suiteId: id
+            },
+            update: {
+                ...data,
+            },
+            upsert: true,
+        },
+    });
+    const response= await Gptutils.predict(getTestCaseGenPrompt(data.description))
+    const testCaseModel = getGlobalCollection(
+        testcaseCollection,
+        testcaseSchema
+    );
+
+    await testCaseModel.deleteMany({suiteId: id, usecaseId: usecaseid })
+    await testCaseModel.create(response);
+    return await model.bulkWrite(_payload);
+};
+
+
+
+export const getUseCaseById = async (id: string, usecaseid: string) => {
+    const model = getGlobalCollection( usecaseCollection, usecaseSchema);
+    const response = await model.find({ _id: usecaseid, suiteId: id });
+    if (response.length > 0) {
+        return response[0];
+    }
+    return null;
+};
+
+
+export const deleteUseCaseById = async (
+    id: string,
+    usecaseid: string
+) => {
+    const model = getGlobalCollection(
+        usecaseCollection, usecaseSchema
+    );
+    return await model.deleteMany({ _id: usecaseid, suiteId: id });
+};
