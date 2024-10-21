@@ -16,7 +16,10 @@ require("./modules/assessment/route")(router);
 require("./modules/assessment/question/route")(router);
 require("./modules/assessment/responseheader/route")(router);
 require("./modules/assessment/responsedetail/route")(router);
-require("./modules/testgenie/suite/route")(router)
+require("./modules/ocr/route")(router);
+require("./modules/contacts/contact/route")(router);
+require("./modules/resume/route")(router);
+require("./modules/testgenie/suite/route")(router);
 require("./modules/testgenie/testcase/route")(router);
 require("./modules/testgenie/usecase/route")(router);
 module.exports = router;
