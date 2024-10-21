@@ -36,50 +36,6 @@ export const createUseCase = async (id: string, data: any) => {
     return response;
 };
 
-/*export const updateUseCaseById = async (
-    id: string,
-    usecaseid: string,
-    data: any
-) => {
-    const model = getGlobalCollection(
-        usecaseCollection, usecaseSchema
-    );
-    const response = await model.find({ _id: usecaseid, suiteId: id });
-    let usecase;
-    if (response.length > 0) {
-        usecase = response[0];
-        const model = getGlobalCollection(testcaseCollection, testcaseSchema);
-        usecase.useCaseName = data.useCaseName;
-        usecase.description = data.description;
-        model.deleteMany({ _id: usecaseid, suiteId: id });
-        const gptResponse = await Gptutils.predict(getTestGeniePrompt(data.description));
-console.log('test cases gpt call');
-        const _testCasespayload: any[] = [];
-        gptResponse?.testCases?.forEach((item: any) =>
-            _testCasespayload.push({
-                insertOne: {
-                    document: {suiteId: id, useCaseId: usecaseid,description: { overview:item.description.overview, steps: item.description.steps, expectedOutcome: item.description.expectedOutcome },summary:item.summary ,priority:item.priority ,comments:item.comments ,components:item.components ,labels:item.labels},
-                },
-            })
-        );
-        await model.bulkWrite(_testCasespayload);
-    }
-    const _payload: any[] = [];
-    _payload.push({
-        updateOne: {
-            filter: {
-                suiteId: id,
-                _id: usecaseid,
-            },
-            update: {
-                usecase,
-            },
-            upsert: true,
-        },
-    });
-    return await model.bulkWrite(_payload);
-};*/
-
 export const updateUseCaseById = async (
     id: string,
     usecaseid: string,
@@ -93,7 +49,6 @@ export const updateUseCaseById = async (
     _payload.push({
         updateOne: {
             filter: {
-                // _id: item._id,
                 _id: usecaseid,
                 suiteId: id
             },
