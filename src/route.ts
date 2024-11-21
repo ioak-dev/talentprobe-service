@@ -20,4 +20,7 @@ require("./modules/testgenie/suite/route")(router)
 require("./modules/testgenie/testcase/route")(router);
 require("./modules/testgenie/usecase/route")(router);
 require("./modules/testgenie/appspecification/route")(router);
+require("./modules/testgenie/application/route")(router);
+require("./modules/testgenie/requirement/route")(router);
+// require("./modules/resume-screener/route")(router);
 module.exports = router;
