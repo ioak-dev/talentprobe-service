@@ -13,7 +13,7 @@ export const updateRequirementById = async (req: any, res: any) => {
   const space = req.params.space;
   const response: any = await Helper.updateRequirementById(
     space,
-    req.params.requirementid,
+    req.params.id,
     req.body
   );
   res.status(200);
@@ -22,6 +22,7 @@ export const updateRequirementById = async (req: any, res: any) => {
 };
 
 export const createRequirement = async (req: any, res: any) => {
+  req.body.applicationId = req.params.id
   const space = req.params.space;
   const response: any = await Helper.createRequirement(space, req.body);
   res.status(200);
@@ -31,7 +32,7 @@ export const createRequirement = async (req: any, res: any) => {
 
 export const deleteRequirement = async(req:any, res:any) => {
   const space = req.params.space;
-  const appId = req.params.applicationid;
+  const appId = req.params.id;
   const response: any = await Helper.deleteRequirement(space, appId);
   res.status(200);
   res.send(response);
@@ -42,7 +43,7 @@ export const deleteRequirementById = async (req: any, res: any) => {
   const space = req.params.space;
   const response: any = await Helper.deleteRequirementById(
     space,
-    req.params.requirementid
+    req.params.id
   );
   res.status(200);
   res.send(response);
@@ -53,7 +54,7 @@ export const getRequirementById = async (req: any, res: any) => {
   const space = req.params.space;
   const response: any = await Helper.getRequirementById(
     space,
-    req.params.requirementid
+    req.params.id
   );
   res.status(200);
   res.send(response);

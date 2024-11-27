@@ -30,5 +30,4 @@ export const predictGemini = async(payload: any)=>{
         console.log("*", err);
         return "";
     }
-    return "";
 };
