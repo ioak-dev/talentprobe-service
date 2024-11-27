@@ -4,10 +4,7 @@ var mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const requirementSchema = new Schema(
   {
-    // appId: { type: String, required: true },
-    // name: { type: String, required: true }, 
-    description: { type: String },
-    // status: { type: String, default: 'open' }, 
+    description: { type: String }, 
   },
   {  timestamps: { createdAt: 'createdDate', updatedAt: 'lastModifiedDate' } }
 );

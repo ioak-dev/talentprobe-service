@@ -5,7 +5,6 @@ import {
   deleteRequirementById,
   updateRequirementById,
   getRequirementById,
-  exportApp,
   deleteRequirement
 } from "./service";
 
@@ -15,14 +14,13 @@ module.exports = function (router: any) {
 
   router.post("/:space/application/:id/requirement", authorizeApi, createRequirement);
 
-  router.put("/:space/application/:id/requirement/:requirementid", authorizeApi, updateRequirementById);
+  router.put("/:space/application/:id/requirement/:id", authorizeApi, updateRequirementById);
 
-  router.delete("/:space/application/:id/requirement/:requirementid", authorizeApi, deleteRequirementById);
+  router.delete("/:space/application/:id/requirement/:id", authorizeApi, deleteRequirementById);
 
-  router.get("/:space/application/:id/requirement/:requirementid", authorizeApi,  getRequirementById);
+  router.get("/:space/application/:id/requirement/:id", authorizeApi,  getRequirementById);
 
   router.delete("/:space/application/:id/requirement", authorizeApi, deleteRequirement);
 
-  router.get("/:space/application/:id", exportApp);
 }
 
