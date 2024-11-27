@@ -1,15 +1,13 @@
 var mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
-const usecaseSchema = new Schema(
+const usecaseGeminiSchema = new Schema(
   {
-      suiteId: { type: String },
-      useCaseName: { type: String },
       description: { type: String },
   },
   { timestamps: { createdAt: 'createdDate', updatedAt: 'lastModifiedDate' } }
 );
 
-const usecaseCollection = "usecase";
+const usecaseGeminiCollection = "usecase";
 
-export { usecaseSchema, usecaseCollection };
+export { usecaseGeminiSchema, usecaseGeminiCollection };
