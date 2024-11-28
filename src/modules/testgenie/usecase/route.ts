@@ -4,5 +4,5 @@ import {
 } from "./service";
 
 module.exports = function (router: any) {
-  router.post("/:space/application/:id/requirement/:requirementid/usecase/generate", authorizeApi, generateUsecase);
+  router.post("/:space/application/:id/requirement/:id/usecase/generate", authorizeApi, generateUsecase);
 };

@@ -3,8 +3,11 @@ var mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const usecaseSchema = new Schema(
   {
+    applicationId: {type: String},
     requirementId: {type: String},
-    usecases: { type: [Object]},
+    overview: {type:String},
+    label: {type: String},
+    description: {type: String}
   },
   { timestamps: { createdAt: 'createdDate', updatedAt: 'lastModifiedDate' } }
 );
