@@ -1,7 +1,7 @@
 import * as Helper from "./helper";
 
 export const getRequirementByApp = async (req: any, res: any) => {
-  const {appId} = req.params;
+  const appId = req.params.id;
   const space = req.params.space;
   const response = await Helper.getRequirementByApp(space, appId);
   res.status(200);
@@ -11,9 +11,13 @@ export const getRequirementByApp = async (req: any, res: any) => {
 
 export const updateRequirementById = async (req: any, res: any) => {
   const space = req.params.space;
+  const parameters = req.url.split('/');
+  const applicationid = parameters[3];
+  const requirementid = parameters[5];
   const response: any = await Helper.updateRequirementById(
     space,
-    req.params.id,
+    applicationid,
+    requirementid,
     req.body
   );
   res.status(200);
@@ -41,9 +45,13 @@ export const deleteRequirement = async(req:any, res:any) => {
 
 export const deleteRequirementById = async (req: any, res: any) => {
   const space = req.params.space;
+  const parameters = req.url.split('/');
+  const applicationid = parameters[3];
+  const requirementid = parameters[5];
   const response: any = await Helper.deleteRequirementById(
     space,
-    req.params.id
+    applicationid,
+    requirementid
   );
   res.status(200);
   res.send(response);
@@ -52,9 +60,13 @@ export const deleteRequirementById = async (req: any, res: any) => {
 
 export const getRequirementById = async (req: any, res: any) => {
   const space = req.params.space;
+  const parameters = req.url.split('/');
+  const applicationid = parameters[3];
+  const requirementid = parameters[5];
   const response: any = await Helper.getRequirementById(
     space,
-    req.params.id
+    applicationid,
+    requirementid
   );
   res.status(200);
   res.send(response);

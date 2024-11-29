@@ -10,7 +10,7 @@ export const getRequirementByApp = async (space:string, appId: string) => {
     requirementCollection,
     requirementSchema
   );
-  return await model.find({appId});
+  return await model.find({applicationId: appId});
 };
 
 export const createRequirement = async (space: string, data: any) => {
@@ -33,31 +33,33 @@ export const deleteRequirement = async(space: string, appId:string) => {
     requirementCollection,
     requirementSchema
   );
-  return await model.deleteMany({appId});
+  return await model.deleteMany({applicationId: appId});
 }
 
 export const deleteRequirementById = async (
   space: string,
-  id: string,
+  applicationid: string,
+  requirementid: string
 ) => {
   const model = getCollection(
     space,
     requirementCollection,
     requirementSchema
   );
-  return await model.deleteOne({ _id: id });
+  return await model.deleteOne({ applicationId: applicationid , _id: requirementid });
 };
 
 export const getRequirementById = async (
   space:string,
-  id: string,
+  applicationid: string,
+  requirementid: string
 ) => {
   const model = getCollection(
     space,
     requirementCollection,
     requirementSchema
   );
-  const response = await model.find({ _id: id });
+  const response = await model.find({applicationId:applicationid, _id: requirementid });
   if (response.length > 0) {
     return response[0];
   }
@@ -66,7 +68,8 @@ export const getRequirementById = async (
 
 export const updateRequirementById = async (
   space:string,
-  id: string,
+  applicationid: string,
+  requirementid: string,
   data: any,
 ) => {
   const model = getCollection(
@@ -75,7 +78,7 @@ export const updateRequirementById = async (
     requirementSchema
   );
   const updatedDocument = await model.findOneAndUpdate(
-    { _id: id }, 
+    { applicationId: applicationid , _id: requirementid }, 
     { $set: data }, 
     {
       new: true, 
