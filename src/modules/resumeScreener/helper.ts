@@ -7,8 +7,16 @@ export async function extractTextFromPDF(filePath: string): Promise<string> {
     const dataBuffer = await fs.readFileSync(filePath);
     const pdfData = await pdfParse(dataBuffer);
     const result: string = pdfData.text;
-    return await result;
-    // return await result;
+    let plainText = result
+        .replace(/[\n\r]+/g, ' ')                       
+        .replace(/\s+/g, ' ')                           
+        .replace(/https?:\/\/\S+/g, '')                 
+        .replace(/[\u2013\u2014]/g, '-')                
+        .replace(/['"\u201C\u201D\u2018\u2019]/g, '')   
+        .replace(/•/g, '.')                             
+        .replace(/\s+/g, ' ')                           
+        .trim();
+    return await plainText;
 }
 
 export async function analyzeResumeService(resumePath: string): Promise<any> {
@@ -17,9 +25,3 @@ export async function analyzeResumeService(resumePath: string): Promise<any> {
     const analysisResults = await analyzeResume(resumeText);
     return await analysisResults;
 }
-
-
-// (async () => {
-//     const result = analyzeResumeService("./AkankshaResumeUpdated5.pdf");
-//     console.log(result); // Logs the result of the `analyzeResume` function
-// })();
