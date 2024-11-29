@@ -11,8 +11,6 @@ import {
   thisYear,
 } from "./ReservedFilterConfiguration";
 
-// import axios from "axios";
-
 export const createCompany = async (data: any, userId: string) => {
     const model = await getGlobalCollection(companyCollection, companySchema);
     const newCompany = await model.create({
@@ -31,17 +29,11 @@ export const updateCompany = async (data: any) => {
       {
         ...data,
       },
-      { new: true, upsert: true }
+      { new: true, upsert: false }
     );
     return response;
   }
 
-  // const response = await model.create({
-  //   ...data,
-  //   reference: await nextval("companyId"),
-  // });
-
-  // return response;
 };
 
 export const getCompany = async () => {
