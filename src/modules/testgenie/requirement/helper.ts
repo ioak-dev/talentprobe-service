@@ -79,7 +79,7 @@ export const updateRequirementById = async (
     { $set: data }, 
     {
       new: true, 
-      upsert: true, 
+      upsert: false, 
     },
   );
   return updatedDocument;

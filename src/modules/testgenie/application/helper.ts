@@ -66,7 +66,7 @@ export const updateAppById = async (
     { $set: data },
     {
       new: true, 
-      upsert: true, 
+      upsert: false, 
     },
   );
   return updatedDocument;

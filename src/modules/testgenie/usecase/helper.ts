@@ -25,9 +25,103 @@ export const generateUsecase = async (
         usecaseSchema
     )
     response.forEach((usecase: any) => {
-        const body = {applicationId:applicationid, requirementId:requirementid, overview:usecase.overview, label:usecase.label, description:usecase.description };
+        const body = { applicationId: applicationid, requirementId: requirementid, overview: usecase.overview, label: usecase.label, description: usecase.description };
         usecaseModel.create(body);
     });
 
     return response;
-}
+};
+
+export const getUsecase = async (
+    space: string,
+    applicationid: string,
+    requirementid: string
+) => {
+    const model = getCollection(
+        space,
+        usecaseCollection,
+        usecaseSchema
+    );
+    const result = model.find({ applicationId: applicationid, requirementId: requirementid });
+    return result;
+};
+
+export const createUsecase = async (
+    space: string,
+    applicationid: string,
+    requirementid: string,
+    data: any
+) => {
+    const model = getCollection(
+        space,
+        usecaseCollection,
+        usecaseSchema
+    );
+    const body = { applicationId: applicationid, requirementId: requirementid, overview: data.overview, label: data.label, description: data.description };
+    const created = await model.create(body);
+    return created;
+};
+
+export const deleteAllUsecase = async (
+    space: string,
+    applicationid: string,
+    requirementid: string
+) => {
+    const model = getCollection(
+        space,
+        usecaseCollection,
+        usecaseSchema
+    );
+    const result = await model.deleteMany({ applicationId: applicationid, requirementId: requirementid });
+    return result;
+};
+
+export const deleteUsecaseById = async (
+    space: string,
+    applicationid: string,
+    requirementid: string,
+    usecaseid: string
+) => {
+    const model = getCollection(
+        space,
+        usecaseCollection,
+        usecaseSchema
+    );
+    const result = await model.deleteOne({ applicationId: applicationid, requirementId: requirementid, _id: usecaseid });
+    return result;
+};
+
+export const getUsecaseById = async (
+    space: string,
+    applicationid: string,
+    requirementid: string,
+    usecaseid: string
+) => {
+    const model = getCollection(
+        space,
+        usecaseCollection,
+        usecaseSchema
+    );
+    const result = model.find({ applicationId: applicationid, requirementId: requirementid, _id: usecaseid });
+    return result;
+};
+
+export const updateUsecaseById = async (
+    space: string,
+    applicationid: string,
+    requirementid: string,
+    usecaseid: string,
+    data: any
+) => {
+    const model = getCollection(
+        space,
+        usecaseCollection,
+        usecaseSchema
+    );
+
+    const updated = await model.findOneAndUpdate(
+        { applicationId: applicationid, requirementId: requirementid, _id: usecaseid },
+        data,
+        { upsert: false, new:true });
+    return updated;
+};
