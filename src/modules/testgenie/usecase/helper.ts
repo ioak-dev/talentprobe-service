@@ -1,6 +1,4 @@
 import * as Geminiutils from "../../../lib/geminiutils";
-
-const axios = require("axios");
 import { getCollection } from "../../../lib/dbutils";
 import { getTestCaseGenPrompt } from "./prompt";
 import { requirementCollection, requirementSchema } from "../requirement/model";
@@ -87,7 +85,7 @@ export const deleteUsecaseById = async (
         usecaseCollection,
         usecaseSchema
     );
-    const result = await model.deleteOne({ applicationId: applicationid, requirementId: requirementid, _id: usecaseid });
+    const result = await model.deleteOne({ applicationId: applicationid, requirementId: requirementid, _id: usecaseid});
     return result;
 };
 

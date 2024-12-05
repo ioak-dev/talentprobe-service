@@ -33,6 +33,7 @@ export const updateCompany = async (data: any) => {
     );
     return response;
   }
+  return null;
 
 };
 

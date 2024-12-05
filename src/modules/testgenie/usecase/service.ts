@@ -48,7 +48,7 @@ export const deleteUsecaseById = async(req:any, res:any)=>{
     const parameters = req.url.split('/');
     const applicationid = parameters[3];
     const requirementid = parameters[5];
-    const usecaseid = parameters[7]
+    const usecaseid = parameters[7];
     const space = parameters[1];
     const response: any = await Helper.deleteUsecaseById(space, applicationid, requirementid, usecaseid);
     res.status(200);
@@ -60,7 +60,7 @@ export const getUsecaseById = async(req:any, res:any)=>{
     const parameters = req.url.split('/');
     const applicationid = parameters[3];
     const requirementid = parameters[5];
-    const usecaseid = parameters[7]
+    const usecaseid = parameters[7];
     const space = parameters[1];
     const response: any = await Helper.getUsecaseById(space, applicationid, requirementid, usecaseid);
     res.status(200);
@@ -72,7 +72,8 @@ export const updateUsecaseById = async(req:any, res:any)=>{
     const parameters = req.url.split('/');
     const applicationid = parameters[3];
     const requirementid = parameters[5];
-    const usecaseid = parameters[7]
+    const usecaseid = parameters[7];
+    const testcaseid = parameters[9];
     const space = parameters[1];
     const response: any = await Helper.updateUsecaseById(space, applicationid, requirementid, usecaseid, req.body);
     res.status(200);

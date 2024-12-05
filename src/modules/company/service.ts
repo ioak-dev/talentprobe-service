@@ -21,17 +21,12 @@ export const createCompany = async(req: any, res:any) => {
 }
 
 export const updateCompany = async (req: any, res: any) => {
-  
+  const id = req.url.split('/')[2];
+  req.body._id = id;
   const company: any = await Helper.updateCompany(req.body);
-
-  // userInviteService.registerUserInvite(
-  //   company._doc.reference,
-  //   company._doc._id,
-  //   userId,
-  //   req.user.email
-  // );
-  // // console.log("**", company._doc.reference, company.reference);
-  // await PermissionHelper.addRole(req.user.email, company._doc.reference);
+  if (!company) { 
+    return res.status(401).send("Unauthorized: ID not found");
+  }
   res.status(200);
   res.send(company);
   res.end();

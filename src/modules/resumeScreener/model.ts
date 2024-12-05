@@ -25,7 +25,6 @@ export async function analyzeResume(resumeContent: string) {
 
         try {
             const result = await predictGemini(payload);
-            console.log(result);
             return result;
         } catch (error) {
             console.error('Error analyzing resume:', error);
