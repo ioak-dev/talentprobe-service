@@ -21,5 +21,5 @@ require("./modules/testgenie/requirement/route")(router);
 require("./modules/resumeScreener/route")(router);
 require("./modules/testgenie/usecase/route")(router);
 require("./modules/testgenie/testcase/route")(router);
-
+require("./modules/testgenie/preference/route")(router);
 module.exports = router;
