@@ -5,7 +5,7 @@ const DODO_KEY = process.env.DODO_KEY || "a53dc337-a203-4980-bfc8-12f19acddd26";
 export const predict = async (payload: any) => {
   try {
     const response = await axios.post(
-      `${DODO_URL}/api/v1/chat/completions`,
+      `${DODO_URL}/api/chatgpt/v1/chat/completions`,
       payload,
       {
         headers: {
