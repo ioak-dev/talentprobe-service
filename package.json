@@ -41,7 +41,8 @@
     "tesseract.js": "^5.1.1",
     "uuid": "^9.0.1",
     "@types/pdf-parse": "^1.1.4",
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "mammoth": "^1.8.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -54,7 +55,6 @@
     "@types/webpack-env": "^1.18.4",
     "clean-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.2",
-    "mammoth": "^1.8.0",
     "nodemon": "^3.0.2",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",
