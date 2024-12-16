@@ -1,8 +1,9 @@
-import * as Geminiutils from "../../../lib/geminiutils";
 import { getCollection } from "../../../lib/dbutils";
-import { getTestCaseGenPrompt } from "./prompt";
+import { getUseCaseGenPrompt } from "./prompt";
 import { requirementCollection, requirementSchema } from "../requirement/model";
 import { usecaseCollection, usecaseSchema } from "./model";
+import { Gemini } from "aihub";
+const {GEMINI_API_KEY} = require("../../../../env.js");
 
 export const generateUsecase = async (
     space: string,
@@ -14,20 +15,25 @@ export const generateUsecase = async (
         requirementCollection,
         requirementSchema
     );
-    const data = await model.findOne({ _id: requirementid });
-    const response = await Geminiutils.predictGemini(getTestCaseGenPrompt(data.description));
+    const data = await model.findOne({ applicationId: applicationid, _id: requirementid });
+    const response = await Gemini.process(
+        GEMINI_API_KEY, "/v1beta/models/gemini-1.5-flash:generateContent",
+        getUseCaseGenPrompt(data.description),
+        "list"
+    )
 
+    const response_list = response.responseList;
     const usecaseModel = getCollection(
         space,
         usecaseCollection,
         usecaseSchema
     )
-    response.forEach((usecase: any) => {
+    response_list.forEach((usecase: any) => {
         const body = { applicationId: applicationid, requirementId: requirementid, overview: usecase.overview, label: usecase.label, description: usecase.description };
         usecaseModel.create(body);
     });
 
-    return response;
+    return response_list;
 };
 
 export const getUsecase = async (

@@ -3,6 +3,7 @@ import{
     createTestcase,
     deleteAllTestcase,
     deleteTestcaseById,
+    generateTestcase,
     getTestcase, 
     getTestcaseById,
     updateTestcaseById
@@ -15,5 +16,5 @@ module.exports= function(router:any) {
     router.delete("/:space/application/:id/requirement/:id/usecase/:id/testcase/:id", authorizeApi, deleteTestcaseById);
     router.get("/:space/application/:id/requirement/:id/usecase/:id/testcase/:id", authorizeApi, getTestcaseById);
     router.put("/:space/application/:id/requirement/:id/usecase/:id/testcase/:id", authorizeApi, updateTestcaseById);
-    
+    router.post("/:space/application/:id/requirement/:id/usecase/:id/testcase/generate", authorizeApi, generateTestcase )
 };

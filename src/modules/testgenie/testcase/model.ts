@@ -15,7 +15,7 @@ const testcaseSchema = new Schema(
     priority: {type: String},
     comments: {type:String},
     components: {type: String},
-    labels: {type:String}
+    label: {type:String}
   },
   { timestamps: { createdAt: 'createdDate', updatedAt: 'lastModifiedDate' } }
 );

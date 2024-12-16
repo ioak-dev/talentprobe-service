@@ -12,7 +12,7 @@ import {
 module.exports = function (router: any) {
   router.get("/:space/application/:id/requirement/:id/usecase", authorizeApi, getUsecase);
   router.post("/:space/application/:id/requirement/:id/usecase", authorizeApi, createUsecase);
-  router.post("/:space/application/:id/requirement/:id/usecase/generate", authorizeApi, generateUsecase);
+  router.post("/:space/application/:id/requirement/:id/usecase/generate",authorizeApi, generateUsecase);
   router.delete("/:space/application/:id/requirement/:id/usecase", authorizeApi, deleteAllUsecase);
   router.delete("/:space/application/:id/requirement/:id/usecase/:id",authorizeApi, deleteUsecaseById);
   router.get("/:space/application/:id/requirement/:id/usecase/:id", authorizeApi, getUsecaseById);

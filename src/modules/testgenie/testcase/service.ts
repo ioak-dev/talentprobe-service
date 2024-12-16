@@ -75,3 +75,15 @@ export const updateTestcaseById = async(req:any, res:any)=>{
     res.end();
 };
 
+export const generateTestcase = async(req:any, res:any)=>{
+    const parameters = req.url.split('/');
+    const applicationid = parameters[3];
+    const requirementid = parameters[5];
+    const usecaseid = parameters[7];
+    // const testcaseid = parameters[9];
+    const space = parameters[1];
+    const response: any = await Helper.generateTestcase(space, applicationid, requirementid, usecaseid);
+    res.status(200);
+    res.send(response);
+    res.end();
+}

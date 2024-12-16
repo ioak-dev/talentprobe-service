@@ -1,7 +1,7 @@
 import * as Handlebars from "handlebars";
 import { cloneDeep } from "lodash";
 
-const _MODEL_NAME_GEMINI = "gemini-1.0-pro";
+const _MODEL_NAME_GEMINI = "gemini-1.5-flash";
 const _MODEL_NAME = _MODEL_NAME_GEMINI;
 
 
@@ -10,7 +10,7 @@ const _TESTGENIE_PROMPT = {
   contents: [
     {
       role: "model",
-      parts: [{ text: "Overall Objective: Assist the user in generating regression use cases for the given description of the requirement. Instruction: Generate as many use cases as possible, covering all scenarios, including edge cases and alternative flows. It is crucial to generate a detailed and descriptive usecase. Consider all possible valid and invalid scenarios. Must generate a minimum requested number of use cases completely. If there are more scenarios to cover, generate as many as necessary. OutputFormat: The response must be a JSON array of test cases with the following structure:jsonCopy[{'overview': 'string', 'label': 'string','description': 'string'}], here description should contain the detailed explanation of the usecase, overview contains the brief summary of the usecase, label contains the category of the use case. Each use case should be represented as an object inside the 'useCases' array."}],
+      parts: [{ text: "Overall Objective: Assist the user in generating regression use cases for the given description of the requirement. Instruction: Generate as many use cases as possible, covering all scenarios, including edge cases and alternative flows. It is crucial to generate a detailed and descriptive usecase. Consider all possible valid and invalid scenarios. Must generate a minimum requested number of use cases completely. If there are more scenarios to cover, generate as many as necessary. OutputFormat: The response must be a JSON array of test cases with the following structure:jsonCopy[{'description': 'string'}], here description should contain the detailed explanation of the usecase. Each use case should be represented as an object inside the 'useCases' array."}],
     },
     {
       role: "user",
@@ -26,7 +26,7 @@ const _TESTGENIE_PROMPT = {
   }
 };
 
-export const getTestCaseGenPrompt = (data: string) => {
+export const getUseCaseGenPrompt = (data: string) => {
   const testGeniePrompt = cloneDeep(_TESTGENIE_PROMPT);
   testGeniePrompt.contents[1].parts[0].text = Handlebars.compile(
     testGeniePrompt.contents[1].parts[0].text
