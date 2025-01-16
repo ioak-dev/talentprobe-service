@@ -5,8 +5,6 @@ const usecaseSchema = new Schema(
   {
     applicationId: {type: String},
     requirementId: {type: String},
-    overview: {type:String},
-    label: {type: String},
     description: {type: String}
   },
   { timestamps: { createdAt: 'createdDate', updatedAt: 'lastModifiedDate' } }
