@@ -9,7 +9,6 @@ export const getAssessment = async (req: any, res: any) => {
 };
 
 export const getAssessmentById = async (req: any, res: any) => {
-  const userId = req.user.user_id;
   const response: any = await Helper.getAssessmentById(req.params.id);
   res.status(response ? 200 : 404);
   res.send(response);

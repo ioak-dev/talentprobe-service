@@ -5,7 +5,7 @@ const assessmentSchema = new Schema(
   {
     name: { type: String },
     jobDescription: { type: String },
-    duration: { type: String },
+    duration: { type: Number },
     status: { type: String },
     lastRecommendationNumber: { type: Number },
     skillSet: { type: Array },

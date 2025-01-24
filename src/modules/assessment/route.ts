@@ -7,7 +7,7 @@ module.exports = function (router: any) {
   router.post("/assessment", authorizeApi, createAssessment);
   router.put("/assessment/:id", authorizeApi, updateAssessment);
   router.get("/assessment", authorizeApi, getAssessment);
-  router.get("/assessment/:id", authorizeApi, getAssessmentById);
+  router.get("/assessment/:id", getAssessmentById);
   // router.post("/auth/token", issueToken);
   // router.get("/auth/token/decode", authorizeApi, decodeToken);
   // router.post("/auth/logout", logout);
