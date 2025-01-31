@@ -151,7 +151,7 @@ export const generateTestcase = async (
                 priority: testcase.priority || "", 
                 comments: testcase.comments || "", 
                 components: testcase.components || "", 
-                labels: testcase.labels || "" 
+                label: testcase.label || "" 
             };
             testcaseModel.create(body);
         });
