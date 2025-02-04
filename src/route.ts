@@ -16,8 +16,10 @@ require("./modules/assessment/route")(router);
 require("./modules/assessment/question/route")(router);
 require("./modules/assessment/responseheader/route")(router);
 require("./modules/assessment/responsedetail/route")(router);
-require("./modules/testgenie/suite/route")(router)
-require("./modules/testgenie/testcase/route")(router);
+require("./modules/testgenie/application/route")(router);
+require("./modules/testgenie/requirement/route")(router);
+require("./modules/resumeScreener/route")(router);
 require("./modules/testgenie/usecase/route")(router);
-require("./modules/testgenie/appspecification/route")(router);
+require("./modules/testgenie/testcase/route")(router);
+require("./modules/testgenie/preference/route")(router);
 module.exports = router;
