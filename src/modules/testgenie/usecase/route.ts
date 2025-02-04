@@ -1,17 +1,20 @@
 import { authorizeApi } from "../../../middlewares";
 import {
-  getAllUseCases,
-  createUseCase,
-  updateUseCaseById,
-  getUseCaseById,
-  deleteUseCaseById
+  generateUsecase,
+  getUsecase,
+  createUsecase,
+  deleteAllUsecase,
+  deleteUsecaseById,
+  getUsecaseById,
+  updateUsecaseById
 } from "./service";
 
 module.exports = function (router: any) {
-  router.get("/suite/:id/usecase",authorizeApi, getAllUseCases);
-  router.post("/suite/:id/usecase",authorizeApi, createUseCase);
-  router.put("/suite/:id/usecase/:usecaseid",authorizeApi, updateUseCaseById);
-  router.delete("/suite/:id/usecase/:usecaseid",authorizeApi, deleteUseCaseById);
-  router.get("/suite/:id/usecase/:usecaseid",authorizeApi, getUseCaseById);
-
+  router.get("/:space/application/:id/requirement/:id/usecase", authorizeApi, getUsecase);
+  router.post("/:space/application/:id/requirement/:id/usecase", authorizeApi, createUsecase);
+  router.post("/:space/application/:id/requirement/:id/usecase/generate",authorizeApi, generateUsecase);
+  router.delete("/:space/application/:id/requirement/:id/usecase", authorizeApi, deleteAllUsecase);
+  router.delete("/:space/application/:id/requirement/:id/usecase/:id",authorizeApi, deleteUsecaseById);
+  router.get("/:space/application/:id/requirement/:id/usecase/:id", authorizeApi, getUsecaseById);
+  router.put("/:space/application/:id/requirement/:id/usecase/:id", authorizeApi, updateUsecaseById);
 };
