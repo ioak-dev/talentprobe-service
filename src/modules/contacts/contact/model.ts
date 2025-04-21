@@ -8,6 +8,8 @@ const contactSchema = new Schema(
     email: { type: String },
     telephone: { type: String },
     comments: { type: String },
+    lead: { type: String },
+    organization: { type: String },
     topic: { type: String },
   },
   { timestamps: true }
