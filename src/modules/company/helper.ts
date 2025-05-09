@@ -11,7 +11,17 @@ import {
   thisYear,
 } from "./ReservedFilterConfiguration";
 
-export const updateCompany = async (data: any, userId: string) => {
+export const createCompany = async (data: any, userId: string) => {
+    const model = await getGlobalCollection(companyCollection, companySchema);
+    const newCompany = await model.create({
+      ...data,
+      reference: await nextval("companyId"),
+    });
+    return newCompany;
+};
+
+
+export const updateCompany = async (data: any) => {
   const model = getGlobalCollection(companyCollection, companySchema);
   if (data._id) {
     const response = await model.findByIdAndUpdate(
@@ -19,17 +29,12 @@ export const updateCompany = async (data: any, userId: string) => {
       {
         ...data,
       },
-      { new: true, upsert: true }
+      { new: true, upsert: false }
     );
     return response;
   }
+  return null;
 
-  const response = await model.create({
-    ...data,
-    reference: await nextval("companyId"),
-  });
-
-  return response;
 };
 
 export const getCompany = async () => {

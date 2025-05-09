@@ -1,11 +1,12 @@
 import { authorizeApi } from "../../middlewares";
-import { updateCompany, getCompany } from "./service";
+import { updateCompany, getCompany, createCompany } from "./service";
 
 const selfRealm = 100;
 
 module.exports = function (router: any) {
-  router.put("/company", authorizeApi, updateCompany);
+  router.put("/company/:id", authorizeApi, updateCompany);
   router.get("/company", authorizeApi, getCompany);
+  router.post("/company", authorizeApi, createCompany);
   // router.post("/auth/token", issueToken);
   // router.get("/auth/token/decode", authorizeApi, decodeToken);
   // router.post("/auth/logout", logout);

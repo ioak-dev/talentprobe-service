@@ -1,92 +1,131 @@
-import * as Gptutils from "../../../lib/gptutils";
+import { getCollection } from "../../../lib/dbutils";
+import { getUseCaseGenPrompt } from "./prompt";
+import { requirementCollection, requirementSchema } from "../requirement/model";
+import { usecaseCollection, usecaseSchema } from "./model";
+import { Gemini } from "aihub";
+const {GEMINI_API_KEY} = require("../../../../env.js");
 
-const axios = require("axios");
-import { getGlobalCollection } from "../../../lib/dbutils";
-import {
-    usecaseCollection,
-    usecaseSchema,
-} from "./model";
-import {testcaseCollection, testcaseSchema} from "../testcase/model";
-import {getTestCaseGenPrompt} from "./prompt";
-
-
-export const getAllUseCases = async (id: string) => {
-    const model = getGlobalCollection(usecaseCollection, usecaseSchema);
-    return await model.find({ suiteId: id });
-
-};
-
-export const createUseCase = async (id: string, data: any) => {
-    const model = getGlobalCollection(usecaseCollection,usecaseSchema);
-    const testCaseModel = getGlobalCollection(testcaseCollection,testcaseSchema);
-
-    const _payload: any[] = [];
-    _payload.push({suiteId: id,description: data.description});
-    const response = await model.create(_payload);
-    const gptResponse= await Gptutils.predict(getTestCaseGenPrompt(data.description));
-    const _testCasesPayload: any[] = [];
-    gptResponse?.testCases?.forEach((item: any) =>
-        _testCasesPayload.push({
-            insertOne: {
-                document: {suiteId: id, useCaseId: response [0]._id,description: { overview:item.description.overview, steps: item.description.steps, expectedOutcome: item.description.expectedOutcome },summary:item.summary ,priority:item.priority ,comments:item.comments ,components:item.components ,labels:item.labels},
-            },
-        })
-    );
-    testCaseModel.bulkWrite(_testCasesPayload);
-    return response;
-};
-
-export const updateUseCaseById = async (
-    id: string,
-    usecaseid: string,
-    data: any,
+export const generateUsecase = async (
+    space: string,
+    requirementid: string,
+    applicationid: string,
 ) => {
-    const model = getGlobalCollection(
+    const model = getCollection(
+        space,
+        requirementCollection,
+        requirementSchema
+    );
+    const data = await model.findOne({ applicationId: applicationid, _id: requirementid });
+    const response = await Gemini.process(
+        GEMINI_API_KEY, "/v1beta/models/gemini-1.5-flash:generateContent",
+        getUseCaseGenPrompt(data.description),
+        "list"
+    )
+
+    const response_list = response.responseList;
+    const usecaseModel = getCollection(
+        space,
+        usecaseCollection,
+        usecaseSchema
+    )
+    response_list.forEach((usecase: any) => {
+        const body = { applicationId: applicationid, requirementId: requirementid, overview: usecase.overview, label: usecase.label, description: usecase.description };
+        usecaseModel.create(body);
+    });
+
+    return response_list;
+};
+
+export const getUsecase = async (
+    space: string,
+    applicationid: string,
+    requirementid: string
+) => {
+    const model = getCollection(
+        space,
         usecaseCollection,
         usecaseSchema
     );
-    const _payload: any[] = [];
-    _payload.push({
-        updateOne: {
-            filter: {
-                _id: usecaseid,
-                suiteId: id
-            },
-            update: {
-                ...data,
-            },
-            upsert: true,
-        },
-    });
-    const response= await Gptutils.predict(getTestCaseGenPrompt(data.description))
-    const testCaseModel = getGlobalCollection(
-        testcaseCollection,
-        testcaseSchema
+    const result = model.find({ applicationId: applicationid, requirementId: requirementid });
+    return result;
+};
+
+export const createUsecase = async (
+    space: string,
+    applicationid: string,
+    requirementid: string,
+    data: any
+) => {
+    const model = getCollection(
+        space,
+        usecaseCollection,
+        usecaseSchema
     );
-
-    await testCaseModel.deleteMany({suiteId: id, usecaseId: usecaseid })
-    await testCaseModel.create(response);
-    return await model.bulkWrite(_payload);
+    const body = { applicationId: applicationid, requirementId: requirementid, overview: data.overview, label: data.label, description: data.description };
+    const created = await model.create(body);
+    return created;
 };
 
-
-
-export const getUseCaseById = async (id: string, usecaseid: string) => {
-    const model = getGlobalCollection( usecaseCollection, usecaseSchema);
-    const response = await model.find({ _id: usecaseid, suiteId: id });
-    if (response.length > 0) {
-        return response[0];
-    }
-    return null;
+export const deleteAllUsecase = async (
+    space: string,
+    applicationid: string,
+    requirementid: string
+) => {
+    const model = getCollection(
+        space,
+        usecaseCollection,
+        usecaseSchema
+    );
+    const result = await model.deleteMany({ applicationId: applicationid, requirementId: requirementid });
+    return result;
 };
 
-
-export const deleteUseCaseById = async (
-    id: string,
+export const deleteUsecaseById = async (
+    space: string,
+    applicationid: string,
+    requirementid: string,
     usecaseid: string
 ) => {
-    const model = getGlobalCollection(
-        usecaseCollection, usecaseSchema
+    const model = getCollection(
+        space,
+        usecaseCollection,
+        usecaseSchema
     );
-    return await model.deleteMany({ _id: usecaseid, suiteId: id });
+    const result = await model.deleteOne({ applicationId: applicationid, requirementId: requirementid, _id: usecaseid});
+    return result;
+};
+
+export const getUsecaseById = async (
+    space: string,
+    applicationid: string,
+    requirementid: string,
+    usecaseid: string
+) => {
+    const model = getCollection(
+        space,
+        usecaseCollection,
+        usecaseSchema
+    );
+    const result = model.find({ applicationId: applicationid, requirementId: requirementid, _id: usecaseid });
+    return result;
+};
+
+export const updateUsecaseById = async (
+    space: string,
+    applicationid: string,
+    requirementid: string,
+    usecaseid: string,
+    data: any
+) => {
+    const model = getCollection(
+        space,
+        usecaseCollection,
+        usecaseSchema
+    );
+
+    const updated = await model.findOneAndUpdate(
+        { applicationId: applicationid, requirementId: requirementid, _id: usecaseid },
+        data,
+        { upsert: false, new:true });
+    return updated;
 };
